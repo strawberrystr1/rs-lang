@@ -1,5 +1,5 @@
 {
-  "name": "my-react-app",
+  "name": "rs-lang",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,7 +21,7 @@
   },
   "scripts": {
     "lint": "eslint --ext .tsx src/",
-    "lint-and-fix": "eslint --ext .tsx src/ --fix",
+    "fix": "eslint --ext .tsx src/ --fix",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

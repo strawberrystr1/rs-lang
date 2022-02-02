@@ -115,6 +115,21 @@ export default function SideMenu() {
                     />
                   </ListItemIcon>
                 </StyledListItem>
+            ))
+          }
+        <Divider />
+        <List>
+          {
+              gameLinks.map((item) => (
+                <StyledListItem key={Math.random() * 10}>
+                  <ListItemIcon>
+                    {getIcon(item.iconName)}
+                    <ListItemText
+                      primary={item.title}
+                      sx={{ paddingLeft: '15px', color: 'white' }}
+                    />
+                  </ListItemIcon>
+                </StyledListItem>
               ))
             }
         </List>

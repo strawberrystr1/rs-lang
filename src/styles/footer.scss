@@ -1,0 +1,42 @@
+.footer {
+  &__rss-link {
+    width: 100px;
+    height: 40px;
+    background-image: url('../assets/rs_school_js.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-left: 5px;
+  }
+
+  &__author {
+    display: flex;
+    justify-content: space-between;
+    min-width: 400px;
+    height: 100%;
+  }
+
+  &__author_link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    transition: all 0.6s ease-in;
+    font-size: 18px;
+
+    & img {
+      margin-right: 10px;
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      color: rgb(0, 0, 0);
+    }
+  }
+
+  &__year {
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+  }
+}

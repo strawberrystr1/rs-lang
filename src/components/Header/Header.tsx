@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import { Container, Tooltip, Drawer } from '@mui/material';
-
+import { Link } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
 
@@ -26,11 +26,13 @@ function Header() {
             }}
           />
           <Tooltip title="To main page" placement="bottom">
-            <button
-              type="button"
-              className="header__main-page-btn"
-              aria-label="to main"
-            />
+            <Link to="/">
+              <button
+                type="button"
+                className="header__main-page-btn"
+                aria-label="to main"
+              />
+            </Link>
           </Tooltip>
         </div>
         <Tooltip title="Sign In">

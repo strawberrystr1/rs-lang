@@ -1,13 +1,9 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import Footer from './components/Footer/Footer';
 
 function App() {
   return (
-    <>
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-    </>
+    <Footer />
   );
 }
 

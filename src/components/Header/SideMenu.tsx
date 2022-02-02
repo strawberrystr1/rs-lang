@@ -8,7 +8,6 @@ import {
 } from '@mui/icons-material';
 import StackedLineChartIcon from '@mui/icons-material/StackedLineChart';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Link } from 'react-router-dom';
 import { StyledListItem } from '../StyledMUIItems';
 
 export default function SideMenu() {
@@ -92,12 +91,22 @@ export default function SideMenu() {
       <List>
         {
             navigationLinks.map((item) => (
-              <Link
-                to={`/${item.url}`}
-                key={Math.random() * 10}
-                style={{ textDecoration: 'none' }}
-              >
-                <StyledListItem>
+              <StyledListItem>
+                <ListItemIcon>
+                  {getIcon(item.iconName)}
+                  <ListItemText
+                    primary={item.title}
+                    sx={{ paddingLeft: '15px', color: 'white' }}
+                  />
+                </ListItemIcon>
+              </StyledListItem>
+            ))
+          }
+        <Divider />
+        <List>
+          {
+              gameLinks.map((item) => (
+                <StyledListItem key={Math.random() * 10}>
                   <ListItemIcon>
                     {getIcon(item.iconName)}
                     <ListItemText
@@ -106,28 +115,21 @@ export default function SideMenu() {
                     />
                   </ListItemIcon>
                 </StyledListItem>
-              </Link>
             ))
           }
         <Divider />
         <List>
           {
               gameLinks.map((item) => (
-                <Link
-                  to={`/${item.url}`}
-                  key={Math.random() * 10}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <StyledListItem key={Math.random() * 10}>
-                    <ListItemIcon>
-                      {getIcon(item.iconName)}
-                      <ListItemText
-                        primary={item.title}
-                        sx={{ paddingLeft: '15px', color: 'white' }}
-                      />
-                    </ListItemIcon>
-                  </StyledListItem>
-                </Link>
+                <StyledListItem key={Math.random() * 10}>
+                  <ListItemIcon>
+                    {getIcon(item.iconName)}
+                    <ListItemText
+                      primary={item.title}
+                      sx={{ paddingLeft: '15px', color: 'white' }}
+                    />
+                  </ListItemIcon>
+                </StyledListItem>
               ))
             }
         </List>

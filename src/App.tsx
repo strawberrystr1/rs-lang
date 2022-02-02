@@ -4,6 +4,7 @@ import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import EmptyPage from './components/EmptyPage';
+import StatisticPage from './components/Statistic/StatisticPage';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route path="/dictionary/difficult" element={<EmptyPage />} />
         <Route path="/dictionary/learned" element={<EmptyPage />} />
         <Route path="/dictionary/deleted" element={<EmptyPage />} />
-        <Route path="/statistic" element={<EmptyPage />} />
+        <Route path="/statistic" element={<StatisticPage />} />
         <Route path="/game/audio" element={<EmptyPage />} />
         <Route path="/game/sprint" element={<EmptyPage />} />
       </Routes>

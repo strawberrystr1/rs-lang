@@ -1,0 +1,30 @@
+.stat {
+  margin-top: 50px;
+  color: white;
+
+  &__grid-item {
+    padding: 10px;
+  }
+
+  & h2 {
+    font-size: 44px;
+    font-family: Lato;
+    margin-bottom: 20px;
+  }
+
+  & p {
+    text-align: center;
+  }
+
+  & .game-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  &_game-stat {
+    min-width: 200px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+  }
+}

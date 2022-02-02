@@ -1,13 +1,16 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
 
 function App() {
   return (
     <>
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
+      <Header />
+      <Main />
+      <Footer />
     </>
+
   );
 }
 

@@ -1,5 +1,5 @@
-import styled from "@emotion/styled/";
-import { Avatar, Box, ListItem} from "@mui/material";
+import styled from '@emotion/styled/';
+import { Avatar, Box, ListItem } from '@mui/material';
 
 export const StyledAvatar = styled(Avatar)`
   width: 350px;

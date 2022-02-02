@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import { Container, Tooltip, Drawer } from '@mui/material';
-
 import { Link } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';

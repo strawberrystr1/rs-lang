@@ -4,9 +4,11 @@ import { Container, Tooltip, Drawer } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
+import AuthentticationPage from '../Authentication/AuthentticationPage';
 
 function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
     <Container
@@ -18,7 +20,7 @@ function Header() {
       <StyledContainer maxWidth="xl">
         <div className="header__burger-wrap">
           <StyledListIcon
-            onClick={() => setIsOpen(true)}
+            onClick={() => setIsDrawerOpen(true)}
             sx={{
               color: 'white',
               fontSize: 40,
@@ -35,28 +37,36 @@ function Header() {
             </Link>
           </Tooltip>
         </div>
-        <Tooltip title="Sign In">
-          <button type="button" className="header__signin">
+        <button
+          type="button"
+          className="header__signin"
+          onClick={() => setIsAuthOpen(true)}
+        >
+          <Tooltip title="Sign In">
             <PersonIcon sx={{
               color: 'white',
               fontSize: 30,
             }}
             />
-          </button>
-        </Tooltip>
+          </Tooltip>
+        </button>
       </StyledContainer>
       <Drawer
         anchor="left"
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
         onClick={(e) => {
           if ((e.target as HTMLElement).closest('a')) {
-            setIsOpen(false);
+            setIsDrawerOpen(false);
           }
         }}
       >
         <SideMenu />
       </Drawer>
+      <AuthentticationPage
+        open={isAuthOpen}
+        handleClose={() => setIsAuthOpen(false)}
+      />
     </Container>
   );
 }

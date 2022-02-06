@@ -4,6 +4,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import checkInput from '../../utils/authenticationUtils';
+import { newUser } from '../../constants/apiConstants';
 
 interface IAuthProps {
   open: boolean;
@@ -19,14 +20,16 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
 
   const checkField = (e: React.FormEvent<HTMLDivElement>, type: string) => {
     const { value } = (e as React.ChangeEvent<HTMLInputElement>).target;
-
     if (type === 'email') {
+      newUser.email = value;
       setEmailFieldError(false);
       if (checkInput(value, type)) setEmailFieldError(true);
     } else if (type === 'pass') {
+      newUser.password = value;
       setPasswordFieldError(false);
       if (checkInput(value, type)) setPasswordFieldError(true);
     } else {
+      newUser.name = value;
       setNameFieldError(false);
       if (checkInput(value, type)) setNameFieldError(true);
     }
@@ -40,7 +43,7 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
 
   const register = () => {
     if (emailFieldError && passwordFieldError && nameFieldError) {
-      console.log('register');
+      console.log('registered');
     }
   };
 
@@ -81,6 +84,7 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
                 fullWidth
                 margin="dense"
                 onInput={(e) => checkField(e, 'name')}
+                // onChange={(e) => checkField(e, 'name')}
               />
             )
             : null}
@@ -100,7 +104,7 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
             label="Password"
             helperText={passwordFieldError
               ? ''
-              : 'Пароль должен содержать минимум 6 симвоволов.'}
+              : 'Пароль должен содержать минимум 8 симвоволов.'}
             fullWidth
             margin="dense"
             onInput={(e) => checkField(e, 'pass')}

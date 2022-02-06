@@ -9,9 +9,11 @@ import { Link } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
 import { RootState } from '../../redux/store';
+import AuthentticationPage from '../Authentication/AuthentticationPage';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const userName = useSelector((state: RootState) => state.user.name);
   return (
     <Container
@@ -57,7 +59,7 @@ function Header() {
             )
             : (
               <Tooltip title="Войти">
-                <button type="button" className="header__signin">
+                <button type="button" onClick={() => setIsAuthOpen(true)} className="header__signin">
                   <PersonIcon sx={{
                     color: 'white',
                     fontSize: 30,
@@ -80,6 +82,10 @@ function Header() {
       >
         <SideMenu />
       </Drawer>
+      <AuthentticationPage
+        open={isAuthOpen}
+        handleClose={() => setIsAuthOpen(false)}
+      />
     </Container>
   );
 }

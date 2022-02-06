@@ -91,46 +91,46 @@ export default function SideMenu() {
     >
       <List>
         {
-            navigationLinks.map((item) => (
-              <Link
-                to={`/${item.url}`}
-                key={Math.random() * 10}
-                style={{ textDecoration: 'none' }}
-              >
-                <StyledListItem>
-                  <ListItemIcon>
-                    {getIcon(item.iconName)}
-                    <ListItemText
-                      primary={item.title}
-                      sx={{ paddingLeft: '15px', color: 'white' }}
-                    />
-                  </ListItemIcon>
-                </StyledListItem>
-              </Link>
-            ))
-          }
-        <Divider />
-        <List>
-          {
-              gameLinks.map((item) => (
-                <Link
-                  to={`/${item.url}`}
-                  key={Math.random() * 10}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <StyledListItem key={Math.random() * 10}>
-                    <ListItemIcon>
-                      {getIcon(item.iconName)}
-                      <ListItemText
-                        primary={item.title}
-                        sx={{ paddingLeft: '15px', color: 'white' }}
-                      />
-                    </ListItemIcon>
-                  </StyledListItem>
-                </Link>
-              ))
-            }
-        </List>
+          navigationLinks.map((item) => (
+            <Link
+              to={`/${item.url}`}
+              key={Math.random() * 10}
+              style={{ textDecoration: 'none' }}
+            >
+              <StyledListItem>
+                <ListItemIcon>
+                  {getIcon(item.iconName)}
+                  <ListItemText
+                    primary={item.title}
+                    sx={{ paddingLeft: '15px', color: 'white' }}
+                  />
+                </ListItemIcon>
+              </StyledListItem>
+            </Link>
+          ))
+        }
+      </List>
+      <Divider />
+      <List>
+        {
+          gameLinks.map((item) => (
+            <Link
+              to={`/${item.url}`}
+              key={Math.random() * 10}
+              style={{ textDecoration: 'none' }}
+            >
+              <StyledListItem>
+                <ListItemIcon>
+                  {getIcon(item.iconName)}
+                  <ListItemText
+                    primary={item.title}
+                    sx={{ paddingLeft: '15px', color: 'white' }}
+                  />
+                </ListItemIcon>
+              </StyledListItem>
+            </Link>
+          ))
+        }
       </List>
     </Box>
   );

@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Link } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
 import { RootState } from '../../redux/store';
@@ -30,11 +31,13 @@ function Header() {
             }}
           />
           <Tooltip title="На главную" placement="bottom">
-            <button
-              type="button"
-              className="header__main-page-btn"
-              aria-label="to main"
-            />
+            <Link to="/">
+              <button
+                type="button"
+                className="header__main-page-btn"
+                aria-label="to main"
+              />
+            </Link>
           </Tooltip>
         </div>
         {

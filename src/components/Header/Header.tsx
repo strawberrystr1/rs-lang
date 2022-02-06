@@ -3,18 +3,21 @@ import PersonIcon from '@mui/icons-material/Person';
 import {
   Container, Tooltip, Drawer, Button,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
-import { RootState } from '../../redux/store';
 import AuthentticationPage from '../Authentication/AuthentticationPage';
+import { RootState } from '../../redux/store';
+import { logOut } from '../../redux/userState/userSlice';
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const userName = useSelector((state: RootState) => state.user.name);
+  const dispatch = useDispatch();
+
   return (
     <Container
       maxWidth={false}
@@ -48,7 +51,7 @@ function Header() {
               <div className="header__signedin">
                 <p>{userName}</p>
                 <Tooltip title="Выйти">
-                  <Button>
+                  <Button onClick={() => dispatch(logOut())}>
                     <LogoutIcon sx={{
                       color: 'white',
                     }}

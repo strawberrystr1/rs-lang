@@ -1,4 +1,7 @@
-import React, { ReactElement, useState } from 'react';
+import React, {
+  ReactElement, useEffect,
+  useState,
+} from 'react';
 import {
   Button, TextField, Dialog, DialogActions, DialogContent,
   DialogTitle,
@@ -7,10 +10,13 @@ import {
   Backdrop,
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import checkInput from '../../utils/authenticationUtils';
+import { checkInput } from '../../utils/authenticationUtils';
 import { newUser } from '../../constants/apiConstants';
 
-import { registerUser, closeModal, signIn } from '../../redux/userState/userSlice';
+import {
+  registerUser, closeModal,
+  signIn,
+} from '../../redux/userState/userSlice';
 import { RootState } from '../../redux/store';
 
 interface IAuthProps {
@@ -56,21 +62,26 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
     }, 500);
   };
 
+  useEffect(() => {
+    if (!user.loading && !user.error) {
+      closeAuthModal();
+    }
+  }, [user.loading]);
+
   const signin = () => {
     if (emailFieldError && passwordFieldError) {
       dispatch(signIn(newUser));
-      if (!user.error) closeAuthModal();
     }
   };
 
   const register = () => {
     if (emailFieldError && passwordFieldError && nameFieldError) {
       dispatch(registerUser(newUser));
-      // if (!user.error) signin();
     }
   };
 
   const registrationRedirect = () => {
+    dispatch(closeModal());
     setIsRegistrationOpen(true);
   };
 

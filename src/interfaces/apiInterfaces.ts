@@ -22,3 +22,16 @@ export interface IUserLogInSuccess {
   userId: string;
   name: string;
 }
+
+export interface ICurrentUserState {
+  id: string;
+  name: string;
+  token: string;
+  refreshToken: string;
+  error: null | string;
+  loading: boolean;
+}
+
+export interface IUserState {
+  user: ICurrentUserState
+}

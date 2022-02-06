@@ -9,3 +9,16 @@ export interface IUserRegistrationResponse {
   name: string;
   email: string;
 }
+
+export interface IUserSignInParams {
+  email: string;
+  password: string;
+}
+
+export interface IUserLogInSuccess {
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
+}

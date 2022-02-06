@@ -2,9 +2,16 @@ import React, { ReactElement, useState } from 'react';
 import {
   Button, TextField, Dialog, DialogActions, DialogContent,
   DialogTitle,
+  Alert,
+  CircularProgress,
+  Backdrop,
 } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
 import checkInput from '../../utils/authenticationUtils';
 import { newUser } from '../../constants/apiConstants';
+
+import { registerUser, closeModal, signIn } from '../../redux/userState/userSlice';
+import { RootState } from '../../redux/store';
 
 interface IAuthProps {
   open: boolean;
@@ -17,6 +24,9 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
   const [passwordFieldError, setPasswordFieldError] = useState(false);
   const [nameFieldError, setNameFieldError] = useState(false);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
 
   const checkField = (e: React.FormEvent<HTMLDivElement>, type: string) => {
     const { value } = (e as React.ChangeEvent<HTMLInputElement>).target;
@@ -35,18 +45,6 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
     }
   };
 
-  const signin = () => {
-    if (emailFieldError && passwordFieldError) {
-      console.log('enter');
-    }
-  };
-
-  const register = () => {
-    if (emailFieldError && passwordFieldError && nameFieldError) {
-      console.log('registered');
-    }
-  };
-
   const closeAuthModal = () => {
     handleClose();
     setTimeout(() => {
@@ -54,7 +52,22 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
       setPasswordFieldError(false);
       setNameFieldError(false);
       setIsRegistrationOpen(false);
+      dispatch(closeModal());
     }, 500);
+  };
+
+  const signin = () => {
+    if (emailFieldError && passwordFieldError) {
+      dispatch(signIn(newUser));
+      if (!user.error) closeAuthModal();
+    }
+  };
+
+  const register = () => {
+    if (emailFieldError && passwordFieldError && nameFieldError) {
+      dispatch(registerUser(newUser));
+      // if (!user.error) signin();
+    }
   };
 
   const registrationRedirect = () => {
@@ -84,7 +97,6 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
                 fullWidth
                 margin="dense"
                 onInput={(e) => checkField(e, 'name')}
-                // onChange={(e) => checkField(e, 'name')}
               />
             )
             : null}
@@ -109,6 +121,21 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
             margin="dense"
             onInput={(e) => checkField(e, 'pass')}
           />
+          {
+            user.error
+              ? (
+                <Alert
+                  variant="outlined"
+                  severity="error"
+                  sx={{
+                    marginTop: '10px',
+                  }}
+                >
+                  {user.error}
+                </Alert>
+              )
+              : null
+          }
         </DialogContent>
         <DialogActions>
           <Button onClick={closeAuthModal}>Отмена</Button>
@@ -117,9 +144,19 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
             : <Button onClick={signin}>Войти</Button>}
           {isRegistrationOpen
             ? <Button onClick={register}>Зарегистрироваться</Button>
-            : <Button onClick={registrationRedirect}>Зарегистрироваться</Button>}
+            : (
+              <Button onClick={registrationRedirect}>
+                Зарегистрироваться
+              </Button>
+            )}
         </DialogActions>
       </Dialog>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: 10001 }}
+        open={user.loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }

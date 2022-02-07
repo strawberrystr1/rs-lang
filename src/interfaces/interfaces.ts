@@ -5,14 +5,7 @@ export interface IScoreProps {
 }
 
 export interface ICircularTimerProps {
-  value: number;
-  realTime: number;
-  isTimePaused: boolean;
-  setIsTimePaused: () => void;
-  timer: ReturnType<typeof setInterval> | undefined;
-  setTimer: (id: ReturnType<typeof setInterval>) => void;
-  setTimerLastTime: () => void;
-  timerLastTime: number;
+  setIsTimeEnd: () => void;
 }
 
 export interface ICirclesBlockProps {
@@ -20,8 +13,18 @@ export interface ICirclesBlockProps {
   currentLevel: number;
 }
 
-export interface IBirdsBlockProps {
-  correctAnswerInARow: number;
+export interface ISprinGameWord {
+  correctAnswerInARow?: number;
   word: string;
   wordTranslate: string;
+}
+
+export interface IAfterGameCircle {
+  value: number;
+}
+
+export interface IAfterGameWordsStat {
+  inARow: number;
+  right: number;
+  wrong: number;
 }

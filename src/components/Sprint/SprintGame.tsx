@@ -7,6 +7,7 @@ import ScoreBlock from './ScoreBlock';
 import CirclesBlock from './CirclesBlock';
 import ButtonsBlock from './ButtonsBlock';
 import BirdsAndWordBlock from './BirdsAndWordBlock';
+import EndGameView from './EndGameView';
 
 export default function SprintGame(): ReactElement {
   const [correctAnswerInARow, setCorrectAnswersInARow] = useState(0);
@@ -16,6 +17,7 @@ export default function SprintGame(): ReactElement {
   const [score, setStore] = useState(0);
   const [isSoundOn, setIsSoundOn] = useState(true);
   const [correctAnswerCounter, setCorrectAnswerCounter] = useState(0);
+  const [isTimeEnd, setIsTimeEnd] = useState(false);
 
   console.log(
     setCorrectAnswersInARow,
@@ -24,6 +26,7 @@ export default function SprintGame(): ReactElement {
     setStore,
     correctAnswerCounter,
     setCorrectAnswerCounter,
+    isTimeEnd,
   );
   const { word, wordTranslate } = {
     word: 'alcohol',
@@ -48,7 +51,7 @@ export default function SprintGame(): ReactElement {
           position: 'relative',
         }}
       >
-        <CircularTimer />
+        <CircularTimer setIsTimeEnd={() => setIsTimeEnd(true)} />
         <ScoreBlock
           score={score}
           isSoundOn={isSoundOn}
@@ -90,6 +93,10 @@ export default function SprintGame(): ReactElement {
           <ButtonsBlock />
         </Card>
       </Container>
+      {
+        isTimeEnd
+          && <EndGameView wrong={5} right={24} inARow={12} />
+      }
     </Container>
   );
 }

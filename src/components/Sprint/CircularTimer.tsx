@@ -4,10 +4,12 @@ import {
 import React, { ReactElement, useEffect, useState } from 'react';
 import PauseIcon from '@mui/icons-material/Pause';
 import { convertTimeToPercent } from '../../utils/gameUtils';
+import { ICircularTimerProps } from '../../interfaces/interfaces';
 
-export default function CircularTimer(): ReactElement {
+export default function CircularTimer(props: ICircularTimerProps): ReactElement {
+  const { setIsTimeEnd } = props;
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
-  const [timerLastTime, setTimerLastTime] = useState(3);
+  const [timerLastTime, setTimerLastTime] = useState(2);
   const [isTimePaused, setIsTimePaused] = useState(false);
 
   const startTimer = () => {
@@ -18,6 +20,7 @@ export default function CircularTimer(): ReactElement {
       setTimer(timerId);
     } else {
       clearInterval(timer!);
+      setIsTimeEnd();
     }
   };
 

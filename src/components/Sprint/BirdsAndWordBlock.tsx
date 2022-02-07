@@ -1,7 +1,7 @@
 import React from 'react';
-import { IBirdsBlockProps } from '../../interfaces/interfaces';
+import { ISprinGameWord } from '../../interfaces/interfaces';
 
-export default function BirdsAndWordBlock(props: IBirdsBlockProps) {
+export default function BirdsAndWordBlock(props: ISprinGameWord) {
   const { word, correctAnswerInARow, wordTranslate } = props;
 
   return (
@@ -11,15 +11,15 @@ export default function BirdsAndWordBlock(props: IBirdsBlockProps) {
       >
         <div className="sprint__stick_bird-red" />
         {
-              correctAnswerInARow >= 4
+              correctAnswerInARow! >= 4
                 && <div className="sprint__stick_bird-blue" />
             }
         {
-              correctAnswerInARow >= 8
+              correctAnswerInARow! >= 8
                && <div className="sprint__stick_bird-green" />
             }
         {
-              correctAnswerInARow >= 12
+              correctAnswerInARow! >= 12
                && <div className="sprint__stick_bird-yellow" />
             }
       </div>

@@ -129,11 +129,16 @@
     color: rgba(0, 0, 0, 0.6);
   }
 
-  &__buttons {
+  &__buttons, &__arrows {
     width: 80%;
     display: flex;
     justify-content: space-between;
     margin-top: 40px;
+  }
+
+  &__arrows {
+    width: 50%;
+    margin-top: 10px;
   }
 }
 

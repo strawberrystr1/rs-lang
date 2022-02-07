@@ -1,19 +1,30 @@
 import { Container, Card, Button } from '@mui/material';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import NotificationsOffOutlinedIcon from '@mui/icons-material/NotificationsOffOutlined';
+import CircularTimer from './CircularTimer';
+import ScoreBlock from './ScoreBlock';
+import CirclesBlock from './CirclesBlock';
+import ButtonsBlock from './ButtonsBlock';
+import BirdsAndWordBlock from './BirdsAndWordBlock';
 
 export default function SprintGame(): ReactElement {
-  const correctAnswerInARow = 12;
-  const currentLevelAnswerCount = 1;
-  const currentLevel = 1;
-  const isPlaying = true;
-  const score = 2000;
-  const isSoundOn = true;
-  // const correctAnserCounter = 0;
+  const [correctAnswerInARow, setCorrectAnswersInARow] = useState(0);
+  const [currentLevelAnswerCount, setCurrentLevelAnswerCount] = useState(0);
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [isWordPlaying, setIsWordPlaying] = useState(false);
+  const [score, setStore] = useState(0);
+  const [isSoundOn, setIsSoundOn] = useState(true);
+  const [correctAnswerCounter, setCorrectAnswerCounter] = useState(0);
 
+  console.log(
+    setCorrectAnswersInARow,
+    setCurrentLevel,
+    setCurrentLevelAnswerCount,
+    setStore,
+    correctAnswerCounter,
+    setCorrectAnswerCounter,
+  );
   const { word, wordTranslate } = {
     word: 'alcohol',
     wordTranslate: 'алкоголь',
@@ -34,42 +45,15 @@ export default function SprintGame(): ReactElement {
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          position: 'relative',
         }}
       >
-        <p className="sprint__counter">
-          {score}
-          <Button
-            sx={{
-              position: 'absolute',
-              right: '1%',
-              bottom: '0',
-              borderRadius: '50%',
-              minWidth: '40px',
-              maxWidth: '40px',
-              height: '40px',
-            }}
-          >
-            {
-              isSoundOn
-                ? (
-                  <NotificationsOutlinedIcon
-                    fontSize="large"
-                    sx={{
-                      color: 'white',
-                    }}
-                  />
-                )
-                : (
-                  <NotificationsOffOutlinedIcon
-                    fontSize="large"
-                    sx={{
-                      color: 'white',
-                    }}
-                  />
-                )
-            }
-          </Button>
-        </p>
+        <CircularTimer />
+        <ScoreBlock
+          score={score}
+          isSoundOn={isSoundOn}
+          setIsSoundOn={() => setIsSoundOn((prev) => !prev)}
+        />
         <Card
           className="sprint__card"
           elevation={12}
@@ -82,7 +66,6 @@ export default function SprintGame(): ReactElement {
         >
           <Button
             size="small"
-            aria-label="music note"
             sx={{
               position: 'absolute',
               top: '10px',
@@ -92,76 +75,19 @@ export default function SprintGame(): ReactElement {
               maxWidth: '40px',
               height: '40px',
             }}
+            onClick={() => setIsWordPlaying((prev) => !prev)}
           >
-            { isPlaying
+            { isWordPlaying
               ? <PauseCircleOutlineIcon fontSize="large" />
               : <PlayCircleOutlineIcon fontSize="large" />}
-
           </Button>
-          <div
-            className="sprint__circle-block"
-          >
-            { currentLevelAnswerCount >= 1
-              ? <div className="sprint__circle-block_item filled" />
-              : <div className="sprint__circle-block_item" />}
-            { currentLevelAnswerCount >= 2
-              ? <div className="sprint__circle-block_item filled" />
-              : <div className="sprint__circle-block_item" />}
-            { currentLevelAnswerCount >= 3
-              ? <div className="sprint__circle-block_item filled" />
-              : <div className="sprint__circle-block_item" />}
-          </div>
-          <p className="sprint__score-info">
-            +
-            {currentLevel * 10}
-            {' '}
-            очков за слово
-          </p>
-          <div
-            className="sprint__stick"
-          >
-            <div className="sprint__stick_bird-red" />
-            {
-              correctAnswerInARow >= 4
-                && <div className="sprint__stick_bird-blue" />
-            }
-            {
-              correctAnswerInARow >= 8
-               && <div className="sprint__stick_bird-green" />
-            }
-            {
-              correctAnswerInARow >= 12
-               && <div className="sprint__stick_bird-yellow" />
-            }
-          </div>
-          <p className="sprint__word">{word}</p>
-          <p className="sprint__word-translate">{wordTranslate}</p>
-          <div className="sprint__buttons">
-            <Button
-              variant="contained"
-              color="error"
-              sx={{
-                width: '180px',
-                color: 'white',
-                height: '50px',
-                fontSize: '18px',
-              }}
-            >
-              Не верно
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              sx={{
-                width: '180px',
-                color: 'white',
-                height: '50px',
-                fontSize: '18px',
-              }}
-            >
-              Верно
-            </Button>
-          </div>
+          <CirclesBlock currentLevelAnswerCount={currentLevelAnswerCount} currentLevel={currentLevel} />
+          <BirdsAndWordBlock
+            correctAnswerInARow={correctAnswerInARow}
+            word={word}
+            wordTranslate={wordTranslate}
+          />
+          <ButtonsBlock />
         </Card>
       </Container>
     </Container>

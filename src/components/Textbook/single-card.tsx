@@ -4,11 +4,12 @@ import Typography from '@mui/material/Typography';
 import { IconButton, CardMedia } from '@mui/material';
 import PauseRounded from '@mui/icons-material/PauseRounded';
 import PlayArrowRounded from '@mui/icons-material/PlayArrowRounded';
-import { SinglWord } from '../interfaces/single-wirdI';
+import { SinglWord } from '../interfaces/textbookI';
 import CorrectText from './right-card-text';
 
 export default function SingleCard(wordCard: SinglWord) {
   let isPaused = true;
+  console.log('aad');
   const {
     id, word, transcription, wordTranslate, image, textMeaning,
     textMeaningTranslate, textExample, textExampleTranslate, audio,

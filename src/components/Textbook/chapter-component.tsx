@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@mui/material/Link';
-import { ChapterComponentInterface } from '../interfaces/chapter-compotentI';
+import { ChapterComponentInterface } from '../interfaces/textbookI';
 import OutlinedCard from './show-cards';
 
 export default function ChapterComponent(data: ChapterComponentInterface) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import { RightCardText } from '../interfaces/right-card-text';
+import { RightCardText } from '../interfaces/textbookI';
 
 export default function CorrectText(text: RightCardText) {
   const { data, type } = text;

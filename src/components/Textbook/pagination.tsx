@@ -7,7 +7,7 @@ export default function BasicPagination() {
   const params = useParams();
   const wordGroup = params.group;
   const page = params.page as string;
-  const wordPage = parseInt(page, 10) + 1;
+  const wordPage = parseInt(page, 10);
   return (
     <Stack spacing={10}>
       <Pagination

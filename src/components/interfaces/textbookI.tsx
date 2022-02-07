@@ -1,3 +1,15 @@
+export interface ChapterComponentInterface{
+    group: string
+    url: string
+    num: string
+
+}
+
+export interface RightCardText{
+    data: string
+    type: number
+}
+
 export interface SinglWord {
     id: string
     group: number

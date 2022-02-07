@@ -1,0 +1,145 @@
+.sprint {
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+
+  &__counter {
+    margin-bottom: 20px;
+    font-family: Lato;
+    font-size: 50px;
+    color: rgb(53, 48, 48);
+    font-weight: 700;
+    width: 40%;
+    text-align: center;
+    position: relative;
+  }
+
+  &__card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 60%;
+    padding: 40px;
+    flex-direction: column;
+  }
+
+  &__stick {
+    position: relative;
+    background-image: url('../assets/stick.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0px -20px;
+    width: 300px;
+    height: 100px;
+    margin-left: 20px;
+    margin: 20px 0;
+
+    &_bird-red {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-image: url('../assets/angry-red.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &_bird-blue {
+      position: absolute;
+      left: 23%;
+      top: 2px;
+      width: 70px;
+      height: 70px;
+      background-image: url('../assets/angry-blue.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &_bird-green {
+      position: absolute;
+      left: 47%;
+      top: -5px;
+      width: 70px;
+      height: 70px;
+      background-image: url('../assets/angry-green.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &_bird-yellow {
+      position: absolute;
+      left: 73%;
+      top: 8px;
+      width: 60px;
+      height: 60px;
+      background-image: url('../assets/angry_yellow.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+  }
+
+  &__circle-block {
+    width: 130px;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    margin-bottom: 10px;
+
+    &_item {
+      width: 25px;
+      height: 25px;
+      background-color: rgba(89, 117, 93, 0.4);
+      border-radius: 50%;
+
+      &.filled {
+        background-image: url('../assets/mark.png');
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: rgb(7, 148, 31);
+      }
+    }
+  }
+
+  &__score-info {
+    color: black;
+    font-family: Lato;
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+
+  &__word {
+    font-size: 50px;
+    font-family: Lato;
+    margin-top: 30px;
+  }
+
+  &__word-translate {
+    font-size: 24px;
+    font-family: Lato;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &__buttons {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+  }
+}
+
+.spring-bg {
+  background-image: url('../assets/bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}

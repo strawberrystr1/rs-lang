@@ -17,7 +17,6 @@ export default function BasicPagination() {
         color="primary"
         onClick={(event:MouseEvent) => {
           const button = event.target as HTMLButtonElement;
-          console.log(button.textContent);
           const url = `http://localhost:3000/textbook/${wordGroup}/${button.textContent}`;
           window.location.href = url;
         }}

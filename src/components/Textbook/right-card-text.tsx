@@ -11,7 +11,7 @@ export default function CorrectText(text: RightCardText) {
   const afterTag = data.slice(lastEntry + 4, data.length);
   if (type === 1) {
     return (
-      <Typography>
+      <Typography sx={{ fontSize: 14 }}>
         {beforeTag}
         <i>{tagString}</i>
         {afterTag}

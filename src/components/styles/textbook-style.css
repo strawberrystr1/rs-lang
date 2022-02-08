@@ -76,9 +76,21 @@ b{
     margin-top: -10px;
     margin-bottom: 10px;
 }
-.audio-meaning-example{
-    text-align: end;
-    margin-right: 40px;
-    margin-top: -22px;
-    margin-bottom: -20px;
+.card-head{
+    display: flex;
+    justify-content: space-between;
+    margin-right: 20px;
+}
+.card-content{
+    width: 100%;
+}
+.word-mean, .word-translate{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 15px;
+    margin-right: 30px;
+    align-items: center;
+}
+.word-mean-text, .word-translate-text{
+    max-width: 280px;
 }

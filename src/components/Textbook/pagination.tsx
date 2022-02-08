@@ -7,7 +7,7 @@ export default function BasicPagination() {
   const params = useParams();
   const wordGroup = params.group;
   const page = params.page as string;
-  const wordPage = parseInt(page, 10);
+  const wordPage = parseInt(page, 10) + 1;
   return (
     <Stack spacing={10}>
       <Pagination
@@ -17,7 +17,9 @@ export default function BasicPagination() {
         color="primary"
         onClick={(event:MouseEvent) => {
           const button = event.target as HTMLButtonElement;
-          const url = `http://localhost:3000/textbook/${wordGroup}/${button.textContent}`;
+          const buttonNumber = button.textContent as string;
+          const rightPage = parseInt(buttonNumber, 10) - 1;
+          const url = `http://localhost:3000/textbook/${wordGroup}/${rightPage}`;
           window.location.href = url;
         }}
       />

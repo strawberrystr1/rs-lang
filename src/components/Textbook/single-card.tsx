@@ -16,13 +16,12 @@ const Style = styled(Typography)`
     margin-top: -18px;
     margin-bottom: -20px;
 `;
-export default function SingleCard(wordCard: SinglWord) {
+export default function SingleCard(wordCard: SinglWord, login?: boolean) {
   const {
     id, word, transcription, wordTranslate, image, textMeaning,
     textMeaningTranslate, textExample, textExampleTranslate, audio,
     audioMeaning, audioExample,
   } = wordCard;
-  const login = true;
   if (login === true) {
     return (
       <Card sx={{ width: 600, display: 'flex' }}>
@@ -86,41 +85,42 @@ export default function SingleCard(wordCard: SinglWord) {
         </div>
       </Card>
     );
+  } if (login === false) {
+    return (
+      <CardContent key={id} sx={{ width: 300, dispaly: 'flex' }}>
+        <Typography variant="h6" gutterBottom>
+          {word}
+          {` ${transcription}`}
+          {CardAudio(audio, '3rem')}
+        </Typography>
+        <Typography variant="h6" color="text.secondary">
+          {wordTranslate}
+        </Typography>
+        <CardMedia
+          component="img"
+          height="194"
+          image={`https://react-rslang-str.herokuapp.com/${image}`}
+          alt="image"
+        />
+        <CorrectText
+          data={textMeaning}
+          type={1}
+        />
+        <Style>{CardAudio(audioMeaning, '2rem')}</Style>
+        <Typography>
+          <br />
+          {textMeaningTranslate}
+          <br />
+        </Typography>
+        <CorrectText
+          data={textExample}
+          type={0}
+        />
+        <Style>{CardAudio(audioExample, '2rem')}</Style>
+        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          {textExampleTranslate}
+        </Typography>
+      </CardContent>
+    );
   }
-  return (
-    <CardContent key={id} sx={{ width: 300, dispaly: 'flex' }}>
-      <Typography variant="h5" color="text.secondary" gutterBottom>
-        {word}
-        {` ${transcription}`}
-        {CardAudio(audio, '3rem')}
-      </Typography>
-      <Typography variant="h5">
-        {wordTranslate}
-      </Typography>
-      <CardMedia
-        component="img"
-        height="194"
-        image={`https://react-rslang-str.herokuapp.com/${image}`}
-        alt="image"
-      />
-      <CorrectText
-        data={textMeaning}
-        type={1}
-      />
-      <Style>{CardAudio(audioMeaning, '2rem')}</Style>
-      <Typography>
-        <br />
-        {textMeaningTranslate}
-        <br />
-      </Typography>
-      <CorrectText
-        data={textExample}
-        type={0}
-      />
-      <Style>{CardAudio(audioExample, '2rem')}</Style>
-      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-        {textExampleTranslate}
-      </Typography>
-    </CardContent>
-  );
 }

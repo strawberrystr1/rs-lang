@@ -20,7 +20,7 @@ export default function ShowCards() {
       {response.map((item: SinglWord) => (
         <Box sx={{ minWidth: 275 }} key={item.id}>
           <Card variant="outlined">
-            {SingleCard(item)}
+            {SingleCard(item, true)}
           </Card>
         </Box>
       ))}

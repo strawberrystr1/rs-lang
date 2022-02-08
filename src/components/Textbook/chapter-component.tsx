@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from '@mui/material/Link';
 import { ChapterComponentInterface } from '../interfaces/textbookI';
-import OutlinedCard from './show-cards';
+import ShowCards from './show-cards';
 
 export default function ChapterComponent(data: ChapterComponentInterface) {
   const { url, num } = data;
@@ -13,7 +13,7 @@ export default function ChapterComponent(data: ChapterComponentInterface) {
       variant="body2"
       onClick={() => {
         window.location.href = url;
-        OutlinedCard();
+        ShowCards();
       }}
     >
       Страница

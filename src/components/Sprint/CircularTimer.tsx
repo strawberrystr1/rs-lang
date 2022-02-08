@@ -9,7 +9,7 @@ import { ICircularTimerProps } from '../../interfaces/interfaces';
 export default function CircularTimer(props: ICircularTimerProps): ReactElement {
   const { setIsTimeEnd } = props;
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
-  const [timerLastTime, setTimerLastTime] = useState(2);
+  const [timerLastTime, setTimerLastTime] = useState(60);
   const [isTimePaused, setIsTimePaused] = useState(false);
 
   const startTimer = () => {
@@ -25,9 +25,12 @@ export default function CircularTimer(props: ICircularTimerProps): ReactElement 
   };
 
   useEffect(() => {
+    let cleanupFunction = false;
     clearInterval(timer!);
-    startTimer();
-    return () => clearInterval(timer!);
+    if (!cleanupFunction) {
+      startTimer();
+    }
+    return () => { cleanupFunction = true; };
   }, [timerLastTime]);
 
   const toggleTimer = () => {

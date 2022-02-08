@@ -1,5 +1,5 @@
 import { Container, Card, Button } from '@mui/material';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import CircularTimer from './CircularTimer';
@@ -8,8 +8,10 @@ import CirclesBlock from './CirclesBlock';
 import ButtonsBlock from './ButtonsBlock';
 import BirdsAndWordBlock from './BirdsAndWordBlock';
 import EndGameView from './EndGameView';
+import { getRandomSetOfWords } from '../../utils/gameUtils';
+import { ISprintStartGame, IWordData } from '../../interfaces/interfaces';
 
-export default function SprintGame(): ReactElement {
+export default function SprintGame(props: ISprintStartGame): ReactElement {
   const [correctAnswerInARow, setCorrectAnswersInARow] = useState(0);
   const [currentLevelAnswerCount, setCurrentLevelAnswerCount] = useState(0);
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -18,6 +20,18 @@ export default function SprintGame(): ReactElement {
   const [isSoundOn, setIsSoundOn] = useState(true);
   const [correctAnswerCounter, setCorrectAnswerCounter] = useState(0);
   const [isTimeEnd, setIsTimeEnd] = useState(false);
+  const [words, setWords] = useState<IWordData[]>([]);
+
+  const { group } = props;
+
+  useEffect(() => {
+    if (!isTimeEnd) {
+      getRandomSetOfWords(group, (data) => setWords(data));
+    }
+    return () => {
+      setIsTimeEnd(true);
+    };
+  }, []);
 
   console.log(
     setCorrectAnswersInARow,
@@ -27,7 +41,14 @@ export default function SprintGame(): ReactElement {
     correctAnswerCounter,
     setCorrectAnswerCounter,
     isTimeEnd,
+    words,
+    setWords,
   );
+
+  const wordsArray = words.map((word) => word.word);
+  const translateArray = words.map((word) => word.wordTranslate);
+  console.log('wordsArray: ', wordsArray, translateArray);
+
   const { word, wordTranslate } = {
     word: 'alcohol',
     wordTranslate: 'алкоголь',
@@ -90,7 +111,10 @@ export default function SprintGame(): ReactElement {
             word={word}
             wordTranslate={wordTranslate}
           />
-          <ButtonsBlock />
+          <ButtonsBlock
+            setCorrectAnswerCounter={() => setCorrectAnswerCounter((prev) => prev + 1)}
+            setCorrectAnswersInARow={(count: number) => setCorrectAnswersInARow(count)}
+          />
         </Card>
       </Container>
       {

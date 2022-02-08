@@ -2,7 +2,9 @@ import React from 'react';
 import { ISprinGameWord } from '../../interfaces/interfaces';
 
 export default function BirdsAndWordBlock(props: ISprinGameWord) {
-  const { word, correctAnswerInARow, wordTranslate } = props;
+  const {
+    word, correctAnswerInARow, wordTranslate,
+  } = props;
 
   return (
     <>

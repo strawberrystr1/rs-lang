@@ -13,6 +13,11 @@ export interface ICirclesBlockProps {
   currentLevel: number;
 }
 
+export interface ISprintAnswerButtons {
+  setCorrectAnswerCounter: () => void;
+  setCorrectAnswersInARow: (count: number) => void;
+}
+
 export interface ISprinGameWord {
   correctAnswerInARow?: number;
   word: string;
@@ -28,3 +33,26 @@ export interface IAfterGameWordsStat {
   right: number;
   wrong: number;
 }
+
+export interface IWordData {
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  id: string;
+  image: string;
+  page: number;
+  textExample: string;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+}
+
+export interface ISprintStartGame {
+  group: number;
+}
+
+export type SetWordsCBType = (data: IWordData[]) => void;

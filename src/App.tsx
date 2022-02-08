@@ -18,7 +18,7 @@ function App() {
         <Route path="/dictionary/deleted" element={<EmptyPage />} />
         <Route path="/statistic" element={<EmptyPage />} />
         <Route path="/game/audio" element={<EmptyPage />} />
-        <Route path="/game/sprint" element={<SprintGame />} />
+        <Route path="/game/sprint" element={<SprintGame group={5} />} />
       </Routes>
       <Footer />
     </>

@@ -3,6 +3,8 @@ import {
   Button, CardContent, Divider, Typography,
 } from '@mui/material';
 import React, { ReactElement } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom';
 import { IAfterGameWordsStat } from '../../interfaces/interfaces';
 import {
   StyledBoxMW, StyledCard, StyledPaper,
@@ -12,9 +14,25 @@ import EndGameWordItem from './EndGameWordItem';
 
 export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
   const { inARow, right, wrong } = props;
+  const navigate = useNavigate();
 
   return (
     <StyledPaper>
+      <Button
+        onClick={() => navigate(-1)}
+        sx={{
+          position: 'absolute',
+          color: 'white',
+          right: 'calc(50% - 265px)',
+          top: 'calc(50% - 250px)',
+          borderRadius: '50%',
+          minWidth: '30px',
+          minHeight: '30px',
+          textAlign: 'center',
+        }}
+      >
+        <CloseIcon fontSize="large" />
+      </Button>
       <StyledCard>
         <CardContent sx={{ width: '95%' }}>
           <StyledBoxMW>
@@ -24,7 +42,7 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
           <Divider sx={{ background: 'white', marginTop: '10px', height: '3px' }} />
           <div className="sprint__stat-box">
             <StyledBoxMW sx={{ paddingX: '30px', marginBottom: '30px' }}>
-              <CircularStatistic value={67} />
+              <CircularStatistic value={Math.ceil((100 / (wrong + right)) * right)} />
               <Box>
                 <Typography
                   variant="h6"

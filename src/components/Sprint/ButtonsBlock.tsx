@@ -2,8 +2,10 @@ import { Button } from '@mui/material';
 import React, { ReactElement } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { ISprintAnswerButtons } from '../../interfaces/interfaces';
 
-export default function ButtonsBlock(): ReactElement {
+export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement {
+  const { setCorrectAnswersInARow, setCorrectAnswerCounter } = props;
   return (
     <>
       <div className="sprint__buttons">
@@ -16,6 +18,7 @@ export default function ButtonsBlock(): ReactElement {
             height: '50px',
             fontSize: '18px',
           }}
+          onClick={() => setCorrectAnswersInARow(0)}
         >
           Не верно
         </Button>
@@ -28,6 +31,7 @@ export default function ButtonsBlock(): ReactElement {
             height: '50px',
             fontSize: '18px',
           }}
+          onClick={ setCorrectAnswerCounter}
         >
           Верно
         </Button>

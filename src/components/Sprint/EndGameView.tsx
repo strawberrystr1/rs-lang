@@ -5,7 +5,7 @@ import {
 import React, { ReactElement } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
-import { IAfterGameWordsStat } from '../../interfaces/interfaces';
+import { IAfterGameWordsStat, IWordData } from '../../interfaces/interfaces';
 import {
   StyledBoxMW, StyledCard, StyledPaper,
 } from '../StyledMUIItems';
@@ -13,7 +13,9 @@ import CircularStatistic from './CircularStatistic';
 import EndGameWordItem from './EndGameWordItem';
 
 export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
-  const { inARow, right, wrong } = props;
+  const {
+    inARow, right, wrong, state, words,
+  } = props;
   const navigate = useNavigate();
 
   return (
@@ -101,9 +103,19 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
                 {' '}
                 <span className="sprint__end_total-count mistake">{wrong}</span>
               </Typography>
-              <EndGameWordItem word="alchohol" wordTranslate="алкоголь" />
-              <EndGameWordItem word="alchohol" wordTranslate="алкоголь" />
-              <EndGameWordItem word="alchohol" wordTranslate="алкоголь" />
+              {
+                Array.from(state.wrongAnswers).map((word) => {
+                  const wordData = words.find((item) => item.id === word) as IWordData;
+                  return (
+                    <EndGameWordItem
+                      word={wordData.word}
+                      wordTranslate={wordData.wordTranslate}
+                      audio={wordData.audio}
+                      key={Math.random()}
+                    />
+                  );
+                })
+              }
             </StyledBoxMW>
             <StyledBoxMW sx={{
               alignItems: 'flex-start !important',
@@ -120,9 +132,19 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
                 {' '}
                 <span className="sprint__end_total-count">{right}</span>
               </Typography>
-              <EndGameWordItem word="alchohol" wordTranslate="алкоголь" />
-              <EndGameWordItem word="alchohol" wordTranslate="алкоголь" />
-              <EndGameWordItem word="alchohol" wordTranslate="алкоголь" />
+              {
+                Array.from(state.correctAnswers).map((word) => {
+                  const wordData = words.find((item) => item.id === word) as IWordData;
+                  return (
+                    <EndGameWordItem
+                      word={wordData.word}
+                      wordTranslate={wordData.wordTranslate}
+                      audio={wordData.audio}
+                      key={Math.random()}
+                    />
+                  );
+                })
+              }
             </StyledBoxMW>
           </div>
         </CardContent>

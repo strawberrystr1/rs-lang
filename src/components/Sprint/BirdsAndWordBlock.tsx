@@ -5,7 +5,6 @@ export default function BirdsAndWordBlock(props: ISprinGameWord) {
   const {
     word, correctAnswerInARow, wordTranslate,
   } = props;
-
   return (
     <>
       <div

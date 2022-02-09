@@ -1,6 +1,6 @@
 import styled from '@emotion/styled/';
 import {
-  Avatar, Box, Card, ListItem, Paper,
+  Avatar, Box, Button, Card, ListItem, Paper,
 } from '@mui/material';
 
 export const StyledAvatar = styled(Avatar)`
@@ -53,4 +53,13 @@ export const StyledCard = styled(Card)`
   background: rgba(36, 34, 34, 1);
   border-radius: 10px;
   padding: 10px;
+`;
+
+export const StyledButton = styled(Button)`
+  min-width: 150px;
+  width: 150px;
+  height: 100px;
+  border-radius: 10px;
+  font-size: 42px;
+  margin: 0 10px;
 `;

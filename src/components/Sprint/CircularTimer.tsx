@@ -7,10 +7,9 @@ import { convertTimeToPercent } from '../../utils/gameUtils';
 import { ICircularTimerProps } from '../../interfaces/interfaces';
 
 export default function CircularTimer(props: ICircularTimerProps): ReactElement {
-  const { setIsTimeEnd } = props;
+  const { setIsTimeEnd, isTimePaused, setIsTimePaused } = props;
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
   const [timerLastTime, setTimerLastTime] = useState(60);
-  const [isTimePaused, setIsTimePaused] = useState(false);
 
   const startTimer = () => {
     if (timerLastTime > 0) {
@@ -34,7 +33,7 @@ export default function CircularTimer(props: ICircularTimerProps): ReactElement 
   }, [timerLastTime]);
 
   const toggleTimer = () => {
-    setIsTimePaused((prev) => !prev);
+    setIsTimePaused();
     if (!isTimePaused) {
       setTimerLastTime(timerLastTime);
       clearInterval(timer!);

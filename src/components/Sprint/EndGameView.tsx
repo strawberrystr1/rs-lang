@@ -4,8 +4,8 @@ import {
 } from '@mui/material';
 import React, { ReactElement } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
-import { IAfterGameWordsStat, IWordData } from '../../interfaces/interfaces';
+import { useNavigate, Link } from 'react-router-dom';
+import { IAfterGameWordsStat } from '../../interfaces/interfaces';
 import {
   StyledBoxMW, StyledCard, StyledPaper,
 } from '../StyledMUIItems';
@@ -14,7 +14,7 @@ import EndGameWordItem from './EndGameWordItem';
 
 export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
   const {
-    inARow, right, wrong, state, words,
+    inARow, right, wrong, state,
   } = props;
   const navigate = useNavigate();
 
@@ -39,12 +39,18 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
         <CardContent sx={{ width: '95%' }}>
           <StyledBoxMW>
             <Typography variant="h4" component="span" color="white">Результаты</Typography>
-            <Button variant="contained">Сыграть ещё раз</Button>
+            <Link to="/gamedif" style={{ textDecoration: 'none' }}>
+              <Button
+                variant="contained"
+              >
+                Сыграть ещё раз
+              </Button>
+            </Link>
           </StyledBoxMW>
           <Divider sx={{ background: 'white', marginTop: '10px', height: '3px' }} />
           <div className="sprint__stat-box">
             <StyledBoxMW sx={{ paddingX: '30px', marginBottom: '30px' }}>
-              <CircularStatistic value={Math.ceil((100 / (wrong + right)) * right)} />
+              <CircularStatistic value={Math.ceil((100 / (wrong + right)) * right) || 0} />
               <Box>
                 <Typography
                   variant="h6"
@@ -104,17 +110,14 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
                 <span className="sprint__end_total-count mistake">{wrong}</span>
               </Typography>
               {
-                Array.from(state.wrongAnswers).map((word) => {
-                  const wordData = words.find((item) => item.id === word) as IWordData;
-                  return (
-                    <EndGameWordItem
-                      word={wordData.word}
-                      wordTranslate={wordData.wordTranslate}
-                      audio={wordData.audio}
-                      key={Math.random()}
-                    />
-                  );
-                })
+                state.wrongWords.map((word) => (
+                  <EndGameWordItem
+                    word={word.word}
+                    wordTranslate={word.wordTranslate}
+                    audio={word.audio}
+                    key={Math.random()}
+                  />
+                ))
               }
             </StyledBoxMW>
             <StyledBoxMW sx={{
@@ -133,17 +136,14 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
                 <span className="sprint__end_total-count">{right}</span>
               </Typography>
               {
-                Array.from(state.correctAnswers).map((word) => {
-                  const wordData = words.find((item) => item.id === word) as IWordData;
-                  return (
-                    <EndGameWordItem
-                      word={wordData.word}
-                      wordTranslate={wordData.wordTranslate}
-                      audio={wordData.audio}
-                      key={Math.random()}
-                    />
-                  );
-                })
+                state.correctWords.map((word) => (
+                  <EndGameWordItem
+                    word={word.word}
+                    wordTranslate={word.wordTranslate}
+                    audio={word.audio}
+                    key={Math.random()}
+                  />
+                ))
               }
             </StyledBoxMW>
           </div>

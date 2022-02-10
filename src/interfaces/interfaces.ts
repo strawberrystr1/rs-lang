@@ -6,6 +6,8 @@ export interface IScoreProps {
 
 export interface ICircularTimerProps {
   setIsTimeEnd: () => void;
+  isTimePaused: boolean;
+  setIsTimePaused: () => void;
 }
 
 export interface ICirclesBlockProps {
@@ -15,8 +17,9 @@ export interface ICirclesBlockProps {
 }
 
 export interface IGameStatistic {
-  wrongAnswers: Set<string>;
-  correctAnswers: Set<string>;
+  wrongWords: IWordData[];
+  correctWords: IWordData[];
+  bestInARow: number;
 }
 
 export interface ISprintAnswerButtons {
@@ -28,10 +31,12 @@ export interface ISprintAnswerButtons {
   correctAnswerInARow: number;
   currentLevel: number;
   setScore: (add: number) => void;
-  setState: (key: string, value: string) => void;
+  setState: (key: string, value: IWordData) => void;
   word: IWordData;
   setWords: (idx: number) => void;
   wordIndex: number;
+  isSoundOn: boolean;
+  isTimePaused: boolean;
 }
 
 export interface ISprinGameWord {

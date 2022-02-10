@@ -1,19 +1,21 @@
 import React from 'react';
 import Link from '@mui/material/Link';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ChapterComponentInterface } from '../interfaces/textbookI';
-import ShowCards from './show-cards';
 
 export default function ChapterComponent(data: ChapterComponentInterface) {
-  const { url, num } = data;
+  const { group, num } = data;
   const pageNumber = ` ${(parseInt(num, 10) + 1).toString()}`;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const newPath = `${location.pathname}/${group}/${num}`;
   return (
     <Link
       href="/"
       component="button"
       variant="body2"
       onClick={() => {
-        window.location.href = url;
-        ShowCards();
+        navigate(newPath);
       }}
     >
       Страница

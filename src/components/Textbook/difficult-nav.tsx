@@ -4,15 +4,12 @@ import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: 'absolute',
-  '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-  },
-  '&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight': {
-    top: theme.spacing(2),
+  '&.MuiSpeedDial-directionDown': {
+    top: theme.spacing(1),
     left: theme.spacing(2),
   },
 }));
@@ -22,9 +19,13 @@ const actions = [
   { name: '2' },
   { name: '3' },
   { name: '4' },
+  { name: '5' },
+  { name: '6' },
 ];
 
-export default function PlaygroundSpeedDial() {
+export default function NavigationByDifficult() {
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
       <Box sx={{ position: 'relative', mt: 3, height: 320 }}>
@@ -37,9 +38,13 @@ export default function PlaygroundSpeedDial() {
             <SpeedDialAction
               key={action.name}
               icon={action.name}
-              // title={DDs()}
-              tooltipTitle
-              onClick={() => { console.log('ss'); }}
+              tooltipTitle={12}
+              onClick={() => {
+                const newGroup = (parseInt(action.name, 10) - 1).toString();
+                const oldGroup = location.pathname[location.pathname.lastIndexOf('/') - 1];
+                const rightPage = location.pathname.replace(oldGroup, newGroup);
+                navigate(rightPage);
+              }}
             />
           ))}
         </StyledSpeedDial>

@@ -50,13 +50,6 @@
     background-color: rgb(21, 101, 192);
     box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px;
 }
-.items{
-    display: flex;
-    flex:1;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-}
 i{
     font-style: italic;
 }
@@ -75,6 +68,7 @@ b{
     margin: 0 auto;
     margin-top: -10px;
     margin-bottom: 10px;
+    justify-content: center;
 }
 .card-head{
     display: flex;
@@ -93,4 +87,12 @@ b{
 }
 .word-mean-text, .word-translate-text{
     max-width: 280px;
+}
+.d-nav{
+    position: fixed;
+    right: 6%;
+    top: 7%;
+}
+.MuiTooltip-tooltipPlacementLeft{
+    display: none;
 }

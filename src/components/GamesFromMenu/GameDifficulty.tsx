@@ -22,37 +22,37 @@ export default function GameDifficulty(): ReactElement {
       <p className="game-difficulty">Выберите уровень сложности</p>
       <ButtonGroup variant="contained">
         <Link
-          to={`/game/sprint/1/${randonPage}`}
+          to={`/game/sprint/0/${randonPage}`}
           style={{ textDecoration: 'none' }}
         >
           <StyledButton>1</StyledButton>
         </Link>
         <Link
-          to={`/game/sprint/2/${randonPage}`}
+          to={`/game/sprint/1/${randonPage}`}
           style={{ textDecoration: 'none' }}
         >
           <StyledButton>2</StyledButton>
         </Link>
         <Link
-          to={`/game/sprint/3/${randonPage}`}
+          to={`/game/sprint/2/${randonPage}`}
           style={{ textDecoration: 'none' }}
         >
           <StyledButton>3</StyledButton>
         </Link>
         <Link
-          to={`/game/sprint/4/${randonPage}`}
+          to={`/game/sprint/3/${randonPage}`}
           style={{ textDecoration: 'none' }}
         >
           <StyledButton>4</StyledButton>
         </Link>
         <Link
-          to={`/game/sprint/5/${randonPage}`}
+          to={`/game/sprint/4/${randonPage}`}
           style={{ textDecoration: 'none' }}
         >
           <StyledButton>5</StyledButton>
         </Link>
         <Link
-          to={`/game/sprint/6/${randonPage}`}
+          to={`/game/sprint/5/${randonPage}`}
           style={{ textDecoration: 'none' }}
         >
           <StyledButton>6</StyledButton>

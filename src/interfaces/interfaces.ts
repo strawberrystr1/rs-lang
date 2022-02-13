@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface IScoreProps {
   score: number;
   isSoundOn: boolean;
@@ -8,6 +10,7 @@ export interface ICircularTimerProps {
   setIsTimeEnd: () => void;
   isTimePaused: boolean;
   setIsTimePaused: () => void;
+  isTimeEnd: boolean;
 }
 
 export interface ICirclesBlockProps {
@@ -23,27 +26,29 @@ export interface IGameStatistic {
 }
 
 export interface ISprintAnswerButtons {
-  setCorrectAnswerCounter: () => void;
-  setCorrectAnswersInARow: (count: number) => void;
-  setCurrentLevel: (level: number) => void;
-  setCurrentLevelAnswerCount: (count: number) => void;
-  answer: boolean;
-  correctAnswerInARow: number;
-  currentLevel: number;
-  setScore: (add: number) => void;
-  setState: (key: string, value: IWordData) => void;
-  word: IWordData;
-  setWords: (idx: number) => void;
-  wordIndex: number;
+  // setCorrectAnswerCounter: () => void;
+  // setCorrectAnswersInARow: (count: number) => void;
+  // setCurrentLevel: (level: number) => void;
+  // setCurrentLevelAnswerCount: (count: number) => void;
+  // answer: boolean;
+  // correctAnswerInARow: number;
+  // currentLevel: number;
+  // setScore: (add: number) => void;
+  // setState: (key: string, value: IWordData) => void;
+  // word: IWordData;
+  // setWords: (idx: number) => void;
+  // wordIndex: number;
   isSoundOn: boolean;
   isTimePaused: boolean;
+  buttonState: ICurrentGameBlockState;
+  setButtonState: (newState: Partial<ICurrentGameBlockState>) => void;
 }
 
 export interface ISprinGameWord {
   correctAnswerInARow?: number;
   word: string;
   wordTranslate: string;
-  audio?: string; 
+  audio?: string;
 }
 
 export interface IAfterGameCircle {
@@ -77,6 +82,19 @@ export interface IWordData {
 
 export interface ISprintStartGame {
   group: number;
+}
+
+export interface ICurrentGameBlockState {
+  correctAnswerInARow: number;
+  currentLevel: number;
+  answer: boolean;
+  word: IWordData | null;
+  wordIndex: number;
+  currentLevelAnswerCount: number;
+  score: number;
+  correctAnswerCounter: number;
+  gameState: IGameStatistic;
+  words: IWordData[];
 }
 
 export type SetWordsCBType = (data: IWordData[]) => void;

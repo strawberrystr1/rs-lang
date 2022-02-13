@@ -1,34 +1,50 @@
 import { Button } from '@mui/material';
-import React, { ReactElement, useRef } from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { ISprintAnswerButtons } from '../../interfaces/interfaces';
-import { checkCurrentLevelAnswers, setCurrentGameLevel, upgradeScore } from '../../utils/gameUtils';
+import {
+  checkCurrentLevelAnswers, checkState, setCurrentGameLevel, spliceWords, upgradeScore,
+} from '../../utils/gameUtils';
 import correctSound from '../../assets/correct.mp3';
 import incorrectSound from '../../assets/incorrect.mp3';
 
 export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement {
   const {
-    setCorrectAnswersInARow,
-    setCorrectAnswerCounter,
-    setCurrentLevelAnswerCount,
-    answer,
-    correctAnswerInARow,
-    currentLevel,
-    setCurrentLevel,
-    setScore,
-    setState,
-    word,
-    setWords,
-    wordIndex,
     isTimePaused,
     isSoundOn,
+    buttonState,
+    setButtonState,
   } = props;
 
   const soundRight = useRef<HTMLAudioElement>(null);
   const soundWrong = useRef<HTMLAudioElement>(null);
+  console.log(buttonState.answer, buttonState.words[buttonState.wordIndex]);
 
-  console.log(word);
+  let {
+    correctAnswerInARow,
+    currentLevel,
+    correctAnswerCounter,
+    score,
+    currentLevelAnswerCount,
+    words,
+  } = buttonState;
+
+  let {
+    bestInARow,
+  } = buttonState.gameState;
+
+  const {
+    correctWords,
+    wrongWords,
+  } = buttonState.gameState;
+
+  const {
+    answer,
+    wordIndex,
+  } = buttonState;
+
+  console.log(words);
 
   const resetSound = () => {
     (soundWrong.current as HTMLAudioElement).pause();
@@ -38,19 +54,23 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
   };
 
   const handleCorrectAnswer = () => {
-    setCorrectAnswersInARow(correctAnswerInARow + 1);
-    setCorrectAnswerCounter();
-    setState('correctWords', word);
-    setScore(upgradeScore(correctAnswerInARow));
+    correctAnswerInARow += 1;
+    correctAnswerCounter += 1;
+    if (checkState('correctWords', words[wordIndex], correctWords)) {
+      correctWords.push(words[wordIndex]);
+    }
+    score += upgradeScore(correctAnswerInARow);
     resetSound();
     if (isSoundOn) (soundRight.current as HTMLAudioElement).play();
   };
 
   const handleWrongAnswer = () => {
-    setCorrectAnswersInARow(0);
-    setCurrentGameLevel(0, setCurrentLevel);
-    setCurrentLevelAnswerCount(0);
-    setState('wrongWords', word);
+    correctAnswerInARow = 0;
+    currentLevel = setCurrentGameLevel(0);
+    currentLevelAnswerCount = 0;
+    if (checkState('wrongWords', words[wordIndex], wrongWords)) {
+      wrongWords.push(words[wordIndex]);
+    }
     resetSound();
     if (isSoundOn) (soundWrong.current as HTMLAudioElement).play();
   };
@@ -61,12 +81,31 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
     } else {
       handleWrongAnswer();
     }
-    if (currentLevel < 4) setCurrentGameLevel(correctAnswerInARow, setCurrentLevel);
+    if (currentLevel < 4) currentLevel = setCurrentGameLevel(correctAnswerInARow);
     const answerCounter = checkCurrentLevelAnswers(correctAnswerInARow);
     if (answerCounter && currentLevel < 4) {
-      setCurrentLevelAnswerCount(answerCounter);
+      currentLevelAnswerCount = answerCounter;
     }
-    setWords(wordIndex);
+    if (words.length === 0) {
+      return;
+    }
+    words = spliceWords(wordIndex, words);
+    bestInARow = correctAnswerInARow > bestInARow
+      ? correctAnswerInARow
+      : bestInARow;
+    setButtonState({
+      correctAnswerInARow,
+      currentLevel,
+      currentLevelAnswerCount,
+      score,
+      correctAnswerCounter,
+      words,
+      gameState: {
+        correctWords,
+        wrongWords,
+        bestInARow,
+      },
+    });
   };
 
   const handleRightBtn = () => {
@@ -75,13 +114,46 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
     } else {
       handleWrongAnswer();
     }
-    if (currentLevel < 4) setCurrentGameLevel(correctAnswerInARow, setCurrentLevel);
+    if (currentLevel < 4) currentLevel = setCurrentGameLevel(correctAnswerInARow);
     const answerCounter = checkCurrentLevelAnswers(correctAnswerInARow);
     if (answerCounter && currentLevel < 4) {
-      setCurrentLevelAnswerCount(answerCounter);
+      currentLevelAnswerCount = answerCounter;
     }
-    setWords(wordIndex);
+    if (words.length === 0) {
+      return;
+    }
+    words = spliceWords(wordIndex, words);
+    bestInARow = correctAnswerInARow > bestInARow
+      ? correctAnswerInARow
+      : bestInARow;
+    setButtonState({
+      correctAnswerInARow,
+      currentLevel,
+      currentLevelAnswerCount,
+      score,
+      correctAnswerCounter,
+      words,
+      gameState: {
+        correctWords,
+        wrongWords,
+        bestInARow,
+      },
+    });
   };
+
+  const handleArrow = (e: KeyboardEvent) => {
+    if (!words[wordIndex]) return;
+    if (e.code === 'ArrowRight') {
+      if (!isTimePaused) handleRightBtn();
+    } else if (e.code === 'ArrowLeft') {
+      if (!isTimePaused) handleWrongBtn();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keyup', handleArrow);
+    return () => window.removeEventListener('keyup', handleArrow);
+  }, [answer, wordIndex]);
 
   return (
     <>
@@ -95,6 +167,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
             height: '50px',
             fontSize: '18px',
           }}
+          disabled={isTimePaused}
           onClick={() => { if (!isTimePaused) handleWrongBtn(); }}
         >
           Не верно
@@ -108,16 +181,17 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
             height: '50px',
             fontSize: '18px',
           }}
+          disabled={isTimePaused}
           onClick={() => { if (!isTimePaused) handleRightBtn(); }}
         >
           Верно
         </Button>
       </div>
       <div className="sprint__arrows">
-        <Button disableRipple>
+        <Button disableRipple disabled={isTimePaused}>
           <ArrowBackIcon fontSize="large" onClick={() => { if (!isTimePaused) handleWrongBtn(); }} />
         </Button>
-        <Button disableRipple>
+        <Button disableRipple disabled={isTimePaused}>
           <ArrowForwardIcon fontSize="large" onClick={() => { if (!isTimePaused) handleRightBtn(); }} />
         </Button>
       </div>

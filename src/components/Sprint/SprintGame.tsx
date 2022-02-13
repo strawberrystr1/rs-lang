@@ -1,5 +1,5 @@
 import {
-  Container, Card, Button,
+  Container, Card, Button, CircularProgress,
 } from '@mui/material';
 import React, {
   ReactElement, useEffect, useRef, useState,
@@ -14,30 +14,35 @@ import ButtonsBlock from './ButtonsBlock';
 import BirdsAndWordBlock from './BirdsAndWordBlock';
 import EndGameView from './EndGameView';
 import { getRandomSetOfWords, getWordForGame } from '../../utils/gameUtils';
-import { IGameStatistic, IWordData } from '../../interfaces/interfaces';
+import { ICurrentGameBlockState } from '../../interfaces/interfaces';
 
 export default function SprintGame(): ReactElement {
-  const [correctAnswerInARow, setCorrectAnswersInARow] = useState(0);
-  const [currentLevelAnswerCount, setCurrentLevelAnswerCount] = useState(0);
-  const [currentLevel, setCurrentLevel] = useState(1);
   const [isWordPlaying, setIsWordPlaying] = useState(false);
-  const [score, setScore] = useState(0);
   const [isSoundOn, setIsSoundOn] = useState(true);
-  const [correctAnswerCounter, setCorrectAnswerCounter] = useState(0);
   const [isTimeEnd, setIsTimeEnd] = useState(false);
-  const [words, setWords] = useState<IWordData[]>([]);
-  const [state, setState] = useState<IGameStatistic>({
-    wrongWords: [],
-    correctWords: [],
-    bestInARow: 0,
-  });
   const [isTimePaused, setIsTimePaused] = useState(false);
   const [pageDown, setPageDown] = useState(0);
   const wordSound = useRef<HTMLAudioElement>(null);
-  const [word, setWord] = useState<string>('');
+  const [singleWord, setSingleWord] = useState<string>('');
   const [wordTranslate, setWordTranslate] = useState<string>('');
-  const [answer, setAnswer] = useState<boolean>(false);
-  const [wordIndex, setWordIndex] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [buttonState, setButtonState] = useState<ICurrentGameBlockState>({
+    correctAnswerInARow: 0,
+    currentLevel: 1,
+    answer: false,
+    word: null,
+    wordIndex: 0,
+    currentLevelAnswerCount: 0,
+    score: 0,
+    correctAnswerCounter: 0,
+    gameState: {
+      correctWords: [],
+      wrongWords: [],
+      bestInARow: 0,
+    },
+    words: [],
+  });
 
   const params = useParams();
   const group: number = +(params.group as string);
@@ -48,20 +53,29 @@ export default function SprintGame(): ReactElement {
       setIsTimeEnd(true);
     }
     if (!isTimeEnd) {
-      if (words.length === 0) {
+      if (buttonState.words.length === 0) {
+        setIsLoading(true);
         setPageDown((prev) => prev + 1);
-        getRandomSetOfWords(group, (data) => setWords(data), page - pageDown);
+        getRandomSetOfWords(group, (data) => {
+          setButtonState((prev) => ({
+            ...prev,
+            words: data,
+          }));
+          setIsLoading(false);
+        }, page - pageDown);
       }
-      const wordsArray: string[] = words.map((wordItem) => wordItem.word);
-      const translateArray: string[] = words.map((wordItem) => wordItem.wordTranslate);
-      const variables = getWordForGame(wordsArray, translateArray);
+      const variables = getWordForGame(buttonState.words);
       const [wordFF, wordTranslateFF, answerFF, wordIndexFF] = variables;
-      setWord(wordFF);
+      setSingleWord(wordFF);
       setWordTranslate(wordTranslateFF);
-      setAnswer(answerFF);
-      setWordIndex(wordIndexFF);
+      setButtonState((prev) => ({
+        ...prev,
+        word: buttonState.words[wordIndexFF],
+        answer: answerFF,
+        wordIndex: wordIndexFF,
+      }));
     }
-  }, [words]);
+  }, [buttonState.words]);
 
   const toggleSound = () => {
     if (!isWordPlaying) {
@@ -76,30 +90,6 @@ export default function SprintGame(): ReactElement {
       setIsWordPlaying(false);
     }
   };
-
-  const changeState = (key: string, value: IWordData) => setState((prev) => {
-    const bestRow = correctAnswerInARow > prev.bestInARow ? correctAnswerInARow : prev.bestInARow;
-    if (key === 'wrongWords') {
-      const idx = state.wrongWords.some((item) => item.id === value.id);
-      if (!idx) {
-        return {
-          wrongWords: [...prev.wrongWords, value],
-          correctWords: [...prev.correctWords],
-          bestInARow: bestRow,
-        };
-      }
-    } else {
-      const idx = state.correctWords.some((item) => item.id === value.id);
-      if (!idx) {
-        return {
-          wrongWords: [...prev.wrongWords],
-          correctWords: [...prev.correctWords, value],
-          bestInARow: bestRow,
-        };
-      }
-    }
-    return prev;
-  });
 
   return (
     <Container
@@ -119,13 +109,19 @@ export default function SprintGame(): ReactElement {
           position: 'relative',
         }}
       >
-        <CircularTimer
-          setIsTimeEnd={() => setIsTimeEnd(true)}
-          isTimePaused={isTimePaused}
-          setIsTimePaused={() => setIsTimePaused((prev) => !prev)}
-        />
+        {
+          (!isLoading || buttonState.score > 0)
+           && (
+           <CircularTimer
+             setIsTimeEnd={() => setIsTimeEnd(true)}
+             isTimePaused={isTimePaused}
+             setIsTimePaused={() => setIsTimePaused((prev) => !prev)}
+             isTimeEnd={isTimeEnd}
+           />
+           )
+        }
         <ScoreBlock
-          score={score}
+          score={buttonState.score}
           isSoundOn={isSoundOn}
           setIsSoundOn={() => setIsSoundOn((prev) => !prev)}
         />
@@ -137,7 +133,11 @@ export default function SprintGame(): ReactElement {
             background: 'rgba(90, 206, 109, 1)',
             borderRadius: '10px',
             position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}
+          tabIndex={0}
         >
           <Button
             size="small"
@@ -159,42 +159,36 @@ export default function SprintGame(): ReactElement {
               ? <PauseCircleOutlineIcon fontSize="large" />
               : <PlayCircleOutlineIcon fontSize="large" />}
 
-            { words?.[wordIndex]?.audio && (
-            <audio ref={wordSound} src={`https://react-rslang-str.herokuapp.com/${words[wordIndex].audio}`}>
+            { buttonState.words?.[buttonState.wordIndex]?.audio && (
+            <audio ref={wordSound} src={`https://react-rslang-str.herokuapp.com/${buttonState.words[buttonState.wordIndex].audio}`}>
               <track kind="captions" />
             </audio>
             )}
           </Button>
           <CirclesBlock
-            currentLevelAnswerCount={currentLevelAnswerCount}
-            currentLevel={currentLevel}
-            correctAnswerInARow={correctAnswerInARow}
+            currentLevelAnswerCount={buttonState.currentLevelAnswerCount}
+            currentLevel={buttonState.currentLevel}
+            correctAnswerInARow={buttonState.correctAnswerInARow}
           />
-          <BirdsAndWordBlock
-            correctAnswerInARow={correctAnswerInARow}
-            word={word}
-            wordTranslate={wordTranslate}
-          />
+          {
+            isLoading
+              ? <CircularProgress />
+              : (
+                <BirdsAndWordBlock
+                  correctAnswerInARow={buttonState.correctAnswerInARow}
+                  word={singleWord}
+                  wordTranslate={wordTranslate}
+                />
+              )
+          }
           <ButtonsBlock
-            setWords={(idx: number) => setWords((prev) => {
-              const newArr = prev.slice();
-              newArr.splice(idx, 1);
-              setIsWordPlaying(false);
-              return newArr;
-            })}
+            buttonState={buttonState}
+            setButtonState={(newState) => setButtonState((prev) => ({
+              ...prev,
+              ...newState,
+            }))}
             isTimePaused={isTimePaused}
-            wordIndex={wordIndex}
-            setState={changeState}
-            word={words[wordIndex]}
-            currentLevel={currentLevel}
-            setCurrentLevelAnswerCount={(count: number) => setCurrentLevelAnswerCount(count)}
-            setCurrentLevel={setCurrentLevel}
-            correctAnswerInARow={correctAnswerInARow}
-            answer={answer}
             isSoundOn={isSoundOn}
-            setScore={(add: number) => setScore((prev) => prev + add)}
-            setCorrectAnswerCounter={() => setCorrectAnswerCounter((prev) => prev + 1)}
-            setCorrectAnswersInARow={(count: number) => setCorrectAnswersInARow(count)}
           />
         </Card>
       </Container>
@@ -202,11 +196,11 @@ export default function SprintGame(): ReactElement {
         isTimeEnd
           && (
           <EndGameView
-            state={state}
-            wrong={state.wrongWords.length}
-            right={correctAnswerCounter}
-            inARow={state.bestInARow}
-            words={words}
+            state={buttonState.gameState}
+            wrong={buttonState.gameState.wrongWords.length}
+            right={buttonState.correctAnswerCounter}
+            inARow={buttonState.gameState.bestInARow}
+            words={buttonState.words}
           />
           )
       }

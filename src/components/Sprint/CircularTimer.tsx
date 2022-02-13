@@ -7,40 +7,57 @@ import { convertTimeToPercent } from '../../utils/gameUtils';
 import { ICircularTimerProps } from '../../interfaces/interfaces';
 
 export default function CircularTimer(props: ICircularTimerProps): ReactElement {
-  const { setIsTimeEnd, isTimePaused, setIsTimePaused } = props;
+  const {
+    setIsTimeEnd, isTimePaused, setIsTimePaused, isTimeEnd,
+  } = props;
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
   const [timerLastTime, setTimerLastTime] = useState(60);
+  let isMounted = true;
 
   const startTimer = () => {
+    if (isTimeEnd) return;
     if (timerLastTime > 0) {
       const timerId = setInterval(() => {
-        setTimerLastTime((prev) => prev - 1);
+        if (isMounted) setTimerLastTime((prev) => prev - 1);
       }, 1000);
       setTimer(timerId);
     } else {
+      setIsTimePaused();
       clearInterval(timer!);
       setIsTimeEnd();
     }
   };
 
-  useEffect(() => {
-    let cleanupFunction = false;
-    clearInterval(timer!);
-    if (!cleanupFunction) {
-      startTimer();
-    }
-    return () => { cleanupFunction = true; };
-  }, [timerLastTime]);
-
-  const toggleTimer = () => {
+  const toggleTimer = (fromSpace?: boolean) => {
     setIsTimePaused();
-    if (!isTimePaused) {
+    if (!isTimePaused && !fromSpace) {
       setTimerLastTime(timerLastTime);
       clearInterval(timer!);
     } else {
       startTimer();
     }
   };
+
+  const handleSpace = (e: KeyboardEvent) => {
+    if (e.code === 'Space') {
+      toggleTimer(true);
+    }
+  };
+
+  useEffect(() => {
+    clearInterval(timer!);
+    if (!isTimePaused) {
+      startTimer();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [timerLastTime]);
+
+  useEffect(() => {
+    window.addEventListener('keyup', handleSpace);
+    return () => window.removeEventListener('keyup', handleSpace);
+  }, [timerLastTime]);
 
   return (
     <Box sx={{
@@ -73,12 +90,16 @@ export default function CircularTimer(props: ICircularTimerProps): ReactElement 
         }}
       >
         <Button
-          onClick={toggleTimer}
+          onClick={(e) => {
+            if ((e.target as HTMLElement).nodeName === 'DIV'
+              || (e.target as HTMLElement).nodeName === 'path') toggleTimer();
+          }}
           disableRipple
           sx={{
             maxWidth: '80px',
             maxHeight: '80px',
           }}
+          tabIndex={0}
         >
           {
             !isTimePaused

@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { BASE_URL } from '../constants/apiConstants';
-import { IWordData, SetGameLevelCB, SetWordsCBType } from '../interfaces/interfaces';
+import {
+  IWordData,
+  // SetGameLevelCB,
+  SetWordsCBType,
+} from '../interfaces/interfaces';
 
 export function convertTimeToPercent(value: number) {
   const fullPercents = 100;
@@ -8,18 +12,18 @@ export function convertTimeToPercent(value: number) {
   return Math.round(value * (fullPercents / secondsInMinute));
 }
 
-export function getRandomSetOfWords(
+export async function getRandomSetOfWords(
   group: number,
   setWordsCallback: SetWordsCBType,
   page: number,
 ) {
-  axios.get<IWordData[]>(`${BASE_URL}words`, {
+  const response = await axios.get<IWordData[]>(`${BASE_URL}words`, {
     params: {
       group,
       page,
     },
-  }).then((response) => response.data)
-    .then((data) => setWordsCallback(data));
+  });
+  setTimeout(() => setWordsCallback(response.data), 3000);
 }
 
 function trueOrFalse() {
@@ -29,26 +33,42 @@ function trueOrFalse() {
   return false;
 }
 
-export function getWordForGame(wordsArr: string[], translateArr: string[]): [string, string, boolean, number] {
-  const randomWord = Math.floor(Math.random() * wordsArr.length);
+export function getWordForGame(words: IWordData[]): [string, string, boolean, number] {
+  if (words.length === 0) return ['', '', false, 0];
+  const randomWord = Math.floor(Math.random() * words.length);
   const answer = trueOrFalse();
   if (answer) {
-    return [wordsArr[randomWord], translateArr[randomWord], answer, randomWord];
+    return [words[randomWord].word, words[randomWord].wordTranslate, answer, randomWord];
   }
-  const randomTranslate = Math.floor(Math.random() * translateArr.length);
-  return [wordsArr[randomWord], translateArr[randomTranslate], answer, randomWord];
+  let randomTranslate = Math.floor(Math.random() * words.length);
+  if (randomWord === randomTranslate) {
+    randomTranslate = Math.floor(Math.random() * words.length);
+  }
+  return [words[randomWord].word, words[randomTranslate].wordTranslate, answer, randomWord];
 }
 
-export function setCurrentGameLevel(correctAnswerInARow: number, setCurrentLevel: SetGameLevelCB) {
+export function setCurrentGameLevel(
+  correctAnswerInARow: number,
+  // setCurrentLevel: SetGameLevelCB
+) {
   if (correctAnswerInARow >= 11) {
-    setCurrentLevel(4);
-  } else if (correctAnswerInARow >= 7) {
-    setCurrentLevel(3);
-  } else if (correctAnswerInARow >= 3) {
-    setCurrentLevel(2);
-  } else {
-    setCurrentLevel(1);
+    // setCurrentLevel(4);
+    return 4;
   }
+  // else
+  if (correctAnswerInARow >= 7) {
+    // setCurrentLevel(3);
+    return 3;
+  }
+  // else
+  if (correctAnswerInARow >= 3) {
+    // setCurrentLevel(2);
+    return 2;
+  }
+  // else {
+  // setCurrentLevel(1);
+  return 1;
+  // }
 }
 
 export function checkCurrentLevelAnswers(count: number) {
@@ -114,4 +134,25 @@ export function howMuchCirclesFilled(
     return ['filled', '', ''];
   }
   return ['filled', 'filled', ''];
+}
+
+export function checkState(key: string, value: IWordData, array: IWordData[]) {
+  if (key === 'wrongWords') {
+    const idx = array.some((item) => item.id === value.id);
+    if (!idx) {
+      return true;
+    }
+  } else {
+    const idx = array.some((item) => item.id === value.id);
+    if (!idx) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function spliceWords(idx: number, array: IWordData[]) {
+  const newArr = array.slice();
+  newArr.splice(idx, 1);
+  return newArr;
 }

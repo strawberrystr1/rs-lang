@@ -14,6 +14,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
     isTimePaused,
     isSoundOn,
     buttonState,
+    setIsWordPlaying,
     setButtonState,
   } = props;
 
@@ -73,6 +74,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
   };
 
   const handleWrongBtn = () => {
+    setIsWordPlaying();
     if (!answer) {
       handleCorrectAnswer();
     } else {
@@ -106,6 +108,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
   };
 
   const handleRightBtn = () => {
+    setIsWordPlaying();
     if (answer) {
       handleCorrectAnswer();
     } else {
@@ -150,7 +153,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
   useEffect(() => {
     window.addEventListener('keyup', handleArrow);
     return () => window.removeEventListener('keyup', handleArrow);
-  }, [answer, wordIndex]);
+  }, [answer, wordIndex, isSoundOn]);
 
   return (
     <>

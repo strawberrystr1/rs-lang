@@ -1,6 +1,7 @@
 import React, { ReactElement, useState, useRef } from 'react';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import { Button, Typography } from '@mui/material';
+import MicOffIcon from '@mui/icons-material/MicOff';
 import { ISprinGameWord } from '../../interfaces/interfaces';
 
 export default function EndGameWordItem(props: ISprinGameWord): ReactElement {
@@ -11,6 +12,9 @@ export default function EndGameWordItem(props: ISprinGameWord): ReactElement {
   const toggleAudio = () => {
     if (!isPlaying) {
       (audioElem.current as HTMLAudioElement).play();
+      (audioElem.current as HTMLAudioElement).onended = () => {
+        setIsPlaying(false);
+      };
       setIsPlaying(true);
     } else {
       (audioElem.current as HTMLAudioElement).pause();
@@ -29,7 +33,12 @@ export default function EndGameWordItem(props: ISprinGameWord): ReactElement {
           borderRadius: '50%',
         }}
       >
-        <KeyboardVoiceIcon fontSize="medium" />
+        {
+          isPlaying
+            ? <MicOffIcon fontSize="medium" />
+            : <KeyboardVoiceIcon fontSize="medium" />
+        }
+
       </Button>
       <Typography
         variant="h6"

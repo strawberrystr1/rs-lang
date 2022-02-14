@@ -19,7 +19,6 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
 
   const soundRight = useRef<HTMLAudioElement>(null);
   const soundWrong = useRef<HTMLAudioElement>(null);
-  console.log(buttonState.answer, buttonState.words[buttonState.wordIndex]);
 
   let {
     correctAnswerInARow,
@@ -43,8 +42,6 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
     answer,
     wordIndex,
   } = buttonState;
-
-  console.log(words);
 
   const resetSound = () => {
     (soundWrong.current as HTMLAudioElement).pause();

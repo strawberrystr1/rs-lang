@@ -12,9 +12,14 @@ import AuthentticationPage from '../Authentication/AuthentticationPage';
 import { RootState } from '../../redux/store';
 import { logOut } from '../../redux/userState/userSlice';
 
-function Header() {
+interface IHeaderProps {
+  isAuthOpenProp: boolean;
+}
+
+function Header(props: IHeaderProps) {
+  const { isAuthOpenProp } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(isAuthOpenProp);
   const userName = useSelector((state: RootState) => state.user.name);
   const dispatch = useDispatch();
 

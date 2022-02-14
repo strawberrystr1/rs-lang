@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { MiddlewareAPI, Middleware, Action } from 'redux';
 import { IUserState } from '../interfaces/apiInterfaces';
 import userReducer from './userState/userSlice';
+import statisticReducer from './userState/statisticSlice';
+import wordReducer from './userState/wordsSlice';
 
 const initialState: IUserState = {
   user: {
@@ -12,6 +14,23 @@ const initialState: IUserState = {
     error: null,
     loading: false,
   },
+  userStatistic: {
+    learnedWords: 0,
+    id: '',
+    optional: {
+      short: {
+        lastDate: 0,
+        sprint: {
+          newWords: 0,
+          inARow: 0,
+          percents: 0,
+          allAnswers: 0,
+          correctAnswers: 0,
+        },
+      },
+    },
+  },
+  userWords: [],
 };
 
 const localStorageMiddleWare: Middleware = (api: MiddlewareAPI) => (next) => <A extends Action>(action: A) => {
@@ -33,6 +52,8 @@ const restoreStore = () => {
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    userStatistic: statisticReducer,
+    userWords: wordReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleWare),
   preloadedState: restoreStore(),

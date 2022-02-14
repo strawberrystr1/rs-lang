@@ -10,9 +10,10 @@ import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
 function App() {
   return (
     <>
-      <Header />
+      <Header isAuthOpenProp={false} />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/signin" element={<Header isAuthOpenProp />} />
         <Route path="/textbook" element={<EmptyPage />} />
         <Route path="/dictionary/difficult" element={<EmptyPage />} />
         <Route path="/dictionary/learned" element={<EmptyPage />} />

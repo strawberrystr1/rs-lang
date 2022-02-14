@@ -7,14 +7,22 @@ import React, {
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import CircularTimer from './CircularTimer';
 import ScoreBlock from './ScoreBlock';
 import CirclesBlock from './CirclesBlock';
 import ButtonsBlock from './ButtonsBlock';
 import BirdsAndWordBlock from './BirdsAndWordBlock';
 import EndGameView from './EndGameView';
-import { getRandomSetOfWords, getWordForGame } from '../../utils/gameUtils';
+import {
+  checkWord,
+  compareStatistic, getRandomSetOfWords, getWordForGame, updateWord,
+} from '../../utils/gameUtils';
 import { ICurrentGameBlockState } from '../../interfaces/interfaces';
+import { RootState } from '../../redux/store';
+import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
+import { addUserWord, updateUserWord } from '../../redux/userState/wordsSlice';
+import { IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
 
 export default function SprintGame(): ReactElement {
   const [isWordPlaying, setIsWordPlaying] = useState(false);
@@ -29,7 +37,7 @@ export default function SprintGame(): ReactElement {
 
   const [buttonState, setButtonState] = useState<ICurrentGameBlockState>({
     correctAnswerInARow: 0,
-    currentLevel: 1,
+    currentLevel: 0,
     answer: false,
     word: null,
     wordIndex: 0,
@@ -47,6 +55,15 @@ export default function SprintGame(): ReactElement {
   const params = useParams();
   const group: number = +(params.group as string);
   const page: number = +(params.page as string);
+
+  const { user, userStatistic } = useSelector((state: RootState) => state);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user.name) {
+      dispatch(getStatistic({ userId: user.id, token: user.token }));
+    }
+  }, []);
 
   useEffect(() => {
     if (page - pageDown < -1) {
@@ -76,6 +93,49 @@ export default function SprintGame(): ReactElement {
       }));
     }
   }, [buttonState.words]);
+
+  const addNewWords = () => {
+    checkWord(
+      buttonState.gameState.correctWords,
+      user,
+      (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
+    );
+    checkWord(
+      buttonState.gameState.wrongWords,
+      user,
+      (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
+    );
+    updateWord(
+      buttonState.gameState.correctWords,
+      'correct',
+      (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+      user,
+    );
+    updateWord(
+      buttonState.gameState.wrongWords,
+      'wrong',
+      (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+      user,
+    );
+  };
+
+  useEffect(() => {
+    if (isTimeEnd) {
+      if (user.name) {
+        addNewWords();
+        compareStatistic(userStatistic, buttonState, user)
+          .then((result) => {
+            dispatch(updateStatistic({
+              userId: user.id,
+              token: user.token,
+              optional: {
+                ...result,
+              },
+            }));
+          });
+      }
+    }
+  }, [isTimeEnd]);
 
   const toggleSound = () => {
     if (!isWordPlaying) {

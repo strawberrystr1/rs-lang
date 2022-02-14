@@ -26,18 +26,6 @@ export interface IGameStatistic {
 }
 
 export interface ISprintAnswerButtons {
-  // setCorrectAnswerCounter: () => void;
-  // setCorrectAnswersInARow: (count: number) => void;
-  // setCurrentLevel: (level: number) => void;
-  // setCurrentLevelAnswerCount: (count: number) => void;
-  // answer: boolean;
-  // correctAnswerInARow: number;
-  // currentLevel: number;
-  // setScore: (add: number) => void;
-  // setState: (key: string, value: IWordData) => void;
-  // word: IWordData;
-  // setWords: (idx: number) => void;
-  // wordIndex: number;
   isSoundOn: boolean;
   isTimePaused: boolean;
   buttonState: ICurrentGameBlockState;

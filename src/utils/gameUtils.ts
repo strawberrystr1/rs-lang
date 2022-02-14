@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { BASE_URL } from '../constants/apiConstants';
 import {
+  DispatchCBCheckWord,
+  DispatchCBUpdateWord,
+  IAggregatedWord,
+  ICurrentUserState, IQueryParamsForWords, ISprintStats, ITodayWordsResponse, IUserStatistic,
+} from '../interfaces/apiInterfaces';
+import {
+  ICurrentGameBlockState,
   IWordData,
   // SetGameLevelCB,
   SetWordsCBType,
@@ -23,7 +30,7 @@ export async function getRandomSetOfWords(
       page,
     },
   });
-  setTimeout(() => setWordsCallback(response.data), 3000);
+  setWordsCallback(response.data);
 }
 
 function trueOrFalse() {
@@ -49,38 +56,29 @@ export function getWordForGame(words: IWordData[]): [string, string, boolean, nu
 
 export function setCurrentGameLevel(
   correctAnswerInARow: number,
-  // setCurrentLevel: SetGameLevelCB
 ) {
   if (correctAnswerInARow >= 11) {
-    // setCurrentLevel(4);
     return 4;
   }
-  // else
   if (correctAnswerInARow >= 7) {
-    // setCurrentLevel(3);
     return 3;
   }
-  // else
   if (correctAnswerInARow >= 3) {
-    // setCurrentLevel(2);
     return 2;
   }
-  // else {
-  // setCurrentLevel(1);
   return 1;
-  // }
 }
 
 export function checkCurrentLevelAnswers(count: number) {
   if (count < 4) {
     switch (count) {
-      case 0: {
+      case 1: {
         return 1;
       }
-      case 1: {
+      case 2: {
         return 2;
       }
-      case 2: {
+      case 3: {
         return 3;
       }
       default: {
@@ -90,9 +88,12 @@ export function checkCurrentLevelAnswers(count: number) {
   } else {
     switch (count % 4) {
       case 1: {
-        return 2;
+        return 1;
       }
       case 2: {
+        return 2;
+      }
+      case 3: {
         return 3;
       }
       case 0: {
@@ -106,11 +107,11 @@ export function checkCurrentLevelAnswers(count: number) {
 }
 
 export function upgradeScore(correctAnswerInARow: number) {
-  if (correctAnswerInARow < 4) {
+  if (correctAnswerInARow <= 4) {
     return 10;
-  } if (correctAnswerInARow >= 4 && correctAnswerInARow < 8) {
+  } if (correctAnswerInARow > 4 && correctAnswerInARow <= 8) {
     return 20;
-  } if (correctAnswerInARow >= 8 && correctAnswerInARow < 12) {
+  } if (correctAnswerInARow > 8 && correctAnswerInARow <= 12) {
     return 40;
   }
   return 80;
@@ -155,4 +156,148 @@ export function spliceWords(idx: number, array: IWordData[]) {
   const newArr = array.slice();
   newArr.splice(idx, 1);
   return newArr;
+}
+
+export async function getAllAggregatedWords(user: Partial<ICurrentUserState>, query: IQueryParamsForWords) {
+  const response = await axios.get<ITodayWordsResponse[]>(
+    `https://react-rslang-str.herokuapp.com/users/${user.id}/aggregatedWords`,
+    {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+      params: {
+        ...query,
+      },
+    },
+  );
+  return response.data;
+}
+
+export async function getAggregatedWord(word: IWordData, user: Partial<ICurrentUserState>) {
+  const response = await axios.get<IAggregatedWord[]>(
+    `https://react-rslang-str.herokuapp.com/users/${user.id}/aggregatedWords/${word.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    },
+  );
+  return response.data;
+}
+// filter: `{"$or":[{"userWord.difficulty": "simple"}, {"userWord.difficulty":"hard"}]}`,
+
+export async function compareStatistic(
+  storageStats: IUserStatistic,
+  currentStats: ICurrentGameBlockState,
+  user: Partial<ICurrentUserState>,
+) {
+  const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+  const bestInARow = (storageStats.optional.short.sprint as ISprintStats).inARow > currentStats.gameState.bestInARow
+    ? (storageStats.optional.short.sprint as ISprintStats).inARow
+    : currentStats.gameState.bestInARow;
+  const correctAll = (storageStats.optional.short.sprint as ISprintStats).correctAnswers + currentStats.gameState.correctWords.length;
+  const allWords = (storageStats.optional.short.sprint as ISprintStats).allAnswers
+    + currentStats.gameState.correctWords.length
+    + currentStats.gameState.wrongWords.length;
+  const newWordsResponse = await getAllAggregatedWords(user, {
+    filter: `{"$and":[{"userWord.optional.wordDate":${todayDate}}]}`,
+  });
+  const newWords = newWordsResponse[0].totalCount[0]?.count || 0;
+  const learnedWords = await getAllAggregatedWords(user, {
+    filter: '{"$and":[{"userWord.optional.learned":true}]}',
+  });
+  const newState: IUserStatistic = {
+    learnedWords: learnedWords[0].totalCount[0]?.count || 0,
+    optional: {
+      short: {
+        lastDate: Date.now(),
+        sprint: {
+          inARow: bestInARow,
+          correctAnswers: correctAll,
+          allAnswers: allWords,
+          percents: Math.floor((correctAll * 100) / allWords) || 0,
+          newWords,
+        },
+      },
+    },
+  };
+  return newState;
+}
+
+export async function checkUserWordExists(wordId: string, userId: string, token: string) {
+  const response = await fetch(`https://react-rslang-str.herokuapp.com/users/${userId}/words/${wordId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  switch (response.status) {
+    case 404:
+      return false;
+    default:
+      return true;
+  }
+}
+
+export async function checkWordProgress(word: IWordData, user: Partial<ICurrentUserState>) {
+  const wordFromStorage = await getAggregatedWord(word, user);
+  return wordFromStorage;
+}
+
+export function checkWord(array: IWordData[], user: Partial<ICurrentUserState>, dispatch: DispatchCBCheckWord) {
+  array.forEach((word) => {
+    checkUserWordExists(word.id, (user.id as string), (user.token as string))
+      .then((result) => {
+        if (!result) {
+          const wordDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+          dispatch({
+            user,
+            word,
+            wordOptions: {
+              difficulty: 'simple',
+              optional: {
+                learned: false,
+                progress: 0,
+                new: false,
+                wordId: word.id,
+                wordDate,
+                learnDate: 0,
+              },
+            },
+          });
+        }
+      });
+  });
+}
+
+export function updateWord(
+  array: IWordData[],
+  type: string,
+  dispatch: DispatchCBUpdateWord,
+  user: Partial<ICurrentUserState>,
+) {
+  array.forEach((word) => {
+    checkWordProgress(word, user)
+      .then((result) => {
+        if (result[0].userWord) {
+          if (type === 'correct') {
+            dispatch({ word: result[0], user });
+          } else {
+            const resetProgress: IAggregatedWord = {
+              ...result[0],
+              userWord: {
+                ...result[0].userWord,
+                optional: {
+                  ...result[0].userWord.optional,
+                  progress: 0,
+                  learned: false,
+                  learnDate: 0,
+                },
+              },
+            };
+            dispatch({ word: resetProgress, user });
+          }
+        }
+      });
+  });
 }

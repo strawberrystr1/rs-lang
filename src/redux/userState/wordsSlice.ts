@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
+  ICurrentUserState,
   IUserCreateWordRequest, IUserUpdateWordRequest, IUserWord,
 } from '../../interfaces/apiInterfaces';
 
@@ -28,6 +29,22 @@ export const addUserWord = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(wordOptions),
+      },
+    );
+    const data = await response.json();
+    return data;
+  },
+);
+
+export const getAllWords = createAsyncThunk(
+  'user/getAllWords',
+  async (user: Partial<ICurrentUserState>) => {
+    const response = await fetch(
+      `https://react-rslang-str.herokuapp.com/users/${user.id}/words`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
       },
     );
     const data = await response.json();
@@ -81,6 +98,7 @@ const wordSlice = createSlice({
       console.log(1);
       // eslint-disable-next-line
       state = [];
+      console.log('state: ', state);
       return state;
     },
   },
@@ -93,6 +111,10 @@ const wordSlice = createSlice({
       const ind = state.findIndex((item) => item.wordId === action.payload.wordId);
       state.splice(ind, 1, action.payload);
       return state;
+    });
+    builder.addCase(getAllWords.fulfilled, (state, action) => {
+      const newState: IUserWord[] = action.payload;
+      return newState;
     });
   },
 });

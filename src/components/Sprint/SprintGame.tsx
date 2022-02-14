@@ -21,7 +21,9 @@ import {
 import { ICurrentGameBlockState } from '../../interfaces/interfaces';
 import { RootState } from '../../redux/store';
 import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
-import { addUserWord, updateUserWord } from '../../redux/userState/wordsSlice';
+import {
+  addUserWord, getAllWords, updateUserWord,
+} from '../../redux/userState/wordsSlice';
 import { IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
 
 export default function SprintGame(): ReactElement {
@@ -57,11 +59,37 @@ export default function SprintGame(): ReactElement {
   const page: number = +(params.page as string);
 
   const { user, userStatistic } = useSelector((state: RootState) => state);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (user.name) {
       dispatch(getStatistic({ userId: user.id, token: user.token }));
+      dispatch(getAllWords(user));
+      const lastDate = new Date(userStatistic.optional.short.lastDate).getDate();
+      const todayDate = (new Date()).getDate();
+
+      if (lastDate !== todayDate) {
+        dispatch(updateStatistic({
+          userId: user.id,
+          token: user.token,
+          optional: {
+            learnedWords: 0,
+            optional: {
+              short: {
+                lastDate: Date.now(),
+                sprint: {
+                  newWords: 0,
+                  inARow: 0,
+                  percents: 0,
+                  correctAnswers: 0,
+                  allAnswers: 0,
+                },
+              },
+            },
+          },
+        }));
+      }
     }
   }, []);
 
@@ -123,7 +151,8 @@ export default function SprintGame(): ReactElement {
     if (isTimeEnd) {
       if (user.name) {
         addNewWords();
-        compareStatistic(userStatistic, buttonState, user)
+        const newOrNot = userStatistic.optional.short.sprint?.allAnswers === 0;
+        compareStatistic(userStatistic, buttonState, user, newOrNot)
           .then((result) => {
             dispatch(updateStatistic({
               userId: user.id,
@@ -132,7 +161,8 @@ export default function SprintGame(): ReactElement {
                 ...result,
               },
             }));
-          });
+          })
+          .catch((err) => console.log(err));
       }
     }
   }, [isTimeEnd]);

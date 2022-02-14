@@ -11,7 +11,7 @@ export default function CircularTimer(props: ICircularTimerProps): ReactElement 
     setIsTimeEnd, isTimePaused, setIsTimePaused, isTimeEnd,
   } = props;
   const [timer, setTimer] = useState<ReturnType<typeof setInterval>>();
-  const [timerLastTime, setTimerLastTime] = useState(60);
+  const [timerLastTime, setTimerLastTime] = useState(10);
   let isMounted = true;
 
   const startTimer = () => {

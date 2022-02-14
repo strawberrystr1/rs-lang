@@ -190,6 +190,7 @@ export async function compareStatistic(
   storageStats: IUserStatistic,
   currentStats: ICurrentGameBlockState,
   user: Partial<ICurrentUserState>,
+  isNewUser: boolean,
 ) {
   const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
   const bestInARow = (storageStats.optional.short.sprint as ISprintStats).inARow > currentStats.gameState.bestInARow
@@ -202,7 +203,12 @@ export async function compareStatistic(
   const newWordsResponse = await getAllAggregatedWords(user, {
     filter: `{"$and":[{"userWord.optional.wordDate":${todayDate}}]}`,
   });
-  const newWords = newWordsResponse[0].totalCount[0]?.count || 0;
+  let newWords = newWordsResponse[0].totalCount[0]?.count || 0;
+  console.log('newWords: ', newWords);
+  if (isNewUser) {
+    newWords = currentStats.gameState.correctWords.length
+      + currentStats.gameState.wrongWords.length;
+  }
   const learnedWords = await getAllAggregatedWords(user, {
     filter: '{"$and":[{"userWord.optional.learned":true}]}',
   });
@@ -221,6 +227,7 @@ export async function compareStatistic(
       },
     },
   };
+  console.log(newState);
   return newState;
 }
 

@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
 import AuthentticationPage from '../Authentication/AuthentticationPage';
@@ -22,7 +22,7 @@ function Header(props: IHeaderProps) {
   const [isAuthOpen, setIsAuthOpen] = useState(isAuthOpenProp);
   const userName = useSelector((state: RootState) => state.user.name);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   return (
     <Container
       maxWidth={false}
@@ -56,7 +56,11 @@ function Header(props: IHeaderProps) {
               <div className="header__signedin">
                 <p>{userName}</p>
                 <Tooltip title="Выйти">
-                  <Button onClick={() => dispatch(logOut())}>
+                  <Button onClick={() => {
+                    dispatch(logOut());
+                    navigate('/');
+                  }}
+                  >
                     <LogoutIcon sx={{
                       color: 'white',
                     }}

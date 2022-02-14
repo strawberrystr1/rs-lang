@@ -6,6 +6,8 @@ import Main from './components/Main/Main';
 import EmptyPage from './components/EmptyPage';
 import SprintGame from './components/Sprint/SprintGame';
 import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
+import Textbook from './components/Textbook/textbook';
+import TextBookFinal from './components/Textbook/component-for-app';
 
 function App() {
   return (
@@ -14,7 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/signin" element={<Header isAuthOpenProp />} />
-        <Route path="/textbook" element={<EmptyPage />} />
+        <Route path="/textbook" element={<Textbook />} />
+        <Route path="/textbook/:group/:page" element={<TextBookFinal />} />
         <Route path="/dictionary/difficult" element={<EmptyPage />} />
         <Route path="/dictionary/learned" element={<EmptyPage />} />
         <Route path="/dictionary/deleted" element={<EmptyPage />} />

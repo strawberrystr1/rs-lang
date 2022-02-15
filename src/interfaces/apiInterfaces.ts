@@ -44,6 +44,7 @@ export interface IUserOwnStats {
   short: {
     lastDate: number;
     sprint?: ISprintStats;
+    audio?: ISprintStats;
   }
 }
 

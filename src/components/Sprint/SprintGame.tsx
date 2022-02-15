@@ -24,7 +24,7 @@ import { getStatistic, updateStatistic } from '../../redux/userState/statisticSl
 import {
   addUserWord, getAllWords, updateUserWord,
 } from '../../redux/userState/wordsSlice';
-import { IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
+import { ILongStatsItem, IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
 
 export default function SprintGame(): ReactElement {
   const [isWordPlaying, setIsWordPlaying] = useState(false);
@@ -72,9 +72,10 @@ export default function SprintGame(): ReactElement {
         const date = `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`;
         const newWords = (userStatistic.optional.short.sprint?.newWords || 0)
           + (userStatistic.optional.short.audio?.newWords || 0);
-        const longAddition = {
+        const longAddition: ILongStatsItem = {
           date,
           newWords,
+          learnedWords: 0,
         };
         dispatch(updateStatistic({
           userId: user.id,

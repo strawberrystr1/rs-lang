@@ -51,6 +51,7 @@ export interface ILongStats {
 export interface ILongStatsItem {
   date: string;
   newWords: number;
+  learnedWords: number;
 }
 
 export interface ITodayStats {

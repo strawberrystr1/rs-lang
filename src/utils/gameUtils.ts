@@ -221,6 +221,7 @@ export async function compareStatistic(
     const newLongStats = {
       date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
       newWords,
+      learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     };
     newLongStat.splice(indOfLastLongStat, 1, newLongStats);
   }
@@ -243,6 +244,7 @@ export async function compareStatistic(
       },
     },
   };
+  console.log(newState);
   return newState;
 }
 

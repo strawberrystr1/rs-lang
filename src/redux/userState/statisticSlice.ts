@@ -26,6 +26,9 @@ export const getStatistic = createAsyncThunk(
         Authorization: `Bearer ${token}`,
       },
     });
+    if (response.status === 404) {
+      return initialState;
+    }
     const data = await response.json();
     return data;
   },

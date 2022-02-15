@@ -59,7 +59,6 @@ export default function SprintGame(): ReactElement {
   const page: number = +(params.page as string);
 
   const { user, userStatistic } = useSelector((state: RootState) => state);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -69,7 +68,7 @@ export default function SprintGame(): ReactElement {
       const lastDate = new Date(userStatistic.optional.short.lastDate).getDate();
       const todayDate = (new Date()).getDate();
 
-      if (lastDate !== todayDate) {
+      if ((lastDate !== todayDate)) {
         dispatch(updateStatistic({
           userId: user.id,
           token: user.token,

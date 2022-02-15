@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Container, Typography } from '@mui/material';
-import TransitionsModal from './modal';
+import StartButton from './start';
 
 export default function MainPage() {
   const [value, setValue] = useState('0');
@@ -11,7 +11,6 @@ export default function MainPage() {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
-
   return (
     <Container sx={{
       display: 'flex',
@@ -44,7 +43,7 @@ export default function MainPage() {
           <Tab value="5" label="Шестая" sx={{ color: 'white' }} />
         </Tabs>
       </Box>
-      {TransitionsModal((parseInt(value, 10) + 1).toString())}
+      {StartButton((parseInt(value, 10)).toString())}
     </Container>
   );
 }

@@ -48,3 +48,18 @@
     background-color: rgb(21, 101, 192);
     box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px;
 }
+.wrong{
+    color: red !important;
+    background-color: black !important;
+}
+.right{
+    color: aliceblue !important;
+    background-color: forestgreen !important;
+}
+.disabled{
+    background-color: darkgray;
+    opacity: 0.6;
+}
+.hidden{
+    display: none;
+}

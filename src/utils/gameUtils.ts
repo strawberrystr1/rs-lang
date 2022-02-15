@@ -204,7 +204,6 @@ export async function compareStatistic(
     filter: `{"$and":[{"userWord.optional.wordDate":${todayDate}}]}`,
   });
   let newWords = newWordsResponse[0].totalCount[0]?.count || 0;
-  console.log('newWords: ', newWords);
   if (isNewUser) {
     newWords = currentStats.gameState.correctWords.length
       + currentStats.gameState.wrongWords.length;
@@ -227,7 +226,6 @@ export async function compareStatistic(
       },
     },
   };
-  console.log(newState);
   return newState;
 }
 

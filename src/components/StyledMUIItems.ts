@@ -1,6 +1,6 @@
 import styled from '@emotion/styled/';
 import {
-  Avatar, Box, ListItem, Card,
+  Avatar, Box, Button, Card, ListItem, Paper,
 } from '@mui/material';
 
 export const StyledAvatar = styled(Avatar)`
@@ -16,6 +16,10 @@ export const StyledBox = styled(Box)`
   justify-content: space-between;
 `;
 
+export const StyledBoxMW = styled(StyledBox)`
+  width: 100%;
+`;
+
 export const StyledListItem = styled(ListItem)`
   margin: 5px 0;
   cursor: pointer;
@@ -25,11 +29,37 @@ export const StyledListItem = styled(ListItem)`
   }
 `;
 
-export const StyledCard = styled(Card)`
+export const StyledPaper = styled(Paper)`
   width: 100%;
+  height: calc(100vh - 120px);
+  background: rgba(73, 64, 64, 0.6);
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
-  color: white;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
-  background: rgba(102, 96, 96, 0.3);
+`;
+
+export const StyledCard = styled(Card)`
+  min-width: 500px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(36, 34, 34, 1);
+  border-radius: 10px;
+  padding: 10px;
+`;
+
+export const StyledButton = styled(Button)`
+  min-width: 150px;
+  width: 150px;
+  height: 100px;
+  border-radius: 10px;
+  font-size: 42px;
+  margin: 0 10px;
 `;

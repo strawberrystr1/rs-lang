@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
-import { Container, Tooltip, Drawer } from '@mui/material';
-import { Link } from 'react-router-dom';
+import {
+  Container, Tooltip, Drawer, Button,
+} from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Link, useNavigate } from 'react-router-dom';
 import { StyledContainer, StyledListIcon } from './Header.style';
 import SideMenu from './SideMenu';
+import AuthentticationPage from '../Authentication/AuthentticationPage';
+import { RootState } from '../../redux/store';
+import { logOut } from '../../redux/userState/userSlice';
 
-function Header() {
+interface IHeaderProps {
+  isAuthOpenProp: boolean;
+}
+
+function Header(props: IHeaderProps) {
+  const { isAuthOpenProp } = props;
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isAuthOpen, setIsAuthOpen] = useState(isAuthOpenProp);
+  const userName = useSelector((state: RootState) => state.user.name);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <Container
       maxWidth={false}
@@ -25,7 +40,7 @@ function Header() {
               padding: '5px',
             }}
           />
-          <Tooltip title="To main page" placement="bottom">
+          <Tooltip title="На главную" placement="bottom">
             <Link to="/">
               <button
                 type="button"
@@ -35,15 +50,37 @@ function Header() {
             </Link>
           </Tooltip>
         </div>
-        <Tooltip title="Sign In">
-          <button type="button" className="header__signin">
-            <PersonIcon sx={{
-              color: 'white',
-              fontSize: 30,
-            }}
-            />
-          </button>
-        </Tooltip>
+        {
+          userName
+            ? (
+              <div className="header__signedin">
+                <p>{userName}</p>
+                <Tooltip title="Выйти">
+                  <Button onClick={() => {
+                    dispatch(logOut());
+                    navigate('/');
+                  }}
+                  >
+                    <LogoutIcon sx={{
+                      color: 'white',
+                    }}
+                    />
+                  </Button>
+                </Tooltip>
+              </div>
+            )
+            : (
+              <Tooltip title="Войти">
+                <button type="button" onClick={() => setIsAuthOpen(true)} className="header__signin">
+                  <PersonIcon sx={{
+                    color: 'white',
+                    fontSize: 30,
+                  }}
+                  />
+                </button>
+              </Tooltip>
+            )
+        }
       </StyledContainer>
       <Drawer
         anchor="left"
@@ -57,6 +94,10 @@ function Header() {
       >
         <SideMenu />
       </Drawer>
+      <AuthentticationPage
+        open={isAuthOpen}
+        handleClose={() => setIsAuthOpen(false)}
+      />
     </Container>
   );
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ILongStatsItem } from './apiInterfaces';
 
 export interface IScoreProps {
   score: number;
@@ -88,7 +89,7 @@ export interface ICurrentGameBlockState {
 }
 
 export interface ILongStatProps {
-  
+  data: ILongStatsItem[];
 }
 
 export type SetWordsCBType = (data: IWordData[]) => void;

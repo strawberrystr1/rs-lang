@@ -200,15 +200,16 @@ export default function StatisticPage(): ReactElement {
             <h2>Общая статистика</h2>
             <Grid
               container
+              spacing={4}
               sx={{
                 height: '50%',
               }}
             >
               <Grid item xs={6} className="stat__grid-item_long">
-                <LongStatistic />
+                <LongStatistic data={userStatistic.optional.long.stat} />
               </Grid>
               <Grid item xs={6} className="stat__grid-item_long">
-                asd
+                <LongStatistic data={userStatistic.optional.long.stat} />
               </Grid>
             </Grid>
           </>

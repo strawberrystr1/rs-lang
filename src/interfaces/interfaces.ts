@@ -86,5 +86,9 @@ export interface ICurrentGameBlockState {
   words: IWordData[];
 }
 
+export interface ILongStatProps {
+  
+}
+
 export type SetWordsCBType = (data: IWordData[]) => void;
 export type SetGameLevelCB = (level: number) => void;

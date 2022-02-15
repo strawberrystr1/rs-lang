@@ -12,6 +12,7 @@ import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
 import { getStatistic } from '../../redux/userState/statisticSlice';
 import { getAllWords } from '../../redux/userState/wordsSlice';
+import LongStatistic from './LongStatistic';
 
 export default function StatisticPage(): ReactElement {
   const { user, userStatistic } = useSelector((state: RootState) => state);
@@ -49,7 +50,13 @@ export default function StatisticPage(): ReactElement {
         ? (
           <>
             <h2>Статистика за последний день</h2>
-            <Grid container>
+            <Grid
+              container
+              sx={{
+                margin: '50px 0',
+                height: '30%',
+              }}
+            >
               <Grid item xs={4} className="stat__grid-item">
                 <StyledStatsCard>
                   <CardContent sx={{
@@ -188,6 +195,20 @@ export default function StatisticPage(): ReactElement {
                     </p>
                   </CardContent>
                 </StyledStatsCard>
+              </Grid>
+            </Grid>
+            <h2>Общая статистика</h2>
+            <Grid
+              container
+              sx={{
+                height: '50%',
+              }}
+            >
+              <Grid item xs={6} className="stat__grid-item_long">
+                <LongStatistic />
+              </Grid>
+              <Grid item xs={6} className="stat__grid-item_long">
+                asd
               </Grid>
             </Grid>
           </>

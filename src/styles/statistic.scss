@@ -4,6 +4,11 @@
 
   &__grid-item {
     padding: 10px;
+
+    &_long {
+      height: 70%;
+      width: 70%;
+    }
   }
 
   & h2 {
@@ -27,4 +32,9 @@
     justify-content: space-between;
     font-size: 18px;
   }
+}
+
+.long-stat {
+  width: 100%;
+  height: 100%;
 }

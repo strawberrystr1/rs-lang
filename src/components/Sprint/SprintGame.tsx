@@ -69,6 +69,13 @@ export default function SprintGame(): ReactElement {
       const todayDate = (new Date()).getDate();
 
       if ((lastDate !== todayDate)) {
+        const date = `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`;
+        const newWords = (userStatistic.optional.short.sprint?.newWords || 0)
+          + (userStatistic.optional.short.audio?.newWords || 0);
+        const longAddition = {
+          date,
+          newWords,
+        };
         dispatch(updateStatistic({
           userId: user.id,
           token: user.token,
@@ -84,6 +91,9 @@ export default function SprintGame(): ReactElement {
                   correctAnswers: 0,
                   allAnswers: 0,
                 },
+              },
+              long: {
+                stat: [...userStatistic.optional.long.stat, longAddition],
               },
             },
           },
@@ -151,7 +161,7 @@ export default function SprintGame(): ReactElement {
       if (user.name) {
         addNewWords();
         const newOrNot = userStatistic.optional.short.sprint?.allAnswers === 0;
-        compareStatistic(userStatistic, buttonState, user, newOrNot)
+        compareStatistic(userStatistic, buttonState, user, newOrNot, 'sprint')
           .then((result) => {
             dispatch(updateStatistic({
               userId: user.id,
@@ -279,6 +289,7 @@ export default function SprintGame(): ReactElement {
             isTimePaused={isTimePaused}
             isSoundOn={isSoundOn}
             setIsWordPlaying={() => setIsWordPlaying(false)}
+            isTimeEnd={isTimeEnd}
           />
         </Card>
       </Container>

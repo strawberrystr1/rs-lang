@@ -41,11 +41,22 @@ export interface IUserStatistic {
 }
 
 export interface IUserOwnStats {
-  short: {
-    lastDate: number;
-    sprint?: ISprintStats;
-    audio?: ISprintStats;
-  }
+  short: ITodayStats,
+  long: ILongStats;
+}
+
+export interface ILongStats {
+  stat: ILongStatsItem[];
+}
+export interface ILongStatsItem {
+  date: string;
+  newWords: number;
+}
+
+export interface ITodayStats {
+  lastDate: number;
+  sprint?: ISprintStats;
+  audio?: ISprintStats;
 }
 
 export interface ISprintStats {

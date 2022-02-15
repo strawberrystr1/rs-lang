@@ -27,6 +27,7 @@ export interface IGameStatistic {
 
 export interface ISprintAnswerButtons {
   isSoundOn: boolean;
+  isTimeEnd: boolean;
   isTimePaused: boolean;
   setIsWordPlaying: () => void;
   buttonState: ICurrentGameBlockState;

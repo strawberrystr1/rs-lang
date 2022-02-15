@@ -4,7 +4,7 @@ import {
   DispatchCBCheckWord,
   DispatchCBUpdateWord,
   IAggregatedWord,
-  ICurrentUserState, IQueryParamsForWords, ISprintStats, ITodayWordsResponse, IUserStatistic,
+  ICurrentUserState, IQueryParamsForWords, ISprintStats, ITodayStats, ITodayWordsResponse, IUserStatistic,
 } from '../interfaces/apiInterfaces';
 import {
   ICurrentGameBlockState,
@@ -191,15 +191,18 @@ export async function compareStatistic(
   currentStats: ICurrentGameBlockState,
   user: Partial<ICurrentUserState>,
   isNewUser: boolean,
+  gameType: string,
 ) {
   const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
-  const bestInARow = (storageStats.optional.short.sprint as ISprintStats).inARow > currentStats.gameState.bestInARow
-    ? (storageStats.optional.short.sprint as ISprintStats).inARow
+  const bestInARow = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow > currentStats.gameState.bestInARow
+    ? (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow
     : currentStats.gameState.bestInARow;
-  const correctAll = (storageStats.optional.short.sprint as ISprintStats).correctAnswers + currentStats.gameState.correctWords.length;
-  const allWords = (storageStats.optional.short.sprint as ISprintStats).allAnswers
+  const correctAll = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).correctAnswers
+    + currentStats.gameState.correctWords.length;
+  const allWords = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).allAnswers
     + currentStats.gameState.correctWords.length
     + currentStats.gameState.wrongWords.length;
+
   const newWordsResponse = await getAllAggregatedWords(user, {
     filter: `{"$and":[{"userWord.optional.wordDate":${todayDate}}]}`,
   });
@@ -211,6 +214,17 @@ export async function compareStatistic(
   const learnedWords = await getAllAggregatedWords(user, {
     filter: '{"$and":[{"userWord.optional.learned":true}]}',
   });
+
+  const indOfLastLongStat = storageStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
+  const newLongStat = [...storageStats.optional.long.stat];
+  if (indOfLastLongStat >= 0) {
+    const newLongStats = {
+      date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
+      newWords,
+    };
+    newLongStat.splice(indOfLastLongStat, 1, newLongStats);
+  }
+
   const newState: IUserStatistic = {
     learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     optional: {
@@ -223,6 +237,9 @@ export async function compareStatistic(
           percents: Math.floor((correctAll * 100) / allWords) || 0,
           newWords,
         },
+      },
+      long: {
+        stat: newLongStat,
       },
     },
   };

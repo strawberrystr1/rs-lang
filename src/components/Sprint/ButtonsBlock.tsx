@@ -15,12 +15,12 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
     isSoundOn,
     buttonState,
     setIsWordPlaying,
+    isTimeEnd,
     setButtonState,
   } = props;
 
   const soundRight = useRef<HTMLAudioElement>(null);
   const soundWrong = useRef<HTMLAudioElement>(null);
-
   let {
     correctAnswerInARow,
     currentLevel,
@@ -143,6 +143,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
 
   const handleArrow = (e: KeyboardEvent) => {
     if (!words[wordIndex]) return;
+    if (isTimeEnd) return;
     if (e.code === 'ArrowRight') {
       if (!isTimePaused) handleRightBtn();
     } else if (e.code === 'ArrowLeft') {
@@ -153,7 +154,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
   useEffect(() => {
     window.addEventListener('keyup', handleArrow);
     return () => window.removeEventListener('keyup', handleArrow);
-  }, [answer, wordIndex, isSoundOn]);
+  }, [answer, wordIndex, isSoundOn, isTimeEnd]);
 
   return (
     <>

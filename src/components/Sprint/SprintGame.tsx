@@ -289,6 +289,7 @@ export default function SprintGame(): ReactElement {
             isTimePaused={isTimePaused}
             isSoundOn={isSoundOn}
             setIsWordPlaying={() => setIsWordPlaying(false)}
+            isTimeEnd={isTimeEnd}
           />
         </Card>
       </Container>

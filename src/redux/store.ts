@@ -28,6 +28,9 @@ const initialState: IUserState = {
           correctAnswers: 0,
         },
       },
+      long: {
+        stat: [],
+      },
     },
   },
   userWords: [],

@@ -54,7 +54,7 @@ export const getAllWords = createAsyncThunk(
 
 export const updateUserWord = createAsyncThunk(
   'user/updateUserWord',
-  async ({ word, user }: IUserUpdateWordRequest) => {
+  async ({ word, user, type }: IUserUpdateWordRequest) => {
     let newProgress = word.userWord.optional.progress + 1;
     let { learned } = word.userWord.optional;
     let { learnDate } = word.userWord.optional;
@@ -63,8 +63,13 @@ export const updateUserWord = createAsyncThunk(
       newProgress = 4;
       learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
     }
+    let { difficulty } = word.userWord;
+    if (type === 'removeDif') {
+      difficulty = 'simple';
+    }
     const newData: IUserWord = {
       ...word.userWord,
+      difficulty,
       optional: {
         ...word.userWord.optional,
         progress: newProgress,

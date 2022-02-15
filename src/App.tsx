@@ -8,17 +8,21 @@ import SprintGame from './components/Sprint/SprintGame';
 import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
 import Textbook from './components/Textbook/textbook';
 import TextBookFinal from './components/Textbook/component-for-app';
+import DifficultPage from './components/DifficultWords/DifficultPage';
 
 function App() {
   return (
-    <>
+    <div style={{
+      overflowY: 'auto',
+    }}
+    >
       <Header isAuthOpenProp={false} />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/signin" element={<Header isAuthOpenProp />} />
         <Route path="/textbook" element={<Textbook />} />
         <Route path="/textbook/:group/:page" element={<TextBookFinal />} />
-        <Route path="/dictionary/difficult" element={<EmptyPage />} />
+        <Route path="/dictionary/difficult" element={<DifficultPage />} />
         <Route path="/dictionary/learned" element={<EmptyPage />} />
         <Route path="/dictionary/deleted" element={<EmptyPage />} />
         <Route path="/statistic" element={<EmptyPage />} />
@@ -27,7 +31,7 @@ function App() {
         <Route path="/gamedif" element={<GameDifficulty />} />
       </Routes>
       <Footer />
-    </>
+    </div>
   );
 }
 

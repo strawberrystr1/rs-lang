@@ -103,6 +103,7 @@ export interface IUserCreateWordRequest {
 export interface IUserUpdateWordRequest {
   word: IAggregatedWord;
   user: Partial<ICurrentUserState>;
+  type?: string;
 }
 export interface IAggregatedWord extends IWordData{
   userWord: IUserWord;

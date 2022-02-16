@@ -9,7 +9,8 @@ import CardItem from './CardItem';
 import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
 import { IAggregatedWord } from '../../interfaces/apiInterfaces';
-import { addUserWord } from '../../redux/userState/wordsSlice';
+import { updateUserWord } from '../../redux/userState/wordsSlice';
+import { removeFromDeletedStorage } from '../../redux/userState/deletedSlice';
 
 export default function CardsBlock(): ReactElement {
   const [response, setResponse] = useState<IAggregatedWord[]>([]);
@@ -32,15 +33,13 @@ export default function CardsBlock(): ReactElement {
     });
   }, []);
 
-  const updateDispatch = (word: IAggregatedWord) => {
-    const wordOptions = { ...word.userWord, deleted: false };
-    // eslint-disable-next-line
-    const wordId = { id: word._id };
-    dispatch(addUserWord({
-      word: wordId,
+  const restoreDispatch = (word: IAggregatedWord) => {
+    dispatch(updateUserWord({
+      word,
       user,
-      wordOptions,
+      type: 'restore',
     }));
+    dispatch(removeFromDeletedStorage(word));
   };
   return (
     <>
@@ -67,7 +66,9 @@ export default function CardsBlock(): ReactElement {
                   className="card-item"
                 >
                   <Card variant="outlined" sx={{ display: 'flex' }}>
-                    {CardItem({ wordItem: item, user, dispatch: updateDispatch })}
+                    {CardItem({
+                      wordItem: item, user, dispatch: restoreDispatch,
+                    })}
                   </Card>
                 </Box>
               ))

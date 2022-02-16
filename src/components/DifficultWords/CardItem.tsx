@@ -10,14 +10,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CorrectText from '../Textbook/right-card-text';
 import CardAudio from '../Textbook/card-audio';
 import { getAggregatedWord } from '../../utils/gameUtils';
-import { ICardItemDifProps } from '../../interfaces/interfaces';
+import { ICardItemDifPropsWithDelete } from '../../interfaces/interfaces';
 
 const Style = styled(Typography)`
     text-align: end;
     margin-top: -18px;
     margin-bottom: -20px;
 `;
-export default function CardItem(props: ICardItemDifProps): ReactElement {
+export default function CardItem(props: ICardItemDifPropsWithDelete): ReactElement {
   const {
     wordItem, user, dispatch, deleteDispatch,
   } = props;

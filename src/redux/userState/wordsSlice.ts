@@ -17,26 +17,6 @@ const initialState: IUserWord[] = [{
   },
 }];
 
-export const addUserWord = createAsyncThunk(
-  'user/addUserWords',
-  async ({ user, word, wordOptions }: IUserCreateWordRequest) => {
-    const response = await fetch(
-      `https://react-rslang-str.herokuapp.com/users/${user.id}/words/${word.id}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(wordOptions),
-      },
-    );
-    const data = await response.json();
-    return data;
-  },
-);
-
 export const getAllWords = createAsyncThunk(
   'user/getAllWords',
   async (user: Partial<ICurrentUserState>) => {
@@ -68,6 +48,9 @@ export const updateUserWord = createAsyncThunk(
     if (type === 'restore') {
       deleted = false;
     }
+    if (type === 'deleteWord') {
+      deleted = true;
+    }
     let { difficulty } = word.userWord;
     if (type === 'removeDif') {
       difficulty = 'simple';
@@ -94,6 +77,29 @@ export const updateUserWord = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newData),
+      },
+    );
+    const data = await response.json();
+    console.log('data: ', data);
+    return data;
+  },
+);
+
+export const addUserWord = createAsyncThunk(
+  'user/addUserWords',
+  async ({
+    user, word, wordOptions,
+  }: IUserCreateWordRequest) => {
+    const response = await fetch(
+      `https://react-rslang-str.herokuapp.com/users/${user.id}/words/${word.id}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(wordOptions),
       },
     );
     const data = await response.json();

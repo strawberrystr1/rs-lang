@@ -91,7 +91,10 @@ export interface ICardItemDifProps {
   wordItem: IAggregatedWord;
   user: ICurrentUserState;
   dispatch: (word: IAggregatedWord) => void;
-  deleteDispatch?: (word: IAggregatedWord) => void;
+}
+
+export interface ICardItemDifPropsWithDelete extends ICardItemDifProps {
+  deleteDispatch: (word: IAggregatedWord) => void;
 }
 
 export type SetWordsCBType = (data: IWordData[]) => void;

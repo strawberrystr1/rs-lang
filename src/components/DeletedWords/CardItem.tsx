@@ -24,10 +24,6 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
     audioMeaning, audioExample,
   } = wordItem;
 
-  const deleteW = () => {
-    dispatch(wordItem);
-  };
-
   return (
     <Card sx={{ width: 600, display: 'flex' }}>
       <CardMedia
@@ -80,7 +76,14 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
           <Style>{CardAudio(audioExample, '2rem')}</Style>
         </div>
         <CardActions>
-          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={deleteW}>
+          <Button
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+            onClick={(e) => {
+              dispatch(wordItem);
+              ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
+            }}
+          >
             Восстановить
           </Button>
         </CardActions>

@@ -10,7 +10,6 @@ import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
 import { IAggregatedWord } from '../../interfaces/apiInterfaces';
 import { updateUserWord } from '../../redux/userState/wordsSlice';
-import { deleteWord } from '../../redux/userState/deletedSlice';
 
 export default function CardsBlock(): ReactElement {
   const [response, setResponse] = useState<IAggregatedWord[]>([]);
@@ -21,11 +20,11 @@ export default function CardsBlock(): ReactElement {
 
   useEffect(() => {
     getAllAggregatedWords(user, {
-      filter: '{"$and":[{"userWord.difficulty":"hard"}]}',
+      filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
     }).then((res) => {
       getAllAggregatedWords(user, {
-        filter: '{"$and":[{"userWord.difficulty":"hard"}]}',
-        wordsPerPage: `${res[0].totalCount[0]?.count}`,
+        filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
+        wordsPerPage: `${res[0].totalCount[0]?.count || 20}`,
       }).then((result) => {
         setResponse(result[0].paginatedResults);
         setOpen(false);
@@ -42,7 +41,11 @@ export default function CardsBlock(): ReactElement {
   };
 
   const deleteDispatch = (word: IAggregatedWord) => {
-    dispatch(deleteWord({ word, user }));
+    dispatch(updateUserWord({
+      word,
+      user,
+      type: 'deleteWord',
+    }));
   };
 
   return (
@@ -58,6 +61,7 @@ export default function CardsBlock(): ReactElement {
                 justifyItems: 'center',
                 rowGap: 3,
                 marginTop: 2,
+                textAlign: 'left',
               }}
             >
               {response.map((item: IAggregatedWord) => (

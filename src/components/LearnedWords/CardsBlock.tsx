@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
+import { Typography } from '@mui/material';
 import CardItem from './CardItem';
 import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
@@ -42,30 +43,44 @@ export default function CardsBlock(): ReactElement {
     <>
       {
         response.length
-          && (
-          <Box
-            sx={{
-              alignContent: 'center',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              justifyItems: 'center',
-              rowGap: 3,
-              marginTop: 2,
-            }}
-          >
-            {response.map((item: IAggregatedWord) => (
-              <Box
-                sx={{ minWidth: 275, alignContent: 'center', display: 'flex' }}
+          ? (
+            <Box
+              sx={{
+                alignContent: 'center',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                justifyItems: 'center',
+                rowGap: 3,
+                marginTop: 2,
+                textAlign: 'left',
+              }}
+            >
+              {response.map((item: IAggregatedWord) => (
+                <Box
+                  sx={{ minWidth: 275, alignContent: 'center', display: 'flex' }}
                 // eslint-disable-next-line
                 key={item._id}
-                className="card-item"
-              >
-                <Card variant="outlined" sx={{ display: 'flex' }}>
-                  {CardItem({ wordItem: item, user, dispatch: updateDispatch })}
-                </Card>
-              </Box>
-            ))}
-          </Box>
+                  className="card-item"
+                >
+                  <Card variant="outlined" sx={{ display: 'flex' }}>
+                    {CardItem({ wordItem: item, user, dispatch: updateDispatch })}
+                  </Card>
+                </Box>
+              ))}
+            </Box>
+          )
+          : (open
+            && (
+            <Typography
+              variant="h4"
+              color="white"
+              sx={{
+                marginTop: '200px',
+              }}
+            >
+              У вас нет изученных слов
+            </Typography>
+            )
           )
       }
       <Backdrop

@@ -1,4 +1,3 @@
-import React from 'react';
 import { IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {

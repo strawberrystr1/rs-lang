@@ -4,6 +4,7 @@ import { IUserState } from '../interfaces/apiInterfaces';
 import userReducer from './userState/userSlice';
 import statisticReducer from './userState/statisticSlice';
 import wordReducer from './userState/wordsSlice';
+import deleteReducer from './userState/deletedSlice';
 
 const initialState: IUserState = {
   user: {
@@ -65,6 +66,7 @@ export const store = configureStore({
     user: userReducer,
     userStatistic: statisticReducer,
     userWords: wordReducer,
+    deletedWords: deleteReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleWare),
   preloadedState: restoreStore(),

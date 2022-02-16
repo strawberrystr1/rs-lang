@@ -27,6 +27,13 @@ const initialState: IUserState = {
           allAnswers: 0,
           correctAnswers: 0,
         },
+        audio: {
+          newWords: 0,
+          inARow: 0,
+          percents: 0,
+          allAnswers: 0,
+          correctAnswers: 0,
+        },
       },
       long: {
         stat: [],

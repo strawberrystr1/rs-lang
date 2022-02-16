@@ -55,6 +55,7 @@ export default function CardsBlock(): ReactElement {
                 justifyItems: 'center',
                 rowGap: 3,
                 marginTop: 2,
+                textAlign: 'left',
               }}
             >
               {

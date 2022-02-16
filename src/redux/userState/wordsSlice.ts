@@ -13,6 +13,7 @@ const initialState: IUserWord[] = [{
     wordId: '',
     wordDate: 0,
     learnDate: 0,
+    deleted: false,
   },
 }];
 
@@ -106,6 +107,12 @@ const wordSlice = createSlice({
       console.log('state: ', state);
       return state;
     },
+    removeFromStorage: (state, action) => {
+      // eslint-disable-next-line
+      const ind = state.findIndex((item) => item.wordId === action.payload._id);
+      state.splice(ind, 1);
+      return state;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(addUserWord.fulfilled, (state, action) => {
@@ -124,5 +131,5 @@ const wordSlice = createSlice({
   },
 });
 
-export const { clearState } = wordSlice.actions;
+export const { clearState, removeFromStorage } = wordSlice.actions;
 export default wordSlice.reducer;

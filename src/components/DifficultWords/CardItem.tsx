@@ -18,7 +18,9 @@ const Style = styled(Typography)`
     margin-bottom: -20px;
 `;
 export default function CardItem(props: ICardItemDifProps): ReactElement {
-  const { wordItem, user, dispatch } = props;
+  const {
+    wordItem, user, dispatch, deleteDispatch,
+  } = props;
   const {
     word, transcription, wordTranslate, image, textMeaning,
     textMeaningTranslate, textExample, textExampleTranslate, audio,
@@ -30,6 +32,11 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
       .then((result) => {
         dispatch(result[0]);
       });
+    ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
+  };
+
+  const deleteWord = (e: React.MouseEvent) => {
+    deleteDispatch(wordItem);
     ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
   };
 
@@ -85,7 +92,11 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
           <Style>{CardAudio(audioExample, '2rem')}</Style>
         </div>
         <CardActions>
-          <Button variant="outlined" startIcon={<DeleteIcon />}>
+          <Button
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+            onClick={deleteWord}
+          >
             Удалить
           </Button>
           <Button variant="outlined" color="error" onClick={removeFromDifficult}>

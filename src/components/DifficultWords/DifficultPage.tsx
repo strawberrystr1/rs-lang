@@ -1,4 +1,6 @@
-import { Button, ButtonGroup, Container } from '@mui/material';
+import {
+  Button, ButtonGroup, Container, Typography,
+} from '@mui/material';
 import React, { ReactElement } from 'react';
 import CardsBlock from './CardsBlock';
 
@@ -15,6 +17,7 @@ export default function DifficultPage(): ReactElement {
       <Container
         sx={{
           padding: '20px 0',
+          textAlign: 'center',
         }}
         maxWidth="xl"
       >
@@ -35,6 +38,15 @@ export default function DifficultPage(): ReactElement {
             </Button>
           </ButtonGroup>
         </Container>
+        <Typography
+          variant="h2"
+          color="white"
+          sx={{
+            margin: '10px 0',
+          }}
+        >
+          Сложные слова
+        </Typography>
         <CardsBlock />
       </Container>
     </Container>

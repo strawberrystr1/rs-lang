@@ -13,6 +13,7 @@ const initialState: IUserWord[] = [{
     wordId: '',
     wordDate: 0,
     learnDate: 0,
+    deleted: false,
   },
 }];
 
@@ -54,7 +55,7 @@ export const getAllWords = createAsyncThunk(
 
 export const updateUserWord = createAsyncThunk(
   'user/updateUserWord',
-  async ({ word, user }: IUserUpdateWordRequest) => {
+  async ({ word, user, type }: IUserUpdateWordRequest) => {
     let newProgress = word.userWord.optional.progress + 1;
     let { learned } = word.userWord.optional;
     let { learnDate } = word.userWord.optional;
@@ -63,8 +64,13 @@ export const updateUserWord = createAsyncThunk(
       newProgress = 4;
       learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
     }
+    let { difficulty } = word.userWord;
+    if (type === 'removeDif') {
+      difficulty = 'simple';
+    }
     const newData: IUserWord = {
       ...word.userWord,
+      difficulty,
       optional: {
         ...word.userWord.optional,
         progress: newProgress,
@@ -101,6 +107,12 @@ const wordSlice = createSlice({
       console.log('state: ', state);
       return state;
     },
+    removeFromStorage: (state, action) => {
+      // eslint-disable-next-line
+      const ind = state.findIndex((item) => item.wordId === action.payload._id);
+      state.splice(ind, 1);
+      return state;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(addUserWord.fulfilled, (state, action) => {
@@ -119,5 +131,5 @@ const wordSlice = createSlice({
   },
 });
 
-export const { clearState } = wordSlice.actions;
+export const { clearState, removeFromStorage } = wordSlice.actions;
 export default wordSlice.reducer;

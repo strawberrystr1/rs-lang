@@ -13,6 +13,7 @@ const initialState: IUserWord[] = [{
     wordId: '',
     wordDate: 0,
     learnDate: 0,
+    deleted: false,
   },
 }];
 
@@ -54,7 +55,7 @@ export const getAllWords = createAsyncThunk(
 
 export const updateUserWord = createAsyncThunk(
   'user/updateUserWord',
-  async ({ word, user }: IUserUpdateWordRequest) => {
+  async ({ word, user, type }: IUserUpdateWordRequest) => {
     let newProgress = word.userWord.optional.progress + 1;
     let { learned } = word.userWord.optional;
     let { learnDate } = word.userWord.optional;
@@ -63,6 +64,10 @@ export const updateUserWord = createAsyncThunk(
       newProgress = 4;
       learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
     }
+    let { deleted } = word.userWord.optional;
+    if (type === 'restore') {
+      deleted = false;
+    }
     const newData: IUserWord = {
       ...word.userWord,
       optional: {
@@ -70,6 +75,7 @@ export const updateUserWord = createAsyncThunk(
         progress: newProgress,
         learned,
         learnDate,
+        deleted,
       },
     };
     const response = await fetch(

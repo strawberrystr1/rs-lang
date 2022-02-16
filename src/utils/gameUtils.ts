@@ -286,6 +286,7 @@ export function checkWord(array: IWordData[], user: Partial<ICurrentUserState>, 
                 wordId: word.id,
                 wordDate,
                 learnDate: 0,
+                deleted: false,
               },
             },
           });

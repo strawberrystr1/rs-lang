@@ -34,6 +34,7 @@ const initialState: IUserState = {
     },
   },
   userWords: [],
+  deletedWords: [],
 };
 
 const localStorageMiddleWare: Middleware = (api: MiddlewareAPI) => (next) => <A extends Action>(action: A) => {

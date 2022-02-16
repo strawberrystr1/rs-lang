@@ -1,4 +1,5 @@
 import React from 'react';
+import { IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {
   score: number;
@@ -85,6 +86,12 @@ export interface ICurrentGameBlockState {
   correctAnswerCounter: number;
   gameState: IGameStatistic;
   words: IWordData[];
+}
+
+export interface ICardItemDifProps {
+  wordItem: IAggregatedWord;
+  user: ICurrentUserState;
+  dispatch: (word: IAggregatedWord) => void;
 }
 
 export type SetWordsCBType = (data: IWordData[]) => void;

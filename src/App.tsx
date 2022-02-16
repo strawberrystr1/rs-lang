@@ -8,6 +8,7 @@ import SprintGame from './components/Sprint/SprintGame';
 import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
 import Textbook from './components/Textbook/textbook';
 import TextBookFinal from './components/Textbook/component-for-app';
+import LearnedPage from './components/LearnedWords/LearnedPage';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/textbook" element={<Textbook />} />
         <Route path="/textbook/:group/:page" element={<TextBookFinal />} />
         <Route path="/dictionary/difficult" element={<EmptyPage />} />
-        <Route path="/dictionary/learned" element={<EmptyPage />} />
+        <Route path="/dictionary/learned" element={<LearnedPage />} />
         <Route path="/dictionary/deleted" element={<EmptyPage />} />
         <Route path="/statistic" element={<EmptyPage />} />
         <Route path="/game/audio" element={<EmptyPage />} />

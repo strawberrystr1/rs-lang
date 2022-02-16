@@ -36,3 +36,13 @@
     background-color: rgba(156, 156, 161, 0.25);
   }
 }
+
+.header__signedin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+  color: white;
+  font-size: 20px;
+  font-family: Lato;
+}

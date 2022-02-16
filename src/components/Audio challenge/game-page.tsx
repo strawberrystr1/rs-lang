@@ -23,7 +23,7 @@ export default function GamePage() {
   }, [apiUrl]);
   return (
     <Container
-      maxWidth="xl"
+      maxWidth={false}
       className="main-game"
       sx={{
         height: 'calc(100vh - 120px)',

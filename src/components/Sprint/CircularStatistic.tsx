@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import React, { ReactElement } from 'react';
-import { IAfterGameCircle } from '../interfaces/interfaces';
+import { IAfterGameCircle } from '../../interfaces/interfaces';
 
 export default function CircularStatistic(props: IAfterGameCircle): ReactElement {
   const { value } = props;

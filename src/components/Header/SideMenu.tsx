@@ -115,7 +115,7 @@ export default function SideMenu() {
         {
           gameLinks.map((item) => (
             <Link
-              to={`/${item.url}`}
+              to="/gamedif"
               key={Math.random() * 10}
               style={{ textDecoration: 'none' }}
             >

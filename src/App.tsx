@@ -4,17 +4,20 @@ import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
 import EmptyPage from './components/EmptyPage';
-import Textbook from './components/Textbook/textbook';
-import TextBookFinal from './components/Textbook/component-for-app';
 import AudioChallenge from './components/Audio challenge/audio-challenge-main';
 import GamePage from './components/Audio challenge/game-page';
+import SprintGame from './components/Sprint/SprintGame';
+import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
+import Textbook from './components/Textbook/textbook';
+import TextBookFinal from './components/Textbook/component-for-app';
 
 function App() {
   return (
     <>
-      <Header />
+      <Header isAuthOpenProp={false} />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/signin" element={<Header isAuthOpenProp />} />
         <Route path="/textbook" element={<Textbook />} />
         <Route path="/textbook/:group/:page" element={<TextBookFinal />} />
         <Route path="/dictionary/difficult" element={<EmptyPage />} />
@@ -23,7 +26,8 @@ function App() {
         <Route path="/statistic" element={<EmptyPage />} />
         <Route path="/game/audio" element={<AudioChallenge />} />
         <Route path="/game/audio/:group/:page" element={<GamePage />} />
-        <Route path="/game/sprint" element={<EmptyPage />} />
+        <Route path="/game/sprint/:group/:page" element={<SprintGame />} />
+        <Route path="/gamedif" element={<GameDifficulty />} />
       </Routes>
       <Footer />
     </>

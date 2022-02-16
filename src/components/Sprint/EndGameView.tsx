@@ -5,7 +5,7 @@ import {
 import React, { ReactElement } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate, Link } from 'react-router-dom';
-import { IAfterGameWordsStat } from '../interfaces/interfaces';
+import { IAfterGameWordsStat } from '../../interfaces/interfaces';
 import {
   StyledBoxMW, StyledCard, StyledPaper,
 } from '../StyledMUIItems';

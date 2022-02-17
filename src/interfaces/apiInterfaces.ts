@@ -99,7 +99,7 @@ export interface IUserStatsRequestOptions {
 
 export interface IUserCreateWordRequest {
   user: Partial<ICurrentUserState>;
-  word: IWordData;
+  word: Partial<IWordData>;
   wordOptions: IUserWord;
 }
 export interface IUserUpdateWordRequest {

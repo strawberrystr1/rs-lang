@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IUserUpdateWordRequest, IUserWord } from '../../interfaces/apiInterfaces';
-import { removeFromStorage } from './wordsSlice';
+import { createSlice } from '@reduxjs/toolkit';
+import { IUserWord } from '../../interfaces/apiInterfaces';
 
 const initialState: IUserWord[] = [{
   difficulty: 'simple',
@@ -15,34 +14,18 @@ const initialState: IUserWord[] = [{
   },
 }];
 
-export const deleteWord = createAsyncThunk(
-  'user/deleteUserWord',
-  async ({ word, user }: IUserUpdateWordRequest, { dispatch }) => {
-    await fetch(
-      // eslint-disable-next-line
-      `https://react-rslang-str.herokuapp.com/users/${user.id}/words/${word._id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      },
-    );
-    dispatch(removeFromStorage(word));
-    return word;
-  },
-);
-
 const deletedSlice = createSlice({
   name: 'deletedWords',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(deleteWord.fulfilled, (state, action) => {
-      state.push(action.payload.userWord);
+  reducers: {
+    removeFromDeletedStorage: (state, action) => {
+      // eslint-disable-next-line
+      const ind = state.findIndex((item) => item.wordId === action.payload._id);
+      state.splice(ind, 1);
       return state;
-    });
+    },
   },
 });
 
+export const { removeFromDeletedStorage } = deletedSlice.actions;
 export default deletedSlice.reducer;

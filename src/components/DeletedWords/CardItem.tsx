@@ -9,36 +9,20 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CorrectText from '../Textbook/right-card-text';
 import CardAudio from '../Textbook/card-audio';
-import { getAggregatedWord } from '../../utils/gameUtils';
-import { ICardItemDifPropsWithDelete } from '../../interfaces/interfaces';
+import { ICardItemDifProps } from '../../interfaces/interfaces';
 
 const Style = styled(Typography)`
     text-align: end;
     margin-top: -18px;
     margin-bottom: -20px;
 `;
-export default function CardItem(props: ICardItemDifPropsWithDelete): ReactElement {
-  const {
-    wordItem, user, dispatch, deleteDispatch,
-  } = props;
+export default function CardItem(props: ICardItemDifProps): ReactElement {
+  const { wordItem, dispatch } = props;
   const {
     word, transcription, wordTranslate, image, textMeaning,
     textMeaningTranslate, textExample, textExampleTranslate, audio,
     audioMeaning, audioExample,
   } = wordItem;
-
-  const removeFromDifficult = (e: React.MouseEvent) => {
-    getAggregatedWord(wordItem, user)
-      .then((result) => {
-        dispatch(result[0]);
-      });
-    ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
-  };
-
-  const deleteWord = (e: React.MouseEvent) => {
-    deleteDispatch(wordItem);
-    ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
-  };
 
   return (
     <Card sx={{ width: 600, display: 'flex' }}>
@@ -95,12 +79,12 @@ export default function CardItem(props: ICardItemDifPropsWithDelete): ReactEleme
           <Button
             variant="outlined"
             startIcon={<DeleteIcon />}
-            onClick={deleteWord}
+            onClick={(e) => {
+              dispatch(wordItem);
+              ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
+            }}
           >
-            Удалить
-          </Button>
-          <Button variant="outlined" color="error" onClick={removeFromDifficult}>
-            Убрать из сложных
+            Восстановить
           </Button>
         </CardActions>
       </div>

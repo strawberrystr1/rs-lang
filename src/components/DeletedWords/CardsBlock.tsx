@@ -10,6 +10,7 @@ import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
 import { IAggregatedWord } from '../../interfaces/apiInterfaces';
 import { updateUserWord } from '../../redux/userState/wordsSlice';
+import { removeFromDeletedStorage } from '../../redux/userState/deletedSlice';
 
 export default function CardsBlock(): ReactElement {
   const [response, setResponse] = useState<IAggregatedWord[]>([]);
@@ -20,34 +21,26 @@ export default function CardsBlock(): ReactElement {
 
   useEffect(() => {
     getAllAggregatedWords(user, {
-      filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
+      filter: '{"$and":[{"userWord.optional.deleted":true}]}',
     }).then((res) => {
       getAllAggregatedWords(user, {
-        filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
+        filter: '{"$and":[{"userWord.optional.deleted":true}]}',
         wordsPerPage: `${res[0].totalCount[0]?.count || 20}`,
       }).then((result) => {
-        setResponse(result[0].paginatedResults);
+        setResponse(result[0].paginatedResults || []);
         setOpen(false);
       });
     });
   }, []);
 
-  const updateDispatch = (word: IAggregatedWord) => {
+  const restoreDispatch = (word: IAggregatedWord) => {
     dispatch(updateUserWord({
       word,
       user,
-      type: 'removeDif',
+      type: 'restore',
     }));
+    dispatch(removeFromDeletedStorage(word));
   };
-
-  const deleteDispatch = (word: IAggregatedWord) => {
-    dispatch(updateUserWord({
-      word,
-      user,
-      type: 'deleteWord',
-    }));
-  };
-
   return (
     <>
       {
@@ -64,34 +57,36 @@ export default function CardsBlock(): ReactElement {
                 textAlign: 'left',
               }}
             >
-              {response.map((item: IAggregatedWord) => (
+              {
+              response.map((item: IAggregatedWord) => (
                 <Box
                   sx={{ minWidth: 275, alignContent: 'center', display: 'flex' }}
-                // eslint-disable-next-line
-                key={item._id}
+                  // eslint-disable-next-line
+                  key={item._id}
                   className="card-item"
                 >
                   <Card variant="outlined" sx={{ display: 'flex' }}>
                     {CardItem({
-                      wordItem: item, user, dispatch: updateDispatch, deleteDispatch,
+                      wordItem: item, user, dispatch: restoreDispatch,
                     })}
                   </Card>
                 </Box>
-              ))}
+              ))
+            }
             </Box>
           )
           : (!open
-              && (
-              <Typography
-                variant="h3"
-                color="white"
-                sx={{
-                  marginTop: '23%',
-                }}
-              >
-                У вас нет сложных слов
-              </Typography>
-              )
+            && (
+            <Typography
+              variant="h4"
+              color="white"
+              sx={{
+                marginTop: '23%',
+              }}
+            >
+              У вас нет удалённых слов
+            </Typography>
+            )
           )
       }
       <Backdrop

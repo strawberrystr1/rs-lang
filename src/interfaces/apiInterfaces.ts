@@ -82,11 +82,13 @@ export interface IUserWordOptional {
   wordId: string;
   wordDate: number;
   learnDate: number;
+  deleted: boolean;
 }
 export interface IUserState {
   user: ICurrentUserState;
   userStatistic: IUserStatistic;
   userWords: IUserWord[];
+  deletedWords: IUserWord[];
 }
 
 export interface IUserStatsRequestOptions {
@@ -97,7 +99,7 @@ export interface IUserStatsRequestOptions {
 
 export interface IUserCreateWordRequest {
   user: Partial<ICurrentUserState>;
-  word: IWordData;
+  word: Partial<IWordData>;
   wordOptions: IUserWord;
 }
 export interface IUserUpdateWordRequest {

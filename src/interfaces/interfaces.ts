@@ -1,4 +1,3 @@
-import React from 'react';
 import { IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {
@@ -92,6 +91,10 @@ export interface ICardItemDifProps {
   wordItem: IAggregatedWord;
   user: ICurrentUserState;
   dispatch: (word: IAggregatedWord) => void;
+}
+
+export interface ICardItemDifPropsWithDelete extends ICardItemDifProps {
+  deleteDispatch: (word: IAggregatedWord) => void;
 }
 
 export type SetWordsCBType = (data: IWordData[]) => void;

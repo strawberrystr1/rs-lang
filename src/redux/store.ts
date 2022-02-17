@@ -4,6 +4,7 @@ import { IUserState } from '../interfaces/apiInterfaces';
 import userReducer from './userState/userSlice';
 import statisticReducer from './userState/statisticSlice';
 import wordReducer from './userState/wordsSlice';
+import deleteReducer from './userState/deletedSlice';
 
 const initialState: IUserState = {
   user: {
@@ -27,6 +28,13 @@ const initialState: IUserState = {
           allAnswers: 0,
           correctAnswers: 0,
         },
+        audio: {
+          newWords: 0,
+          inARow: 0,
+          percents: 0,
+          allAnswers: 0,
+          correctAnswers: 0,
+        },
       },
       long: {
         stat: [],
@@ -34,6 +42,7 @@ const initialState: IUserState = {
     },
   },
   userWords: [],
+  deletedWords: [],
 };
 
 const localStorageMiddleWare: Middleware = (api: MiddlewareAPI) => (next) => <A extends Action>(action: A) => {
@@ -57,6 +66,7 @@ export const store = configureStore({
     user: userReducer,
     userStatistic: statisticReducer,
     userWords: wordReducer,
+    deletedWords: deleteReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleWare),
   preloadedState: restoreStore(),

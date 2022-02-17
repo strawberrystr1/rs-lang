@@ -244,7 +244,6 @@ export async function compareStatistic(
       },
     },
   };
-  console.log(newState);
   return newState;
 }
 

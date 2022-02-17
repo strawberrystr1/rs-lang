@@ -44,7 +44,6 @@ export const getStatistic = createAsyncThunk(
 export const updateStatistic = createAsyncThunk(
   'user/updateStatistic',
   async ({ optional, token, userId }: IUserStatsRequestOptions) => {
-    console.log('optional: ', optional);
     const response = await fetch(
       `https://react-rslang-str.herokuapp.com/users/${userId}/statistics`,
       {

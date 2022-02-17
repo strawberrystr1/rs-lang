@@ -230,12 +230,16 @@ export default function SprintGame(): ReactElement {
           elevation={12}
           sx={{
             maxWidth: 600,
+            width: '40%',
+            height: '60%',
+            padding: '20px',
             background: 'rgba(90, 206, 109, 1)',
             borderRadius: '10px',
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
+            alignItems: 'center',
           }}
           tabIndex={0}
         >

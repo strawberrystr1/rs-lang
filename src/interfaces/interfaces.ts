@@ -1,4 +1,4 @@
-import { IAggregatedWord, ICurrentUserState } from './apiInterfaces';
+import { ILongStatsItem, IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {
   score: number;
@@ -87,6 +87,9 @@ export interface ICurrentGameBlockState {
   words: IWordData[];
 }
 
+export interface ILongStatProps {
+  data: ILongStatsItem[];
+}
 export interface ICardItemDifProps {
   wordItem: IAggregatedWord;
   user: ICurrentUserState;

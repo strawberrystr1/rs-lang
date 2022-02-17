@@ -29,6 +29,15 @@ export const StyledListItem = styled(ListItem)`
   }
 `;
 
+export const StyledStatsCard = styled(Card)`
+  width: 100%;
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-content: space-evenly;
+  background: rgba(102, 96, 96, 0.3);
+`;
+
 export const StyledPaper = styled(Paper)`
   width: 100%;
   height: calc(100vh - 120px);

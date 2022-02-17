@@ -13,11 +13,10 @@ export default function Footer() {
     >
       <StyledContainer maxWidth="xl">
         <a
-          className="footer__rss-link"
           href="https://rs.school/js/"
           aria-label="link"
         >
-          RS
+          <div className="footer__rss-link" />
         </a>
         <div className="footer__author">
           <a

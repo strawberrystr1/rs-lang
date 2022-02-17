@@ -1,0 +1,186 @@
+.sprint {
+  width: 100%;
+  height: 100%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+
+  &__counter {
+    margin-bottom: 20px;
+    font-family: Lato;
+    font-size: 50px;
+    color: rgb(53, 48, 48);
+    font-weight: 700;
+    width: 40%;
+    text-align: center;
+    position: relative;
+  }
+
+  &__stick {
+    width: 60%;
+    height: 18%;
+    position: relative;
+
+    &_stick {
+      width: 100%;
+      height: 25%;
+      position: absolute;
+      bottom: 0;
+      background-image: url('../assets/stick.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    &_bird-red {
+      width: 22%;
+      height: 80%;
+      position: absolute;
+      background-image: url('../assets/angry-red.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &_bird-blue {
+      position: absolute;
+      left: 23%;
+      top: 2px;
+      width: 22%;
+      height: 80%;
+      background-image: url('../assets/angry-blue.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &_bird-green {
+      position: absolute;
+      left: 47%;
+      top: -5px;
+      width: 22%;
+      height: 80%;
+      background-image: url('../assets/angry-green.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+
+    &_bird-yellow {
+      position: absolute;
+      left: 73%;
+      top: 8px;
+      width: 22%;
+      height: 80%;
+      background-image: url('../assets/angry_yellow.png');
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+    }
+  }
+
+  &__circle-block {
+    width: 30%;
+    height: 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    margin-bottom: 10px;
+
+    &_item {
+      width: 25px;
+      height: 25px;
+      background-color: rgba(89, 117, 93, 0.4);
+      border-radius: 50%;
+
+      &.filled {
+        background-image: url('../assets/mark.png');
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: rgb(7, 148, 31);
+      }
+    }
+  }
+
+  &__score-info {
+    color: black;
+    font-family: Lato;
+    font-size: 18px;
+  }
+
+  &__word {
+    font-size: 50px;
+    font-family: Lato;
+  }
+
+  &__word-translate {
+    font-size: 24px;
+    font-family: Lato;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &__buttons, &__arrows {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__arrows {
+    width: 50%;
+  }
+
+  &__end_total-count {
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: rgb(37, 128, 212);
+    margin: 20px 0;
+
+    &.mistake {
+      background-color: rgb(211, 33, 33);
+    }
+  }
+
+  &__stat-box {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    margin-top: 30px;
+    align-items: center;
+    height: 280px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+      background-color: #443e3e;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: #2c292b;
+    }
+  }
+}
+
+.spring-bg {
+  background-image: url('../assets/bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.game-difficulty {
+  font-size: 66px;
+  color: white;
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 1000px) {
+  .sprint {
+    &__stick {
+      width: 90%;
+      height: 15%;
+    }
+  }
+}

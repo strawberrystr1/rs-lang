@@ -77,8 +77,8 @@ b{
 .card-content{
     width: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    flex-direction: column;
 }
 .word-mean, .word-translate{
     display: flex;

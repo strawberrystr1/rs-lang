@@ -1,5 +1,4 @@
-import { ILongStatsItem } from './apiInterfaces';
-import { IAggregatedWord, ICurrentUserState } from './apiInterfaces';
+import { ILongStatsItem, IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {
   score: number;

@@ -57,12 +57,12 @@ Chart.register(
   SubTitle,
 );
 
-export default function LongStatistic(props: ILongStatProps): ReactElement {
+export default function LongStatisticLearned(props: ILongStatProps): ReactElement {
   const canvas = useRef<HTMLCanvasElement>(null);
   const { data } = props;
 
   const createChar = useCallback(() => {
-    const maxValue = Math.max(...data.map((item) => item.newWords));
+    const maxValue = Math.max(...data.map((item) => item.learnedWords));
 
     const plugin = {
       id: 'custom_canvas_background_color',
@@ -79,29 +79,30 @@ export default function LongStatistic(props: ILongStatProps): ReactElement {
     const ctx = (canvas.current as HTMLCanvasElement).getContext('2d');
 
     const myChar = new Chart((ctx as CanvasRenderingContext2D), {
-      type: 'line',
+      type: 'bar',
       data: {
         datasets: [{
-          label: 'Новых слов за день',
+          label: 'Изучено слов за всё время',
           data,
           borderColor: '#000',
+          backgroundColor: 'rgba(201, 77, 104, 0.5)',
         }],
       },
       options: {
         scales: {
           y: {
             min: 0,
-            max: maxValue + 10,
+            max: maxValue + 3,
           },
         },
         parsing: {
           xAxisKey: 'date',
-          yAxisKey: 'newWords',
+          yAxisKey: 'learnedWords',
         },
         plugins: {
           title: {
             display: true,
-            text: 'Количество новых cлов по дням',
+            text: 'Прогресс изучения слов',
           },
         },
       },

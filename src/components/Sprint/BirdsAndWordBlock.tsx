@@ -10,6 +10,7 @@ export default function BirdsAndWordBlock(props: ISprinGameWord) {
       <div
         className="sprint__stick"
       >
+        <div className="sprint__stick_stick" />
         <div className="sprint__stick_bird-red" />
         {
               correctAnswerInARow! >= 4

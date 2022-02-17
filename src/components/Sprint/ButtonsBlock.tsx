@@ -163,7 +163,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
           variant="contained"
           color="error"
           sx={{
-            width: '180px',
+            width: '45%',
             color: 'white',
             height: '50px',
             fontSize: '18px',
@@ -177,7 +177,7 @@ export default function ButtonsBlock(props: ISprintAnswerButtons): ReactElement 
           variant="contained"
           color="success"
           sx={{
-            width: '180px',
+            width: '45%',
             color: 'white',
             height: '50px',
             fontSize: '18px',

@@ -19,6 +19,7 @@ const initialState: IUserStatistic = {
       stat: [{
         date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
         newWords: 0,
+        learnedWords: 0,
       }],
     },
   },

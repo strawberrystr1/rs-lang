@@ -173,9 +173,10 @@ export async function getAllAggregatedWords(user: Partial<ICurrentUserState>, qu
   return response.data;
 }
 
-export async function getAggregatedWord(word: IWordData, user: Partial<ICurrentUserState>) {
+export async function getAggregatedWord(word: IWordData | IAggregatedWord, user: Partial<ICurrentUserState>) {
   const response = await axios.get<IAggregatedWord[]>(
-    `https://react-rslang-str.herokuapp.com/users/${user.id}/aggregatedWords/${word.id}`,
+    // eslint-disable-next-line
+    `https://react-rslang-str.herokuapp.com/users/${user.id}/aggregatedWords/${word.id || (word as IAggregatedWord)._id}`,
     {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -221,6 +222,7 @@ export async function compareStatistic(
     const newLongStats = {
       date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
       newWords,
+      learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     };
     newLongStat.splice(indOfLastLongStat, 1, newLongStats);
   }
@@ -243,6 +245,7 @@ export async function compareStatistic(
       },
     },
   };
+  console.log(newState);
   return newState;
 }
 
@@ -284,6 +287,7 @@ export function checkWord(array: IWordData[], user: Partial<ICurrentUserState>, 
                 wordId: word.id,
                 wordDate,
                 learnDate: 0,
+                deleted: false,
               },
             },
           });

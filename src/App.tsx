@@ -9,7 +9,10 @@ import TextBookFinal from './components/Textbook/component-for-app';
 
 function App() {
   return (
-    <>
+    <div style={{
+      overflowY: 'auto',
+    }}
+    >
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
@@ -23,7 +26,7 @@ function App() {
         <Route path="/game/sprint" element={<EmptyPage />} />
       </Routes>
       <Footer />
-    </>
+    </div>
   );
 }
 

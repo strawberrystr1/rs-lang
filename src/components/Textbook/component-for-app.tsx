@@ -7,16 +7,26 @@ import ShowCards from './show-cards';
 function TextBookFinal() {
   return (
     <Container
-      maxWidth="xl"
+      maxWidth={false}
       className="main"
       sx={{
         height: 'calc(100vh - 120px)',
-        display: 'table',
+        overflowY: 'auto',
+        padding: '20px 0',
       }}
     >
-      <GameButtons />
-      <BasicPagination />
-      <ShowCards />
+      <Container
+        maxWidth="xl"
+        className="main"
+        sx={{
+          height: 'calc(100vh - 120px)',
+          display: 'table',
+        }}
+      >
+        <GameButtons />
+        <BasicPagination />
+        <ShowCards />
+      </Container>
     </Container>
   );
 }

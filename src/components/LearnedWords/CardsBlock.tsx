@@ -24,7 +24,7 @@ export default function CardsBlock(): ReactElement {
     }).then((res) => {
       getAllAggregatedWords(user, {
         filter: '{"$and":[{"userWord.optional.learned":true}]}',
-        wordsPerPage: `${res[0].totalCount[0]?.count}`,
+        wordsPerPage: `${res[0].totalCount[0]?.count || 20}`,
       }).then((result) => {
         setResponse(result[0].paginatedResults);
         setOpen(false);
@@ -69,7 +69,7 @@ export default function CardsBlock(): ReactElement {
               ))}
             </Box>
           )
-          : (open
+          : (!open
             && (
             <Typography
               variant="h4"

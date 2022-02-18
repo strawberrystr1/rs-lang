@@ -83,10 +83,10 @@ export default function CardsBlock(): ReactElement {
           : (!open
               && (
               <Typography
-                variant="h3"
+                variant="h4"
                 color="white"
                 sx={{
-                  marginTop: '23%',
+                  marginTop: '200px',
                 }}
               >
                 У вас нет сложных слов

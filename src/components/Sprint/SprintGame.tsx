@@ -16,7 +16,7 @@ import BirdsAndWordBlock from './BirdsAndWordBlock';
 import EndGameView from './EndGameView';
 import {
   checkWord,
-  compareStatistic, getRandomSetOfWords, getWordForGame, updateWord,
+  compareStatistic, getAllAggregatedWords, getRandomSetOfWords, getWordForGame, updateWord,
 } from '../../utils/gameUtils';
 import { ICurrentGameBlockState } from '../../interfaces/interfaces';
 import { RootState } from '../../redux/store';
@@ -111,13 +111,46 @@ export default function SprintGame(): ReactElement {
       if (buttonState.words.length === 0) {
         setIsLoading(true);
         setPageDown((prev) => prev + 1);
-        getRandomSetOfWords(group, (data) => {
-          setButtonState((prev) => ({
-            ...prev,
-            words: data,
-          }));
-          setIsLoading(false);
-        }, page - pageDown);
+        if (group) {
+          getRandomSetOfWords(group, (data) => {
+            setButtonState((prev) => ({
+              ...prev,
+              words: data,
+            }));
+            setIsLoading(false);
+          }, page - pageDown);
+        } else if (!group) {
+          if (!buttonState.gameState.correctWords.length && !buttonState.gameState.wrongWords.length) {
+            getAllAggregatedWords(user, {
+              filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
+            }).then((result) => {
+              const wordData = result[0].paginatedResults.map((item) => ({
+                audio: item.audio,
+                audioExample: item.audioExample,
+                audioMeaning: item.audioMeaning,
+                group: item.group,
+                // eslint-disable-next-line
+                id: item._id,
+                image: item.image,
+                page: item.page,
+                textExample: item.textExample,
+                textExampleTranslate: item.textExampleTranslate,
+                textMeaning: item.textMeaning,
+                textMeaningTranslate: item.textMeaningTranslate,
+                transcription: item.transcription,
+                word: item.word,
+                wordTranslate: item.wordTranslate,
+              }));
+              setButtonState((prev) => ({
+                ...prev,
+                words: wordData,
+              }));
+              setIsLoading(false);
+            });
+          } else {
+            setIsTimeEnd(true);
+          }
+        }
       }
       const variables = getWordForGame(buttonState.words);
       const [wordFF, wordTranslateFF, answerFF, wordIndexFF] = variables;
@@ -143,18 +176,20 @@ export default function SprintGame(): ReactElement {
       user,
       (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
     );
-    updateWord(
-      buttonState.gameState.correctWords,
-      'correct',
-      (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
-      user,
-    );
-    updateWord(
-      buttonState.gameState.wrongWords,
-      'wrong',
-      (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
-      user,
-    );
+    setTimeout(() => {
+      updateWord(
+        buttonState.gameState.correctWords,
+        'correct',
+        (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+        user,
+      );
+      updateWord(
+        buttonState.gameState.wrongWords,
+        'wrong',
+        (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+        user,
+      );
+    }, 1000);
   };
 
   useEffect(() => {

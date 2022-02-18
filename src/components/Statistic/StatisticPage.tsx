@@ -1,5 +1,5 @@
 import {
-  Container, Grid, CardContent, Dialog, DialogTitle, DialogActions, Button,
+  Container, Grid, CardContent, Dialog, DialogTitle, DialogActions, Button, Backdrop, CircularProgress,
 } from '@mui/material';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ import LongStatisticLearned from './LosgStatisticLearned';
 export default function StatisticPage(): ReactElement {
   const { user, userStatistic } = useSelector((state: RootState) => state);
   const [learnedWords, setLearnedWords] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,6 +37,7 @@ export default function StatisticPage(): ReactElement {
       }).then((res) => {
         const totalCount = res[0].totalCount[0]?.count || 0;
         setLearnedWords(totalCount);
+        setIsLoading(false);
       });
     }
   }, []);
@@ -267,14 +269,29 @@ export default function StatisticPage(): ReactElement {
               container
               spacing={4}
             >
-              <Grid item xs={6} className="stat__grid-item_long">
-                <LongStatistic data={userStatistic.optional.long.stat} />
-                {/* <LongStatistic data={data} /> */}
-              </Grid>
-              <Grid item xs={6} className="stat__grid-item_long">
-                <LongStatisticLearned data={userStatistic.optional.long.stat} />
-                {/* <LongStatisticLearned data={data} /> */}
-              </Grid>
+              {
+                !isLoading
+                  ? (
+                    <>
+                      <Grid item xs={6} className="stat__grid-item_long">
+                        <LongStatistic data={userStatistic.optional.long.stat} />
+                        {/* <LongStatistic data={data} /> */}
+                      </Grid>
+                      <Grid item xs={6} className="stat__grid-item_long">
+                        <LongStatisticLearned data={userStatistic.optional.long.stat} />
+                        {/* <LongStatisticLearned data={data} /> */}
+                      </Grid>
+                    </>
+                  )
+                  : (
+                    <Backdrop
+                      sx={{ color: '#fff', zIndex: 10001 }}
+                      open={isLoading}
+                    >
+                      <CircularProgress color="inherit" />
+                    </Backdrop>
+                  )
+              }
             </Grid>
           </>
         )

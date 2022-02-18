@@ -14,6 +14,8 @@ const initialState: IUserWord[] = [{
     wordDate: 0,
     learnDate: 0,
     deleted: false,
+    directProgress: 0,
+    backProgress: 0,
   },
 }];
 
@@ -36,24 +38,43 @@ export const getAllWords = createAsyncThunk(
 export const updateUserWord = createAsyncThunk(
   'user/updateUserWord',
   async ({ word, user, type }: IUserUpdateWordRequest) => {
-    let newProgress = word.userWord.optional.progress + 1;
+    let newProgress = word.userWord.optional.progress;
+    let { directProgress, backProgress } = word.userWord.optional;
+    if (type === 'correct') {
+      newProgress += 1;
+      directProgress += 1;
+    }
+    if (type === 'wrong') {
+      backProgress += 1;
+    }
     let { learned } = word.userWord.optional;
     let { learnDate } = word.userWord.optional;
-    if (newProgress >= 4) {
+    if (newProgress === 4) {
       learned = true;
-      newProgress = 4;
       learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
     }
     let { deleted } = word.userWord.optional;
+    let { difficulty } = word.userWord;
     if (type === 'restore') {
       deleted = false;
     }
     if (type === 'deleteWord') {
       deleted = true;
     }
-    let { difficulty } = word.userWord;
+    if (type === 'learnTrue') {
+      learned = true;
+      difficulty = 'simple';
+      learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+    }
+    if (type === 'learnFalse') {
+      learned = false;
+      learnDate = 0;
+    }
     if (type === 'removeDif') {
       difficulty = 'simple';
+    }
+    if (type === 'addDif') {
+      difficulty = 'hard';
     }
     const newData: IUserWord = {
       ...word.userWord,
@@ -64,6 +85,8 @@ export const updateUserWord = createAsyncThunk(
         learned,
         learnDate,
         deleted,
+        directProgress,
+        backProgress,
       },
     };
     const response = await fetch(

@@ -20,10 +20,10 @@ export default function CardsBlock(): ReactElement {
 
   useEffect(() => {
     getAllAggregatedWords(user, {
-      filter: '{"$and":[{"userWord.optional.learned":true}]}',
+      filter: '{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.deleted":false}]}',
     }).then((res) => {
       getAllAggregatedWords(user, {
-        filter: '{"$and":[{"userWord.optional.learned":true}]}',
+        filter: '{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.deleted":false}]}',
         wordsPerPage: `${res[0].totalCount[0]?.count || 20}`,
       }).then((result) => {
         setResponse(result[0].paginatedResults);

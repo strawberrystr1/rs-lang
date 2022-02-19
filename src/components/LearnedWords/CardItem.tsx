@@ -58,7 +58,7 @@ export default function CardItem(props: ICardItemDifPropsWithDelete): ReactEleme
               {wordTranslate}
             </Typography>
           </CardContent>
-          {CardAudio(audio, '3rem')}
+          <Style>{CardAudio([audio, audioMeaning, audioExample], '3rem')}</Style>
         </div>
         <div className="word-mean">
           <div className="word-mean-text">
@@ -71,7 +71,6 @@ export default function CardItem(props: ICardItemDifPropsWithDelete): ReactEleme
               <br />
             </Typography>
           </div>
-          <Style>{CardAudio(audioMeaning, '2rem')}</Style>
         </div>
         <br />
         <div className="word-translate">
@@ -85,10 +84,9 @@ export default function CardItem(props: ICardItemDifPropsWithDelete): ReactEleme
               <br />
             </Typography>
           </div>
-          <Style>{CardAudio(audioExample, '2rem')}</Style>
         </div>
         <CardActions>
-          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={deleteWord}>
+          <Button variant="contained" startIcon={<DeleteIcon />} onClick={deleteWord}>
             Удалить
           </Button>
         </CardActions>

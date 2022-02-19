@@ -77,11 +77,10 @@ export default function ShowCards(props: IShowCardsProps) {
       filter: '{"$and":[{"userWord.optional.learned":true}]}',
     }).then((res) => {
       const learned = res[0].totalCount[0].count || 0;
-      const wordDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
       newStats.learnedWords = learned;
       const ind = newStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
       getAllAggregatedWords(user, {
-        filter: `{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.wordDate": ${wordDate}}]}`,
+        filter: '{"$and":[{"userWord.optional.learned":true}]}',
       }).then((result) => {
         const newLongStat = [...newStats.optional.long.stat];
         if (ind >= 0) {

@@ -78,6 +78,8 @@ export interface IUserWord {
 export interface IUserWordOptional {
   learned: boolean;
   progress: number;
+  backProgress: number;
+  directProgress: number;
   new: boolean;
   wordId: string;
   wordDate: number;

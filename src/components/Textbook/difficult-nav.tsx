@@ -5,6 +5,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { colors } from '../../constants/apiConstants';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: 'absolute',
@@ -13,15 +14,6 @@ const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
     left: theme.spacing(2),
   },
 }));
-
-const actions = [
-  { name: '1' },
-  { name: '2' },
-  { name: '3' },
-  { name: '4' },
-  { name: '5' },
-  { name: '6' },
-];
 
 export default function NavigationByDifficult() {
   const navigate = useNavigate();
@@ -34,7 +26,7 @@ export default function NavigationByDifficult() {
           icon={<SpeedDialIcon />}
           direction="down"
         >
-          {actions.map((action) => (
+          {colors.map((action) => (
             <SpeedDialAction
               key={action.name}
               icon={action.name}
@@ -44,6 +36,11 @@ export default function NavigationByDifficult() {
                 const oldGroup = location.pathname[location.pathname.lastIndexOf('/') - 1];
                 const rightPage = location.pathname.replace(oldGroup, newGroup);
                 navigate(rightPage);
+              }}
+              sx={{
+                backgroundColor: action.color,
+                color: 'white',
+                fontSize: '20px',
               }}
             />
           ))}

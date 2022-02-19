@@ -1,5 +1,5 @@
 import {
-  Container, Grid, CardContent, Dialog, DialogTitle, DialogActions, Button,
+  Container, Grid, CardContent, Dialog, DialogTitle, DialogActions, Button, Backdrop, CircularProgress,
 } from '@mui/material';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +17,8 @@ import LongStatisticLearned from './LosgStatisticLearned';
 
 export default function StatisticPage(): ReactElement {
   const { user, userStatistic } = useSelector((state: RootState) => state);
-  const [learnedWords, setLearnedWords] = useState(0);
+  const [learnedToday, setLearnedToday] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -29,13 +30,15 @@ export default function StatisticPage(): ReactElement {
 
   useEffect(() => {
     if (user.name) {
+      const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
       dispatch(getStatistic({ userId: user.id, token: user.token }));
       dispatch(getAllWords(user));
       getAllAggregatedWords(user, {
-        filter: '{"$and":[{"userWord.optional.learned":true}]}',
+        filter: `{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.learnDate":${todayDate}}]}`,
       }).then((res) => {
         const totalCount = res[0].totalCount[0]?.count || 0;
-        setLearnedWords(totalCount);
+        setLearnedToday(totalCount);
+        setIsLoading(false);
       });
     }
   }, []);
@@ -129,7 +132,7 @@ export default function StatisticPage(): ReactElement {
                     fontWeight: 'bold',
                   }}
                   >
-                    {learnedWords}
+                    {learnedToday}
                   </CardContent>
                   <CardContent sx={{
                     fontSize: '24px',
@@ -195,20 +198,20 @@ export default function StatisticPage(): ReactElement {
                   }}
                   >
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.sprint?.newWords}</span>
+                      <span>{userStatistic.optional.short.sprint?.newWords || 0}</span>
                       {' '}
                       новых слов
                     </p>
                     <p className="stat_game-stat">
                       <span>
-                        {userStatistic.optional.short.sprint?.percents}
+                        {userStatistic.optional.short.sprint?.percents || 0}
                         {' '}
                         %
                       </span>
                       правильных ответов
                     </p>
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.sprint?.inARow}</span>
+                      <span>{userStatistic.optional.short.sprint?.inARow || 0}</span>
                       {' '}
                       лучшая серия
                     </p>
@@ -241,20 +244,20 @@ export default function StatisticPage(): ReactElement {
                   }}
                   >
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.audio?.newWords}</span>
+                      <span>{userStatistic.optional.short.audio?.newWords || 0}</span>
                       {' '}
                       новых слов
                     </p>
                     <p className="stat_game-stat">
                       <span>
-                        {userStatistic.optional.short.audio?.percents}
+                        {userStatistic.optional.short.audio?.percents || 0}
                         {' '}
                         %
                       </span>
                       правильных ответов
                     </p>
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.audio?.inARow}</span>
+                      <span>{userStatistic.optional.short.audio?.inARow || 0 || 0}</span>
                       {' '}
                       лучшая серия
                     </p>
@@ -267,14 +270,29 @@ export default function StatisticPage(): ReactElement {
               container
               spacing={4}
             >
-              <Grid item xs={6} className="stat__grid-item_long">
-                <LongStatistic data={userStatistic.optional.long.stat} />
-                {/* <LongStatistic data={data} /> */}
-              </Grid>
-              <Grid item xs={6} className="stat__grid-item_long">
-                <LongStatisticLearned data={userStatistic.optional.long.stat} />
-                {/* <LongStatisticLearned data={data} /> */}
-              </Grid>
+              {
+                !isLoading
+                  ? (
+                    <>
+                      <Grid item xs={6} className="stat__grid-item_long">
+                        <LongStatistic data={userStatistic.optional.long.stat} />
+                        {/* <LongStatistic data={data} /> */}
+                      </Grid>
+                      <Grid item xs={6} className="stat__grid-item_long">
+                        <LongStatisticLearned data={userStatistic.optional.long.stat} />
+                        {/* <LongStatisticLearned data={data} /> */}
+                      </Grid>
+                    </>
+                  )
+                  : (
+                    <Backdrop
+                      sx={{ color: '#fff', zIndex: 10001 }}
+                      open={isLoading}
+                    >
+                      <CircularProgress color="inherit" />
+                    </Backdrop>
+                  )
+              }
             </Grid>
           </>
         )

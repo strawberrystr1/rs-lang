@@ -20,11 +20,11 @@ export default function CardsBlock(): ReactElement {
 
   useEffect(() => {
     getAllAggregatedWords(user, {
-      filter: '{"$and":[{"userWord.optional.learned":true}]}',
+      filter: '{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.deleted":false}]}',
     }).then((res) => {
       getAllAggregatedWords(user, {
-        filter: '{"$and":[{"userWord.optional.learned":true}]}',
-        wordsPerPage: `${res[0].totalCount[0]?.count}`,
+        filter: '{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.deleted":false}]}',
+        wordsPerPage: `${res[0].totalCount[0]?.count || 20}`,
       }).then((result) => {
         setResponse(result[0].paginatedResults);
         setOpen(false);
@@ -36,6 +36,14 @@ export default function CardsBlock(): ReactElement {
     dispatch(updateUserWord({
       word,
       user,
+    }));
+  };
+
+  const deleteDispatch = (word: IAggregatedWord) => {
+    dispatch(updateUserWord({
+      word,
+      user,
+      type: 'deleteWord',
     }));
   };
 
@@ -63,13 +71,15 @@ export default function CardsBlock(): ReactElement {
                   className="card-item"
                 >
                   <Card variant="outlined" sx={{ display: 'flex' }}>
-                    {CardItem({ wordItem: item, user, dispatch: updateDispatch })}
+                    {CardItem({
+                      wordItem: item, user, dispatch: updateDispatch, deleteDispatch,
+                    })}
                   </Card>
                 </Box>
               ))}
             </Box>
           )
-          : (open
+          : (!open
             && (
             <Typography
               variant="h4"

@@ -100,5 +100,11 @@ export interface ICardItemDifPropsWithDelete extends ICardItemDifProps {
   deleteDispatch: (word: IAggregatedWord) => void;
 }
 
+export interface IShowCardsProps {
+  setIsPageLearned: (value: boolean) => void;
+}
+
 export type SetWordsCBType = (data: IWordData[]) => void;
 export type SetGameLevelCB = (level: number) => void;
+export type LearnDispatchCB = (word: IAggregatedWord, type: string) => void;
+export type AddWordDispatchCB = (word: IAggregatedWord) => void;

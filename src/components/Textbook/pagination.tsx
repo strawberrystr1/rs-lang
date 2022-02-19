@@ -22,7 +22,8 @@ export default function BasicPagination() {
           page={wordPage}
           sx={{ margin: '0 auto' }}
           count={30}
-          color="primary"
+          size="large"
+          color="secondary"
           onClick={(event: MouseEvent) => {
             const button = event.target as HTMLButtonElement;
             const svg = ((button.closest('button')as HTMLElement).querySelector('svg')as SVGElement);

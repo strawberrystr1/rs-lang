@@ -31,6 +31,7 @@ function App() {
         <Route path="/dictionary/deleted" element={<DeletedPage />} />
         <Route path="/game/audio" element={<EmptyPage />} />
         <Route path="/game/sprint/:group/:page" element={<SprintGame />} />
+        <Route path="/game/sprint/difficult" element={<SprintGame />} />
         <Route path="/gamedif" element={<GameDifficulty />} />
       </Routes>
       <Footer />

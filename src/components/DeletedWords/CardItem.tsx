@@ -46,7 +46,7 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
               {wordTranslate}
             </Typography>
           </CardContent>
-          {CardAudio(audio, '3rem')}
+          <Style>{CardAudio([audio, audioMeaning, audioExample], '3rem')}</Style>
         </div>
         <div className="word-mean">
           <div className="word-mean-text">
@@ -59,7 +59,6 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
               <br />
             </Typography>
           </div>
-          <Style>{CardAudio(audioMeaning, '2rem')}</Style>
         </div>
         <br />
         <div className="word-translate">
@@ -73,11 +72,10 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
               <br />
             </Typography>
           </div>
-          <Style>{CardAudio(audioExample, '2rem')}</Style>
         </div>
         <CardActions>
           <Button
-            variant="outlined"
+            variant="contained"
             startIcon={<DeleteIcon />}
             onClick={(e) => {
               dispatch(wordItem);

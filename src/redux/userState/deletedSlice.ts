@@ -11,6 +11,8 @@ const initialState: IUserWord[] = [{
     wordDate: 0,
     learnDate: 0,
     deleted: false,
+    backProgress: 0,
+    directProgress: 0,
   },
 }];
 

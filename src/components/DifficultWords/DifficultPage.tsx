@@ -2,9 +2,15 @@ import {
   Button, ButtonGroup, Container, Typography,
 } from '@mui/material';
 import React, { ReactElement } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import CardsBlock from './CardsBlock';
+import iconFirstGame from '../../assets/audio.png';
+import iconSecondGame from '../../assets/sprint.png';
 
 export default function DifficultPage(): ReactElement {
+  const params = useParams();
+  const navigate = useNavigate();
+  const { group, page } = params;
   return (
     <Container
       maxWidth={false}
@@ -28,12 +34,12 @@ export default function DifficultPage(): ReactElement {
         }}
         >
           <ButtonGroup variant="contained" aria-label="outlined primary button group" color="secondary">
-            <Button>
-              <img alt="" className="img" />
+            <Button onClick={() => navigate(`/game/audio/${group}/${page}`)}>
+              <img src={iconFirstGame} alt="" className="img" />
               Audio challenge
             </Button>
-            <Button>
-              <img alt="" className="img" />
+            <Button onClick={() => navigate('/game/sprint/difficult')}>
+              <img src={iconSecondGame} alt="" className="img" />
               Sprint
             </Button>
           </ButtonGroup>

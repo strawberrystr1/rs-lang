@@ -81,7 +81,7 @@ export default function CardsBlock(): ReactElement {
               variant="h4"
               color="white"
               sx={{
-                marginTop: '23%',
+                marginTop: '200px',
               }}
             >
               У вас нет удалённых слов

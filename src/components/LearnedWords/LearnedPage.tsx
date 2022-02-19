@@ -1,5 +1,5 @@
 import {
-  Button, ButtonGroup, Container, Typography,
+  Container, Typography,
 } from '@mui/material';
 import React, { ReactElement } from 'react';
 import CardsBlock from './CardsBlock';
@@ -26,18 +26,7 @@ export default function LearnedPage(): ReactElement {
           marginTop: '20px',
           justifyContent: 'center',
         }}
-        >
-          <ButtonGroup variant="contained" aria-label="outlined primary button group" color="secondary">
-            <Button>
-              <img alt="" className="img" />
-              Audio challenge
-            </Button>
-            <Button>
-              <img alt="" className="img" />
-              Sprint
-            </Button>
-          </ButtonGroup>
-        </Container>
+        />
         <Typography
           variant="h2"
           color="white"

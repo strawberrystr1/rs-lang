@@ -111,15 +111,47 @@ export default function SprintGame(): ReactElement {
       if (buttonState.words.length === 0) {
         setIsLoading(true);
         setPageDown((prev) => prev + 1);
-        if (group) {
-          getRandomSetOfWords(group, (data) => {
-            setButtonState((prev) => ({
-              ...prev,
-              words: data,
-            }));
-            setIsLoading(false);
-          }, page - pageDown);
+        if (group >= 0) {
+          if (user.name) {
+            getAllAggregatedWords(user, {
+              filter: `{"$and":[{"group":${group}}, {"page":${page - pageDown}}]}`,
+              wordsPerPage: '20',
+            }).then((result) => {
+              const filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+              const newData = filtered.map((item) => ({
+                audio: item.audio,
+                audioExample: item.audioExample,
+                audioMeaning: item.audioMeaning,
+                group: item.group,
+                // eslint-disable-next-line
+                id: item._id,
+                image: item.image,
+                page: item.page,
+                textExample: item.textExample,
+                textExampleTranslate: item.textExampleTranslate,
+                textMeaning: item.textMeaning,
+                textMeaningTranslate: item.textMeaningTranslate,
+                transcription: item.transcription,
+                word: item.word,
+                wordTranslate: item.wordTranslate,
+              }));
+              setButtonState((prev) => ({
+                ...prev,
+                words: newData,
+              }));
+              setIsLoading(false);
+            });
+          } else {
+            getRandomSetOfWords(group, (data) => {
+              setButtonState((prev) => ({
+                ...prev,
+                words: data,
+              }));
+              setIsLoading(false);
+            }, page - pageDown);
+          }
         } else if (!group) {
+          console.log(group);
           if (!buttonState.gameState.correctWords.length && !buttonState.gameState.wrongWords.length) {
             getAllAggregatedWords(user, {
               filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',

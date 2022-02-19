@@ -30,10 +30,11 @@ export default function StatisticPage(): ReactElement {
 
   useEffect(() => {
     if (user.name) {
+      const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
       dispatch(getStatistic({ userId: user.id, token: user.token }));
       dispatch(getAllWords(user));
       getAllAggregatedWords(user, {
-        filter: '{"$and":[{"userWord.optional.learned":true}]}',
+        filter: `{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.learnDate":${todayDate}}]}`,
       }).then((res) => {
         const totalCount = res[0].totalCount[0]?.count || 0;
         setLearnedWords(totalCount);
@@ -197,20 +198,20 @@ export default function StatisticPage(): ReactElement {
                   }}
                   >
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.sprint?.newWords}</span>
+                      <span>{userStatistic.optional.short.sprint?.newWords || 0}</span>
                       {' '}
                       новых слов
                     </p>
                     <p className="stat_game-stat">
                       <span>
-                        {userStatistic.optional.short.sprint?.percents}
+                        {userStatistic.optional.short.sprint?.percents || 0}
                         {' '}
                         %
                       </span>
                       правильных ответов
                     </p>
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.sprint?.inARow}</span>
+                      <span>{userStatistic.optional.short.sprint?.inARow || 0}</span>
                       {' '}
                       лучшая серия
                     </p>
@@ -243,20 +244,20 @@ export default function StatisticPage(): ReactElement {
                   }}
                   >
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.audio?.newWords}</span>
+                      <span>{userStatistic.optional.short.audio?.newWords || 0}</span>
                       {' '}
                       новых слов
                     </p>
                     <p className="stat_game-stat">
                       <span>
-                        {userStatistic.optional.short.audio?.percents}
+                        {userStatistic.optional.short.audio?.percents || 0}
                         {' '}
                         %
                       </span>
                       правильных ответов
                     </p>
                     <p className="stat_game-stat">
-                      <span>{userStatistic.optional.short.audio?.inARow}</span>
+                      <span>{userStatistic.optional.short.audio?.inARow || 0 || 0}</span>
                       {' '}
                       лучшая серия
                     </p>

@@ -8,7 +8,7 @@ export default function Circular(progress: number) {
       <Box sx={{ position: 'relative' }}>
         <CircularProgress
           variant="determinate"
-          value={progress}
+          value={progress + 5}
           size={120}
           sx={{ position: 'absolute', zIndex: 100 }}
         />
@@ -20,7 +20,7 @@ export default function Circular(progress: number) {
         />
       </Box>
       <Typography variant="h6" sx={{ position: 'absolute', top: '43px', left: '41px' }}>
-        {`${progress / 5}/20`}
+        {`${(progress / 5) + 1}/20`}
       </Typography>
     </Box>
   );

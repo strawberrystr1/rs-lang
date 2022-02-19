@@ -51,6 +51,7 @@ export interface IAfterGameWordsStat {
   wrong: number;
   state: IGameStatistic;
   words: IWordData[];
+  audioGame?: string;
 }
 
 export interface IWordData {

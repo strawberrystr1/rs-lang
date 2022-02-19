@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { GameInterface } from '../components/interfaces/gameI';
 import { BASE_URL } from '../constants/apiConstants';
 import {
   DispatchCBCheckWord,
@@ -7,7 +8,7 @@ import {
   ICurrentUserState, IQueryParamsForWords, ISprintStats, ITodayStats, ITodayWordsResponse, IUserStatistic,
 } from '../interfaces/apiInterfaces';
 import {
-  ICurrentGameBlockState,
+  // ICurrentGameBlockState,
   IWordData,
   // SetGameLevelCB,
   SetWordsCBType,
@@ -188,7 +189,7 @@ export async function getAggregatedWord(word: IWordData, user: Partial<ICurrentU
 
 export async function compareStatistic(
   storageStats: IUserStatistic,
-  currentStats: ICurrentGameBlockState,
+  currentStats: GameInterface,
   user: Partial<ICurrentUserState>,
   isNewUser: boolean,
   gameType: string,
@@ -231,7 +232,7 @@ export async function compareStatistic(
     optional: {
       short: {
         lastDate: Date.now(),
-        sprint: {
+        [gameType as keyof ITodayStats]: {
           inARow: bestInARow,
           correctAnswers: correctAll,
           allAnswers: allWords,
@@ -244,7 +245,6 @@ export async function compareStatistic(
       },
     },
   };
-  console.log(newState);
   return newState;
 }
 

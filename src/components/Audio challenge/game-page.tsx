@@ -4,8 +4,21 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import { SinglWord } from '../interfaces/textbookI';
-import AnswerVariant from './answer-buttons';
+import AnswerVariant, { ResetData } from './answer-buttons';
 import FillAnswerButtons from './fill-answer-buttons';
+import { GameInterface } from '../interfaces/gameI';
+
+export const gameData: GameInterface = {
+  correctAnswerInARow: 0,
+  answer: false,
+  correctAnswerCounter: 0,
+  gameState: {
+    correctWords: [],
+    wrongWords: [],
+    bestInARow: 0,
+  },
+  words: [],
+};
 
 export default function GamePage() {
   const [response, setResponse] = React.useState<Array<SinglWord>>([]);
@@ -18,6 +31,7 @@ export default function GamePage() {
     axios.get(apiUrl).then((resp) => resp.data).then((data:Array<SinglWord>) => {
       setResponse(data);
       setOpen(false);
+      ResetData();
       FillAnswerButtons(data, 0);
     });
   }, [apiUrl]);

@@ -23,6 +23,6 @@ export default function FillAnswerButtons(data: Array<SinglWord>, count: number)
     }
   }
   for (let index = 0; index < buttons.length; index += 1) {
-    buttons[index].innerHTML = answers[index];
+    buttons[index].innerHTML = `${(index + 1).toString()}. ${answers[index]}`;
   }
 }

@@ -49,8 +49,8 @@
     box-shadow: rgb(0 0 0 / 20%) 0px 2px 4px -1px, rgb(0 0 0 / 14%) 0px 4px 5px 0px, rgb(0 0 0 / 12%) 0px 1px 10px 0px;
 }
 .wrong{
-    color: red !important;
-    background-color: black !important;
+    color: aliceblue !important;
+    background-color: red !important;
 }
 .right{
     color: aliceblue !important;
@@ -62,4 +62,17 @@
 }
 .hidden{
     display: none;
+}
+.button-background{
+    background: rgb(255,255,255);
+    background: radial-gradient(circle, rgba(255,255,255,1) 71%, rgba(29,135,253,1) 100%);
+}
+.main-game {
+    background-image: url('../../assets/bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.mute{
+    background-color: darkgray;
 }

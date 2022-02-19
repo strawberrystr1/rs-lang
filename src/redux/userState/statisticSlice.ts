@@ -14,6 +14,13 @@ const initialState: IUserStatistic = {
         correctAnswers: 0,
         allAnswers: 0,
       },
+      audio: {
+        newWords: 0,
+        inARow: 0,
+        percents: 0,
+        correctAnswers: 0,
+        allAnswers: 0,
+      },
     },
     long: {
       stat: [{
@@ -44,7 +51,6 @@ export const getStatistic = createAsyncThunk(
 export const updateStatistic = createAsyncThunk(
   'user/updateStatistic',
   async ({ optional, token, userId }: IUserStatsRequestOptions) => {
-    console.log('optional: ', optional);
     const response = await fetch(
       `https://react-rslang-str.herokuapp.com/users/${userId}/statistics`,
       {

@@ -5,6 +5,7 @@ import { Container } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import iconFirstGame from '../../assets/audio.png';
 import iconSecondGame from '../../assets/sprint.png';
+import { colors } from '../../constants/apiConstants';
 
 export default function GameButtons() {
   const params = useParams();
@@ -12,12 +13,12 @@ export default function GameButtons() {
   const { group, page } = params;
   return (
     <Container className="game" sx={{ display: 'flex' }}>
-      <ButtonGroup variant="contained" aria-label="outlined primary button group" color="secondary">
-        <Button onClick={() => navigate(`/game/audio/${group}/${page}`)}>
+      <ButtonGroup variant="contained" aria-label="outlined primary button group">
+        <Button onClick={() => navigate(`/game/audio/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
           <img src={iconFirstGame} alt="" className="img" />
           Audio challenge
         </Button>
-        <Button onClick={() => navigate(`/game/sprint/${group}/${page}`)}>
+        <Button onClick={() => navigate(`/game/sprint/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
           <img src={iconSecondGame} alt="" className="img" />
           Sprint
         </Button>

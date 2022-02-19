@@ -215,17 +215,13 @@ export async function compareStatistic(
     filter: '{"$and":[{"userWord.optional.learned":true}]}',
   });
 
-  const learnedToday = await getAllAggregatedWords(user, {
-    filter: `{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.learnDate":${todayDate}}]}`,
-  });
-
   const indOfLastLongStat = storageStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
   const newLongStat = [...storageStats.optional.long.stat];
   if (indOfLastLongStat >= 0) {
     const newLongStats = {
       date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
       newWords,
-      learnedWords: learnedToday[0].totalCount[0]?.count || 0,
+      learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     };
     newLongStat.splice(indOfLastLongStat, 1, newLongStats);
   }

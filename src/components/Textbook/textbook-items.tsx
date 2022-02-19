@@ -8,6 +8,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import '../styles/textbook-style.css';
 import ChapterComponents from './chapter';
+import { colors } from '../../constants/apiConstants';
 
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -52,18 +53,25 @@ function TextbookItem() {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const itemContent: Array<string> = ['1', ' 2', '3', '4', '5', '6'];
-  function addAcordionsElement(numCat: string) {
-    const ariControlsValue = `panel${{ numCat }}d-content`;
-    const id = `panel${{ numCat }}d-header`;
-    const name = `Раздел # ${numCat}`;
+  function addAcordionsElement(numCat: {name: string, color: string}) {
+    const ariControlsValue = `panel${numCat.name}d-content`;
+    const id = `panel${numCat.name}d-header`;
+    const name = `Раздел # ${numCat.name}`;
     return (
-      <Accordion key={numCat} expanded={expanded === `panel${numCat}`} onChange={handleChange(`panel${numCat}`)}>
+      <Accordion
+        key={numCat.name}
+        expanded={expanded === `panel${numCat.name}`}
+        onChange={handleChange(`panel${numCat.name}`)}
+        sx={{
+          backgroundColor: numCat.color,
+          color: 'white',
+        }}
+      >
         <AccordionSummary aria-controls={ariControlsValue} id={id}>
-          <Typography>{name}</Typography>
+          <Typography fontSize={22}>{name}</Typography>
         </AccordionSummary>
         <AccordionDetails className="chapterContainer">
-          {ChapterComponents(numCat)}
+          {ChapterComponents(numCat.name)}
         </AccordionDetails>
       </Accordion>
     );
@@ -71,7 +79,7 @@ function TextbookItem() {
   return (
     <div className="textbook-items">
       {
-          itemContent.map((item) => (
+          colors.map((item) => (
             addAcordionsElement(item)
           ))
       }

@@ -29,6 +29,7 @@ export default function SingleCard(
   addWordDispatch: AddWordDispatchCB,
   deleteDispatch: AddWordDispatchCB,
   difficultyDispatch: LearnDispatchCB,
+  checkPageIsLearned: () => void,
 ) {
   const {
     word, transcription, wordTranslate, image, textMeaning,
@@ -94,9 +95,13 @@ export default function SingleCard(
             addWordDispatch(aggregatedWord);
             setTimeout(() => {
               learnToggleDispatch(aggregatedWord, type);
+              checkPageIsLearned();
             }, 1000);
           } else {
             learnToggleDispatch(aggregatedWord, type);
+            setTimeout(() => {
+              checkPageIsLearned();
+            }, 500);
           }
         });
     }
@@ -189,17 +194,22 @@ export default function SingleCard(
         alt="wordPicture"
       />
       <div className={cardClass}>
-        <div className="progress-block">
-          <div className="btn-wrapper">
-            <Tooltip title="Количество правильных ответов за все время">
-              <div className="correct-block">{correctProgress}</div>
-            </Tooltip>
-            <Tooltip title="Количество неправильных ответов за все время">
-              <div className="incorrect-block">{wrongProgress}</div>
-            </Tooltip>
-          </div>
-          <CircularProgressLabel value={progress} />
-        </div>
+        {
+          name
+            && (
+              <div className="progress-block">
+                <div className="btn-wrapper">
+                  <Tooltip title="Количество правильных ответов за все время">
+                    <div className="correct-block">{correctProgress}</div>
+                  </Tooltip>
+                  <Tooltip title="Количество неправильных ответов за все время">
+                    <div className="incorrect-block">{wrongProgress}</div>
+                  </Tooltip>
+                </div>
+                <CircularProgressLabel value={progress} />
+              </div>
+            )
+        }
         <div className="card-head">
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">

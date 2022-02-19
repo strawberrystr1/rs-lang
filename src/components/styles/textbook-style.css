@@ -156,3 +156,8 @@ b{
 .MuiButtonBase-root.MuiPaginationItem-root.Mui-selected.learned {
     background-color: rgb(99, 202, 30);
 }
+
+.MuiAccordionDetails-root {
+    background-color: #fff;
+    color: #2362d6;
+}

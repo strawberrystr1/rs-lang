@@ -14,8 +14,10 @@ import { getAllAggregatedWords } from '../../utils/gameUtils';
 import { IAggregatedWord, IUserWord } from '../../interfaces/apiInterfaces';
 import { addUserWord, updateUserWord } from '../../redux/userState/wordsSlice';
 import { updateStatistic } from '../../redux/userState/statisticSlice';
+import { IShowCardsProps } from '../../interfaces/interfaces';
 
-export default function ShowCards() {
+export default function ShowCards(props: IShowCardsProps) {
+  const { setIsPageLearned } = props;
   const [response, setResponse] = useState<Array<SinglWord | IAggregatedWord>>([]);
   const [open, setOpen] = React.useState(true);
   const params = useParams();
@@ -42,11 +44,26 @@ export default function ShowCards() {
           .filter((item) => !item.userWord?.optional.deleted);
         setResponse(data);
         setOpen(false);
-        // const ans = data.every((item) => item.userWord.optional.learned || item.userWord.difficulty === 'hard');
-        // console.log(ans);
+        const ans = data.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
+        if (ans) setIsPageLearned(true);
       });
     }
   }, [apiUrlAnonym, user.name]);
+
+  const checkPageIsLearned = () => {
+    getAllAggregatedWords(user, {
+      filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}]}`,
+      wordsPerPage: '20',
+    }).then((res) => {
+      const ans = res[0].paginatedResults.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
+      console.log('ans: ', ans);
+      if (ans) {
+        setIsPageLearned(true);
+      } else {
+        setIsPageLearned(false);
+      }
+    });
+  };
 
   const learnToggleDispatch = (word: IAggregatedWord, type: string) => {
     dispatch(updateUserWord({
@@ -160,7 +177,7 @@ export default function ShowCards() {
                 className="card-item"
               >
                 <Card variant="outlined" sx={{ display: 'flex' }}>
-                  {SingleCard(item, user, learnToggleDispatch, addWordDispatch, deleteDispatch, difficultyDispatch)}
+                  {SingleCard(item, user, learnToggleDispatch, addWordDispatch, deleteDispatch, difficultyDispatch, checkPageIsLearned)}
                 </Card>
               </Box>
             ))}

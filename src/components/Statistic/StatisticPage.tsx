@@ -17,7 +17,7 @@ import LongStatisticLearned from './LosgStatisticLearned';
 
 export default function StatisticPage(): ReactElement {
   const { user, userStatistic } = useSelector((state: RootState) => state);
-  const [learnedWords, setLearnedWords] = useState(0);
+  const [learnedToday, setLearnedToday] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ export default function StatisticPage(): ReactElement {
         filter: `{"$and":[{"userWord.optional.learned":true}, {"userWord.optional.learnDate":${todayDate}}]}`,
       }).then((res) => {
         const totalCount = res[0].totalCount[0]?.count || 0;
-        setLearnedWords(totalCount);
+        setLearnedToday(totalCount);
         setIsLoading(false);
       });
     }
@@ -132,7 +132,7 @@ export default function StatisticPage(): ReactElement {
                     fontWeight: 'bold',
                   }}
                   >
-                    {learnedWords}
+                    {learnedToday}
                   </CardContent>
                   <CardContent sx={{
                     fontSize: '24px',

@@ -39,6 +39,14 @@ export default function CardsBlock(): ReactElement {
     }));
   };
 
+  const deleteDispatch = (word: IAggregatedWord) => {
+    dispatch(updateUserWord({
+      word,
+      user,
+      type: 'deleteWord',
+    }));
+  };
+
   return (
     <>
       {
@@ -63,7 +71,9 @@ export default function CardsBlock(): ReactElement {
                   className="card-item"
                 >
                   <Card variant="outlined" sx={{ display: 'flex' }}>
-                    {CardItem({ wordItem: item, user, dispatch: updateDispatch })}
+                    {CardItem({
+                      wordItem: item, user, dispatch: updateDispatch, deleteDispatch,
+                    })}
                   </Card>
                 </Box>
               ))}

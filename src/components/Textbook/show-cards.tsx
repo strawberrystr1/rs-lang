@@ -56,7 +56,6 @@ export default function ShowCards(props: IShowCardsProps) {
       wordsPerPage: '20',
     }).then((res) => {
       const ans = res[0].paginatedResults.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
-      console.log('ans: ', ans);
       if (ans) {
         setIsPageLearned(true);
       } else {

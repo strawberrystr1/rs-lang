@@ -154,31 +154,31 @@ export default function SingleCard(
     checkUserWordExists((wordCard as IAggregatedWord)._id, user.id, user.token)
       .then((res) => {
         const wordDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
-        const aggregatedWord: IAggregatedWord = {
-          ...(wordCard as IAggregatedWord),
-          userWord: {
-            difficulty: 'simple',
-            optional: {
-              learned: false,
-              progress: 0,
-              new: false,
-              // eslint-disable-next-line
-                wordId: (wordCard as IAggregatedWord)._id || wordCard.id,
-              wordDate,
-              learnDate: 0,
-              deleted: true,
-              backProgress: 0,
-              directProgress: 0,
-            },
-          },
-        };
         if (!res) {
+          const aggregatedWord: IAggregatedWord = {
+            ...(wordCard as IAggregatedWord),
+            userWord: {
+              difficulty: 'simple',
+              optional: {
+                learned: false,
+                progress: 0,
+                new: false,
+                // eslint-disable-next-line
+                  wordId: (wordCard as IAggregatedWord)._id || wordCard.id,
+                wordDate,
+                learnDate: 0,
+                deleted: true,
+                backProgress: 0,
+                directProgress: 0,
+              },
+            },
+          };
           addWordDispatch(aggregatedWord);
           setTimeout(() => {
             deleteDispatch(aggregatedWord);
           }, 1000);
         } else {
-          deleteDispatch(aggregatedWord);
+          deleteDispatch(wordCard as IAggregatedWord);
         }
         ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
       });

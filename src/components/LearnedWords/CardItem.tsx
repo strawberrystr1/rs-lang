@@ -9,20 +9,25 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CorrectText from '../Textbook/right-card-text';
 import CardAudio from '../Textbook/card-audio';
-import { ICardItemDifProps } from '../../interfaces/interfaces';
+import { ICardItemDifPropsWithDelete } from '../../interfaces/interfaces';
 
 const Style = styled(Typography)`
     text-align: end;
     margin-top: -18px;
     margin-bottom: -20px;
 `;
-export default function CardItem(props: ICardItemDifProps): ReactElement {
-  const { wordItem } = props;
+export default function CardItem(props: ICardItemDifPropsWithDelete): ReactElement {
+  const { wordItem, deleteDispatch } = props;
   const {
     word, transcription, wordTranslate, image, textMeaning,
     textMeaningTranslate, textExample, textExampleTranslate, audio,
     audioMeaning, audioExample,
   } = wordItem;
+
+  const deleteWord = (e: React.MouseEvent) => {
+    deleteDispatch(wordItem);
+    ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
+  };
 
   return (
     <Card sx={{ width: 600, display: 'flex' }}>
@@ -83,7 +88,7 @@ export default function CardItem(props: ICardItemDifProps): ReactElement {
           <Style>{CardAudio(audioExample, '2rem')}</Style>
         </div>
         <CardActions>
-          <Button variant="outlined" startIcon={<DeleteIcon />}>
+          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={deleteWord}>
             Удалить
           </Button>
         </CardActions>

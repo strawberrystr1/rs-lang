@@ -141,9 +141,13 @@ export default function SingleCard(
             addWordDispatch(aggregatedWord);
             setTimeout(() => {
               difficultyDispatch(aggregatedWord, type);
+              checkPageIsLearned();
             }, 1000);
           } else {
             difficultyDispatch(aggregatedWord, type);
+            setTimeout(() => {
+              checkPageIsLearned();
+            }, 500);
           }
         });
     }

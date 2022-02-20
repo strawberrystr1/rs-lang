@@ -10,8 +10,10 @@ import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
 import { IAggregatedWord } from '../../interfaces/apiInterfaces';
 import { updateUserWord } from '../../redux/userState/wordsSlice';
+import { IDifficultyBlockProps } from '../../interfaces/interfaces';
 
-export default function CardsBlock(): ReactElement {
+export default function CardsBlock(props: IDifficultyBlockProps): ReactElement {
+  const { setIsEmpty } = props;
   const [response, setResponse] = useState<IAggregatedWord[]>([]);
   const [open, setOpen] = React.useState(true);
 
@@ -28,6 +30,7 @@ export default function CardsBlock(): ReactElement {
       }).then((result) => {
         setResponse(result[0].paginatedResults);
         setOpen(false);
+        setIsEmpty(result[0].totalCount[0]?.count >= 0);
       });
     });
   }, []);

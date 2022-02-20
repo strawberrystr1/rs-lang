@@ -43,64 +43,6 @@ export default function StatisticPage(): ReactElement {
     }
   }, []);
 
-  // const data = [
-  //   {
-  //     date: '17.02',
-  //     newWords: 15,
-  //     learnedWords: 3,
-  //   },
-  //   {
-  //     date: '18.02',
-  //     newWords: 8,
-  //     learnedWords: 6,
-  //   },
-  //   {
-  //     date: '19.02',
-  //     newWords: 19,
-  //     learnedWords: 4,
-  //   },
-  //   {
-  //     date: '20.02',
-  //     newWords: 4,
-  //     learnedWords: 9,
-  //   },
-  //   {
-  //     date: '21.02',
-  //     newWords: 66,
-  //     learnedWords: 5,
-  //   },
-  //   {
-  //     date: '22.02',
-  //     newWords: 31,
-  //     learnedWords: 19,
-  //   },
-  //   {
-  //     date: '23.02',
-  //     newWords: 18,
-  //     learnedWords: 12,
-  //   },
-  //   {
-  //     date: '24.02',
-  //     newWords: 15,
-  //     learnedWords: 15,
-  //   },
-  //   {
-  //     date: '25.02',
-  //     newWords: 5,
-  //     learnedWords: 20,
-  //   },
-  //   {
-  //     date: '26.02',
-  //     newWords: 19,
-  //     learnedWords: 13,
-  //   },
-  //   {
-  //     date: '27.02',
-  //     newWords: 23,
-  //     learnedWords: 21,
-  //   },
-  // ];
-
   return (
     <Container
       maxWidth={false}
@@ -276,11 +218,9 @@ export default function StatisticPage(): ReactElement {
                     <>
                       <Grid item xs={6} className="stat__grid-item_long">
                         <LongStatistic data={userStatistic.optional.long.stat} />
-                        {/* <LongStatistic data={data} /> */}
                       </Grid>
                       <Grid item xs={6} className="stat__grid-item_long">
                         <LongStatisticLearned data={userStatistic.optional.long.stat} />
-                        {/* <LongStatisticLearned data={data} /> */}
                       </Grid>
                     </>
                   )

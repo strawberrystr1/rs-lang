@@ -45,7 +45,7 @@ export default function ShowCards(props: IShowCardsProps) {
         setResponse(data);
         setOpen(false);
         const ans = data.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
-        if (ans) setIsPageLearned(true);
+        if (ans && data.length) setIsPageLearned(true);
       });
     }
   }, [apiUrlAnonym, user.name]);
@@ -76,6 +76,7 @@ export default function ShowCards(props: IShowCardsProps) {
     getAllAggregatedWords(user, {
       filter: '{"$and":[{"userWord.optional.learned":true}]}',
     }).then((res) => {
+      console.log(res);
       const learned = res[0].totalCount[0].count || 0;
       newStats.learnedWords = learned;
       const ind = newStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
@@ -181,7 +182,8 @@ export default function ShowCards(props: IShowCardsProps) {
             ))}
           </Box>
         )
-        : (
+        : (!open
+          && (
           <Typography
             variant="h4"
             color="white"
@@ -191,6 +193,7 @@ export default function ShowCards(props: IShowCardsProps) {
           >
             Все слова на этой странице удалены
           </Typography>
+          )
         )}
       <Backdrop
         sx={{ color: '#fff', zIndex: 10001 }}

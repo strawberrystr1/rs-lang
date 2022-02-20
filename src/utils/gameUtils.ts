@@ -217,13 +217,15 @@ export async function compareStatistic(
 
   const indOfLastLongStat = storageStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
   const newLongStat = [...storageStats.optional.long.stat];
-  if (indOfLastLongStat >= 0) {
+  console.log('newLongStat: ', newLongStat);
+  if (indOfLastLongStat !== -1) {
     const newLongStats = {
       date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
       newWords,
       learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     };
     newLongStat.splice(indOfLastLongStat, 1, newLongStats);
+    console.log('newLongStat: ', newLongStat);
   }
 
   const newState: IUserStatistic = {

@@ -14,9 +14,20 @@ const initialState: IUserStatistic = {
         correctAnswers: 0,
         allAnswers: 0,
       },
+      audio: {
+        newWords: 0,
+        inARow: 0,
+        percents: 0,
+        correctAnswers: 0,
+        allAnswers: 0,
+      },
     },
     long: {
-      stat: [],
+      stat: [{
+        date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
+        newWords: 0,
+        learnedWords: 0,
+      }],
     },
   },
 };

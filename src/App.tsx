@@ -28,7 +28,7 @@ function App() {
       const lastDate = new Date(userStatistic.optional.short.lastDate).getDate();
       const todayDate = (new Date()).getDate();
 
-      if ((lastDate !== todayDate)) {
+      if ((lastDate !== todayDate) && lastDate > 0) {
         const date = `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`;
         const newWords = (userStatistic.optional.short.sprint?.newWords || 0)
           + (userStatistic.optional.short.audio?.newWords || 0);

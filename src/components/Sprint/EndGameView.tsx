@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import React, { ReactElement } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IAfterGameWordsStat } from '../../interfaces/interfaces';
 import {
   StyledBoxMW, StyledCard, StyledPaper,
@@ -14,7 +14,7 @@ import EndGameWordItem from './EndGameWordItem';
 
 export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
   const {
-    inARow, right, wrong, state,
+    inARow, right, wrong, state, audioGame,
   } = props;
   const navigate = useNavigate();
 
@@ -39,13 +39,18 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
         <CardContent sx={{ width: '95%' }}>
           <StyledBoxMW>
             <Typography variant="h4" component="span" color="white">Результаты</Typography>
-            <Link to="/gamedif" style={{ textDecoration: 'none' }}>
-              <Button
-                variant="contained"
-              >
-                Сыграть ещё раз
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              onClick={(() => {
+                if (audioGame === '/game/audio') {
+                  navigate(audioGame);
+                  return;
+                }
+                navigate('/gamedif');
+              })}
+            >
+              Сыграть ещё раз
+            </Button>
           </StyledBoxMW>
           <Divider sx={{ background: 'white', marginTop: '10px', height: '3px' }} />
           <div className="sprint__stat-box">

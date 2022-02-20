@@ -1,4 +1,4 @@
-import { ILongStatsItem, IAggregatedWord, ICurrentUserState } from './apiInterfaces';
+import React from 'react';
 
 export interface IScoreProps {
   score: number;
@@ -27,9 +27,7 @@ export interface IGameStatistic {
 
 export interface ISprintAnswerButtons {
   isSoundOn: boolean;
-  isTimeEnd: boolean;
   isTimePaused: boolean;
-  setIsWordPlaying: () => void;
   buttonState: ICurrentGameBlockState;
   setButtonState: (newState: Partial<ICurrentGameBlockState>) => void;
 }
@@ -51,7 +49,6 @@ export interface IAfterGameWordsStat {
   wrong: number;
   state: IGameStatistic;
   words: IWordData[];
-  audioGame?: string;
 }
 
 export interface IWordData {
@@ -88,24 +85,5 @@ export interface ICurrentGameBlockState {
   words: IWordData[];
 }
 
-export interface ILongStatProps {
-  data: ILongStatsItem[];
-}
-export interface ICardItemDifProps {
-  wordItem: IAggregatedWord;
-  user: ICurrentUserState;
-  dispatch: (word: IAggregatedWord) => void;
-}
-
-export interface ICardItemDifPropsWithDelete extends ICardItemDifProps {
-  deleteDispatch: (word: IAggregatedWord) => void;
-}
-
-export interface IShowCardsProps {
-  setIsPageLearned: (value: boolean) => void;
-}
-
 export type SetWordsCBType = (data: IWordData[]) => void;
 export type SetGameLevelCB = (level: number) => void;
-export type LearnDispatchCB = (word: IAggregatedWord, type: string) => void;
-export type AddWordDispatchCB = (word: IAggregatedWord) => void;

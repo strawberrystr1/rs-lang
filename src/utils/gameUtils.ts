@@ -8,6 +8,8 @@ import {
 } from '../interfaces/apiInterfaces';
 import {
   ICurrentGameBlockState,
+  IGameStatistic,
+  // ICurrentGameBlockState,
   IWordData,
   // SetGameLevelCB,
   SetWordsCBType,
@@ -188,28 +190,28 @@ export async function getAggregatedWord(word: IWordData | IAggregatedWord, user:
 
 export async function compareStatistic(
   storageStats: IUserStatistic,
-  currentStats: ICurrentGameBlockState,
+  currentStats: Partial<ICurrentGameBlockState>,
   user: Partial<ICurrentUserState>,
   isNewUser: boolean,
   gameType: string,
 ) {
   const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
-  const bestInARow = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow > currentStats.gameState.bestInARow
+  const bestInARow = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow > (currentStats.gameState as IGameStatistic).bestInARow
     ? (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow
-    : currentStats.gameState.bestInARow;
+    : (currentStats.gameState as IGameStatistic).bestInARow;
   const correctAll = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).correctAnswers
-    + currentStats.gameState.correctWords.length;
+    + (currentStats.gameState as IGameStatistic).correctWords.length;
   const allWords = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).allAnswers
-    + currentStats.gameState.correctWords.length
-    + currentStats.gameState.wrongWords.length;
+    + (currentStats.gameState as IGameStatistic).correctWords.length
+    + (currentStats.gameState as IGameStatistic).wrongWords.length;
 
   const newWordsResponse = await getAllAggregatedWords(user, {
     filter: `{"$and":[{"userWord.optional.wordDate":${todayDate}}]}`,
   });
   let newWords = newWordsResponse[0].totalCount[0]?.count || 0;
   if (isNewUser) {
-    newWords = currentStats.gameState.correctWords.length
-      + currentStats.gameState.wrongWords.length;
+    newWords = (currentStats.gameState as IGameStatistic).correctWords.length
+      + (currentStats.gameState as IGameStatistic).wrongWords.length;
   }
   const learnedWords = await getAllAggregatedWords(user, {
     filter: '{"$and":[{"userWord.optional.learned":true}]}',
@@ -244,7 +246,6 @@ export async function compareStatistic(
       },
     },
   };
-  console.log(newState);
   return newState;
 }
 

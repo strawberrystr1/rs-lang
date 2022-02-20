@@ -1,7 +1,6 @@
 export interface ChapterComponentInterface{
     group: string
     num: string
-
 }
 
 export interface RightCardText{

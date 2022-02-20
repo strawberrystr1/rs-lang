@@ -13,28 +13,11 @@ const initialState: IUserWord[] = [{
     wordId: '',
     wordDate: 0,
     learnDate: 0,
+    deleted: false,
+    directProgress: 0,
+    backProgress: 0,
   },
 }];
-
-export const addUserWord = createAsyncThunk(
-  'user/addUserWords',
-  async ({ user, word, wordOptions }: IUserCreateWordRequest) => {
-    const response = await fetch(
-      `https://react-rslang-str.herokuapp.com/users/${user.id}/words/${word.id}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(wordOptions),
-      },
-    );
-    const data = await response.json();
-    return data;
-  },
-);
 
 export const getAllWords = createAsyncThunk(
   'user/getAllWords',
@@ -54,22 +37,56 @@ export const getAllWords = createAsyncThunk(
 
 export const updateUserWord = createAsyncThunk(
   'user/updateUserWord',
-  async ({ word, user }: IUserUpdateWordRequest) => {
-    let newProgress = word.userWord.optional.progress + 1;
+  async ({ word, user, type }: IUserUpdateWordRequest) => {
+    let newProgress = word.userWord.optional.progress;
+    let { directProgress, backProgress } = word.userWord.optional;
+    if (type === 'correct') {
+      newProgress += 1;
+      directProgress += 1;
+    }
+    if (type === 'wrong') {
+      backProgress += 1;
+    }
     let { learned } = word.userWord.optional;
     let { learnDate } = word.userWord.optional;
-    if (newProgress >= 4) {
+    if (newProgress === 4) {
       learned = true;
-      newProgress = 4;
       learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+    }
+    let { deleted } = word.userWord.optional;
+    let { difficulty } = word.userWord;
+    if (type === 'restore') {
+      deleted = false;
+    }
+    if (type === 'deleteWord') {
+      deleted = true;
+    }
+    if (type === 'learnTrue') {
+      learned = true;
+      difficulty = 'simple';
+      learnDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+    }
+    if (type === 'learnFalse') {
+      learned = false;
+      learnDate = 0;
+    }
+    if (type === 'removeDif') {
+      difficulty = 'simple';
+    }
+    if (type === 'addDif') {
+      difficulty = 'hard';
     }
     const newData: IUserWord = {
       ...word.userWord,
+      difficulty,
       optional: {
         ...word.userWord.optional,
         progress: newProgress,
         learned,
         learnDate,
+        deleted,
+        directProgress,
+        backProgress,
       },
     };
     const response = await fetch(
@@ -90,6 +107,28 @@ export const updateUserWord = createAsyncThunk(
   },
 );
 
+export const addUserWord = createAsyncThunk(
+  'user/addUserWords',
+  async ({
+    user, word, wordOptions,
+  }: IUserCreateWordRequest) => {
+    const response = await fetch(
+      `https://react-rslang-str.herokuapp.com/users/${user.id}/words/${word.id}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(wordOptions),
+      },
+    );
+    const data = await response.json();
+    return data;
+  },
+);
+
 const wordSlice = createSlice({
   name: 'userWords',
   initialState,
@@ -99,6 +138,12 @@ const wordSlice = createSlice({
       // eslint-disable-next-line
       state = [];
       console.log('state: ', state);
+      return state;
+    },
+    removeFromStorage: (state, action) => {
+      // eslint-disable-next-line
+      const ind = state.findIndex((item) => item.wordId === action.payload._id);
+      state.splice(ind, 1);
       return state;
     },
   },
@@ -119,5 +164,5 @@ const wordSlice = createSlice({
   },
 });
 
-export const { clearState } = wordSlice.actions;
+export const { clearState, removeFromStorage } = wordSlice.actions;
 export default wordSlice.reducer;

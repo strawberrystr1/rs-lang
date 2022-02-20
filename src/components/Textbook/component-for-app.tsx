@@ -1,22 +1,43 @@
-import React from 'react';
-import { Container } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Tooltip } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import GameButtons from './games';
 import BasicPagination from './pagination';
 import ShowCards from './show-cards';
 
 function TextBookFinal() {
+  const [isPageLearned, setIsPageLearned] = useState(false);
   return (
     <Container
-      maxWidth="xl"
+      maxWidth={false}
       className="main"
       sx={{
         height: 'calc(100vh - 120px)',
-        display: 'table',
+        overflowY: 'auto',
+        padding: '20px 0',
+        position: 'relative',
       }}
     >
-      <GameButtons />
-      <BasicPagination />
-      <ShowCards />
+      {
+        isPageLearned
+          && (
+            <Tooltip title="Страница полностью изучена">
+              <CheckCircleOutlineIcon sx={{ fontSize: '84px', color: 'lightgreen', position: 'absolute' }} />
+            </Tooltip>
+          )
+      }
+      <Container
+        maxWidth="xl"
+        className="main"
+        sx={{
+          height: 'calc(100vh - 120px)',
+          display: 'table',
+        }}
+      >
+        <GameButtons />
+        <BasicPagination />
+        <ShowCards setIsPageLearned={(value: boolean) => setIsPageLearned(value)} />
+      </Container>
     </Container>
   );
 }

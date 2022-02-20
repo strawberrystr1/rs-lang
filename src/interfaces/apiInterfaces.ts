@@ -78,15 +78,19 @@ export interface IUserWord {
 export interface IUserWordOptional {
   learned: boolean;
   progress: number;
+  backProgress: number;
+  directProgress: number;
   new: boolean;
   wordId: string;
   wordDate: number;
   learnDate: number;
+  deleted: boolean;
 }
 export interface IUserState {
   user: ICurrentUserState;
   userStatistic: IUserStatistic;
   userWords: IUserWord[];
+  deletedWords: IUserWord[];
 }
 
 export interface IUserStatsRequestOptions {
@@ -97,12 +101,13 @@ export interface IUserStatsRequestOptions {
 
 export interface IUserCreateWordRequest {
   user: Partial<ICurrentUserState>;
-  word: IWordData;
+  word: Partial<IWordData>;
   wordOptions: IUserWord;
 }
 export interface IUserUpdateWordRequest {
   word: IAggregatedWord;
   user: Partial<ICurrentUserState>;
+  type?: string;
 }
 export interface IAggregatedWord extends IWordData{
   userWord: IUserWord;

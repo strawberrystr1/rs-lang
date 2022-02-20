@@ -8,7 +8,7 @@ function ChapterComponents(group: string) {
       <ChapterComponent
         group={(parseInt(group, 10) - 1).toString()}
         num={index.toString()}
-        key={Date.now.toString() + index}
+        key={Math.random()}
       />,
     );
   }

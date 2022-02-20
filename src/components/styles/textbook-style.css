@@ -66,7 +66,6 @@ b{
 }
 .game{
     margin: 0 auto;
-    margin-top: -10px;
     margin-bottom: 10px;
     justify-content: center;
 }
@@ -78,9 +77,51 @@ b{
 .card-content{
     width: 100%;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
+    padding: 30px 0 10px;
+}
+
+.difficult {
+    background-color: rgba(184, 175, 58, 0.452);
+}
+
+.learned {
+    background-color: rgba(66, 192, 50, 0.452);
+}
+
+.progress-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.btn-wrapper {
+    display: flex;
+    width: 40%;
     justify-content: space-between;
 }
+
+.progress-block .correct-block, .progress-block .incorrect-block {
+    width: 60px;
+    height: 30px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.correct-block {
+    background-color: #2e7d32;
+}
+
+.incorrect-block {
+    background-color: #d32f2f;
+}
+
 .word-mean, .word-translate{
     display: flex;
     justify-content: space-between;
@@ -98,4 +139,25 @@ b{
 }
 .MuiTooltip-tooltipPlacementLeft{
     display: none;
+}
+
+.MuiPaginationItem-root {
+	color: white !important;
+}
+
+.MuiButton-containedError:disabled, .MuiButton-containedError.disabled {
+    color: rgba(0, 0, 0, 0.26);
+    box-shadow: none;
+    background-color: rgba(0, 0, 0, 0.12);
+    pointer-events: none;
+    cursor: default;
+}
+
+.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected.learned {
+    background-color: rgb(99, 202, 30);
+}
+
+.MuiAccordionDetails-root {
+    background-color: #fff;
+    color: #2362d6;
 }

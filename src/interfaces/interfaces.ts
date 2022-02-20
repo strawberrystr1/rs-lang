@@ -1,4 +1,4 @@
-import React from 'react';
+import { ILongStatsItem, IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {
   score: number;
@@ -88,5 +88,24 @@ export interface ICurrentGameBlockState {
   words: IWordData[];
 }
 
+export interface ILongStatProps {
+  data: ILongStatsItem[];
+}
+export interface ICardItemDifProps {
+  wordItem: IAggregatedWord;
+  user: ICurrentUserState;
+  dispatch: (word: IAggregatedWord) => void;
+}
+
+export interface ICardItemDifPropsWithDelete extends ICardItemDifProps {
+  deleteDispatch: (word: IAggregatedWord) => void;
+}
+
+export interface IShowCardsProps {
+  setIsPageLearned: (value: boolean) => void;
+}
+
 export type SetWordsCBType = (data: IWordData[]) => void;
 export type SetGameLevelCB = (level: number) => void;
+export type LearnDispatchCB = (word: IAggregatedWord, type: string) => void;
+export type AddWordDispatchCB = (word: IAggregatedWord) => void;

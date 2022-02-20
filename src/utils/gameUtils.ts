@@ -175,9 +175,10 @@ export async function getAllAggregatedWords(user: Partial<ICurrentUserState>, qu
   return response.data;
 }
 
-export async function getAggregatedWord(word: IWordData, user: Partial<ICurrentUserState>) {
+export async function getAggregatedWord(word: IWordData | IAggregatedWord, user: Partial<ICurrentUserState>) {
   const response = await axios.get<IAggregatedWord[]>(
-    `https://react-rslang-str.herokuapp.com/users/${user.id}/aggregatedWords/${word.id}`,
+    // eslint-disable-next-line
+    `https://react-rslang-str.herokuapp.com/users/${user.id}/aggregatedWords/${word.id || (word as IAggregatedWord)._id}`,
     {
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -186,7 +187,6 @@ export async function getAggregatedWord(word: IWordData, user: Partial<ICurrentU
   );
   return response.data;
 }
-// filter: `{"$or":[{"userWord.difficulty": "simple"}, {"userWord.difficulty":"hard"}]}`,
 
 export async function compareStatistic(
   storageStats: IUserStatistic,
@@ -271,6 +271,7 @@ export async function checkWordProgress(word: IWordData, user: Partial<ICurrentU
 
 export function checkWord(array: IWordData[], user: Partial<ICurrentUserState>, dispatch: DispatchCBCheckWord) {
   array.forEach((word) => {
+    console.log('word: ', word);
     checkUserWordExists(word.id, (user.id as string), (user.token as string))
       .then((result) => {
         if (!result) {
@@ -287,6 +288,9 @@ export function checkWord(array: IWordData[], user: Partial<ICurrentUserState>, 
                 wordId: word.id,
                 wordDate,
                 learnDate: 0,
+                deleted: false,
+                backProgress: 0,
+                directProgress: 0,
               },
             },
           });
@@ -306,7 +310,7 @@ export function updateWord(
       .then((result) => {
         if (result[0].userWord) {
           if (type === 'correct') {
-            dispatch({ word: result[0], user });
+            dispatch({ word: result[0], user, type });
           } else {
             const resetProgress: IAggregatedWord = {
               ...result[0],
@@ -320,7 +324,7 @@ export function updateWord(
                 },
               },
             };
-            dispatch({ word: resetProgress, user });
+            dispatch({ word: resetProgress, user, type });
           }
         }
       });

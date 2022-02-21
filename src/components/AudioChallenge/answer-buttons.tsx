@@ -7,7 +7,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import { IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
 import { RootState } from '../../redux/store';
 import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
-import { addUserWord, updateUserWord } from '../../redux/userState/wordsSlice';
+import { addUserWord, getAllWords, updateUserWord } from '../../redux/userState/wordsSlice';
 import { checkWord, compareStatistic, updateWord } from '../../utils/gameUtils';
 import { SinglWord } from '../interfaces/textbookI';
 import EndGameView from '../Sprint/EndGameView';
@@ -62,6 +62,14 @@ export default function AnswerVariant(data: Array<SinglWord>) {
   const { ...allWords } = data;
   const { user, userStatistic } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user.name) {
+      dispatch(getStatistic({ userId: user.id, token: user.token }));
+      dispatch(getAllWords(user));
+    }
+  }, []);
+
   function KeyboardEvent(button: HTMLButtonElement) {
     setbuttonName('Следующее слово');
     const rightAnswer = allWords[progress / 5].wordTranslate;
@@ -73,7 +81,6 @@ export default function AnswerVariant(data: Array<SinglWord>) {
   }
 
   function EnterKey(button: HTMLButtonElement) {
-    dispatch(getStatistic({ userId: user.id, token: user.token }));
     if (button.textContent === 'Я не знаю') {
       gameData.gameState.wrongWords.push(allWords[progress / 5]);
       gameData.words.push(allWords[progress / 5]);
@@ -123,34 +130,37 @@ export default function AnswerVariant(data: Array<SinglWord>) {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [allWords]);
 
+  const addNewWords = () => {
+    gameData.correctAnswerInARow = inArrow;
+    gameData.gameState.bestInARow = inArrow;
+    checkWord(
+      gameData.gameState.correctWords,
+      user,
+      (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
+    );
+    checkWord(
+      gameData.gameState.wrongWords,
+      user,
+      (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
+    );
+    setTimeout(() => {
+      updateWord(
+        gameData.gameState.correctWords,
+        'correct',
+        (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+        user,
+      );
+      updateWord(
+        gameData.gameState.wrongWords,
+        'wrong',
+        (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+        user,
+      );
+    }, 1000);
+  };
+
   useEffect(() => {
     if (endGame) {
-      gameData.correctAnswerInARow = inArrow;
-      gameData.gameState.bestInARow = inArrow;
-      const addNewWords = () => {
-        checkWord(
-          gameData.gameState.correctWords,
-          user,
-          (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
-        );
-        checkWord(
-          gameData.gameState.wrongWords,
-          user,
-          (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
-        );
-        updateWord(
-          gameData.gameState.correctWords,
-          'correct',
-          (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
-          user,
-        );
-        updateWord(
-          gameData.gameState.wrongWords,
-          'wrong',
-          (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
-          user,
-        );
-      };
       if (user.name) {
         addNewWords();
         const newOrNot = userStatistic.optional.short.audio?.allAnswers === 0;
@@ -234,7 +244,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
             right={gameData.correctAnswerCounter}
             inARow={inArrow}
             words={gameData.words}
-            audioGame="/game/audio"
+            gameType="audio"
           />
           )
       }

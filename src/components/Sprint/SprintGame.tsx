@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularTimer from './CircularTimer';
 import ScoreBlock from './ScoreBlock';
@@ -57,6 +57,7 @@ export default function SprintGame(): ReactElement {
   const params = useParams();
   const group: number = +(params.group as string);
   const page: number = +(params.page as string);
+  const location = useLocation();
 
   const { user, userStatistic } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
@@ -117,7 +118,12 @@ export default function SprintGame(): ReactElement {
               filter: `{"$and":[{"group":${group}}, {"page":${page - pageDown}}]}`,
               wordsPerPage: '20',
             }).then((result) => {
-              const filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+              let filtered = result[0].paginatedResults;
+              console.log(location.pathname);
+              if (location.pathname.includes('textbook')) {
+                filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+              }
+              console.log(filtered);
               const newData = filtered.map((item) => ({
                 audio: item.audio,
                 audioExample: item.audioExample,
@@ -151,35 +157,37 @@ export default function SprintGame(): ReactElement {
             }, page - pageDown);
           }
         } else if (!group) {
-          if (!buttonState.gameState.correctWords.length && !buttonState.gameState.wrongWords.length) {
-            getAllAggregatedWords(user, {
-              filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
-            }).then((result) => {
-              const wordData = result[0].paginatedResults.map((item) => ({
-                audio: item.audio,
-                audioExample: item.audioExample,
-                audioMeaning: item.audioMeaning,
-                group: item.group,
-                // eslint-disable-next-line
-                id: item._id,
-                image: item.image,
-                page: item.page,
-                textExample: item.textExample,
-                textExampleTranslate: item.textExampleTranslate,
-                textMeaning: item.textMeaning,
-                textMeaningTranslate: item.textMeaningTranslate,
-                transcription: item.transcription,
-                word: item.word,
-                wordTranslate: item.wordTranslate,
-              }));
-              setButtonState((prev) => ({
-                ...prev,
-                words: wordData,
-              }));
-              setIsLoading(false);
-            });
-          } else {
-            setIsTimeEnd(true);
+          if (user.name) {
+            if (!buttonState.gameState.correctWords.length && !buttonState.gameState.wrongWords.length) {
+              getAllAggregatedWords(user, {
+                filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',
+              }).then((result) => {
+                const wordData = result[0].paginatedResults.map((item) => ({
+                  audio: item.audio,
+                  audioExample: item.audioExample,
+                  audioMeaning: item.audioMeaning,
+                  group: item.group,
+                  // eslint-disable-next-line
+                  id: item._id,
+                  image: item.image,
+                  page: item.page,
+                  textExample: item.textExample,
+                  textExampleTranslate: item.textExampleTranslate,
+                  textMeaning: item.textMeaning,
+                  textMeaningTranslate: item.textMeaningTranslate,
+                  transcription: item.transcription,
+                  word: item.word,
+                  wordTranslate: item.wordTranslate,
+                }));
+                setButtonState((prev) => ({
+                  ...prev,
+                  words: wordData,
+                }));
+                setIsLoading(false);
+              });
+            } else {
+              setIsTimeEnd(true);
+            }
           }
         }
       }
@@ -227,7 +235,8 @@ export default function SprintGame(): ReactElement {
     if (isTimeEnd) {
       if (user.name) {
         addNewWords();
-        const newOrNot = userStatistic.optional.short.sprint?.allAnswers === 0;
+        const newOrNot = userStatistic.optional.short.sprint?.allAnswers === 0
+          && userStatistic.optional.short.audio?.allAnswers === 0;
         compareStatistic(userStatistic, buttonState, user, newOrNot, 'sprint')
           .then((result) => {
             dispatch(updateStatistic({
@@ -373,6 +382,7 @@ export default function SprintGame(): ReactElement {
             right={buttonState.correctAnswerCounter}
             inARow={buttonState.gameState.bestInARow}
             words={buttonState.words}
+            gameType="sprint"
           />
           )
       }

@@ -27,7 +27,7 @@ export default function StatisticPage(): ReactElement {
     + (userStatistic.optional.short.audio?.newWords || 0);
   const totalAnswers = (userStatistic.optional.short.sprint?.allAnswers || 0) + (userStatistic.optional.short.audio?.allAnswers || 0);
   const correctAnswers = (userStatistic.optional.short.sprint?.correctAnswers || 0) + (userStatistic.optional.short.audio?.correctAnswers || 0);
-  const totalPercents = Math.ceil(((correctAnswers * 100) / totalAnswers)) || 0;
+  const totalPercents = Math.floor(((correctAnswers * 100) / totalAnswers)) || 0;
 
   useEffect(() => {
     if (user.name) {

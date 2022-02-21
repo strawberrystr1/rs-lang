@@ -8,7 +8,6 @@ import AudioChallenge from './components/AudioChallenge/audio-challenge-main';
 import GamePage from './components/AudioChallenge/game-page';
 import StatisticPage from './components/Statistic/StatisticPage';
 import SprintGame from './components/Sprint/SprintGame';
-import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
 import Textbook from './components/Textbook/textbook';
 import TextBookFinal from './components/Textbook/component-for-app';
 import LearnedPage from './components/LearnedWords/LearnedPage';
@@ -18,6 +17,7 @@ import { RootState } from './redux/store';
 import { getStatistic, updateStatistic } from './redux/userState/statisticSlice';
 import { getAllWords } from './redux/userState/wordsSlice';
 import { ILongStatsItem } from './interfaces/apiInterfaces';
+import DifficultyChoose from './components/Sprint/DifficultyChoose';
 
 function App() {
   const { user, userStatistic } = useSelector((state: RootState) => state);
@@ -53,6 +53,13 @@ function App() {
                   correctAnswers: 0,
                   allAnswers: 0,
                 },
+                audio: {
+                  newWords: 0,
+                  inARow: 0,
+                  percents: 0,
+                  correctAnswers: 0,
+                  allAnswers: 0,
+                },
               },
               long: {
                 stat: [...userStatistic.optional.long.stat, longAddition],
@@ -81,8 +88,10 @@ function App() {
         <Route path="/dictionary/difficult" element={<DifficultPage />} />
         <Route path="/dictionary/deleted" element={<DeletedPage />} />
         <Route path="/game/sprint/:group/:page" element={<SprintGame />} />
+        <Route path="/textbook/game/sprint/:group/:page" element={<SprintGame />} />
+        <Route path="/textbook/game/audio/:group/:page" element={<GamePage />} />
+        <Route path="/game/sprint" element={<DifficultyChoose />} />
         <Route path="/game/sprint/difficult" element={<SprintGame />} />
-        <Route path="/gamedif" element={<GameDifficulty />} />
       </Routes>
       <Footer />
     </div>

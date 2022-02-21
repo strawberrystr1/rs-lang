@@ -14,11 +14,11 @@ export default function GameButtons() {
   return (
     <Container className="game" sx={{ display: 'flex' }}>
       <ButtonGroup variant="contained" aria-label="outlined primary button group">
-        <Button onClick={() => navigate(`/game/audio/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
+        <Button onClick={() => navigate(`/textbook/game/audio/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
           <img src={iconFirstGame} alt="" className="img" />
           Audio challenge
         </Button>
-        <Button onClick={() => navigate(`/game/sprint/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
+        <Button onClick={() => navigate(`/textbook/game/sprint/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
           <img src={iconSecondGame} alt="" className="img" />
           Sprint
         </Button>

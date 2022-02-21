@@ -194,7 +194,7 @@ export async function compareStatistic(
   isNewUser: boolean,
   gameType: string,
 ) {
-  const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+  // const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
   const bestInARow = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow > (currentStats.gameState as IGameStatistic).bestInARow
     ? (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow
     : (currentStats.gameState as IGameStatistic).bestInARow;
@@ -204,24 +204,21 @@ export async function compareStatistic(
     + (currentStats.gameState as IGameStatistic).correctWords.length
     + (currentStats.gameState as IGameStatistic).wrongWords.length;
 
-  const newWordsResponse = await getAllAggregatedWords(user, {
-    filter: `{"$and":[{"userWord.optional.wordDate":${todayDate}}]}`,
-  });
-  let newWords = newWordsResponse[0].totalCount[0]?.count || 0;
-  if (isNewUser) {
-    newWords = (currentStats.gameState as IGameStatistic).correctWords.length
-      + (currentStats.gameState as IGameStatistic).wrongWords.length;
-  }
   const learnedWords = await getAllAggregatedWords(user, {
     filter: '{"$and":[{"userWord.optional.learned":true}]}',
   });
 
   const indOfLastLongStat = storageStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
   const newLongStat = [...storageStats.optional.long.stat];
+  const newWords = (currentStats.gameState as IGameStatistic).correctWords.length
+      + (currentStats.gameState as IGameStatistic).wrongWords.length
+      + (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).newWords;
+  const newWordsLong = (currentStats.gameState as IGameStatistic).correctWords.length
+  + (currentStats.gameState as IGameStatistic).wrongWords.length + storageStats.optional.long.stat[indOfLastLongStat].newWords;
   if (indOfLastLongStat !== -1) {
     const newLongStats = {
       date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
-      newWords,
+      newWords: newWordsLong,
       learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     };
     newLongStat.splice(indOfLastLongStat, 1, newLongStats);
@@ -231,6 +228,7 @@ export async function compareStatistic(
     learnedWords: learnedWords[0].totalCount[0]?.count || 0,
     optional: {
       short: {
+        ...storageStats.optional.short,
         lastDate: Date.now(),
         [gameType as keyof ITodayStats]: {
           inARow: bestInARow,
@@ -270,7 +268,6 @@ export async function checkWordProgress(word: IWordData, user: Partial<ICurrentU
 
 export function checkWord(array: IWordData[], user: Partial<ICurrentUserState>, dispatch: DispatchCBCheckWord) {
   array.forEach((word) => {
-    console.log('word: ', word);
     checkUserWordExists(word.id, (user.id as string), (user.token as string))
       .then((result) => {
         if (!result) {

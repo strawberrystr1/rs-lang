@@ -14,27 +14,27 @@ import { StyledListItem } from '../StyledMUIItems';
 export default function SideMenu() {
   const navigationLinks = [
     {
-      title: 'Textbook',
+      title: 'Словарь',
       iconName: 'LocalLibrary',
       url: 'textbook',
     },
     {
-      title: 'Difficult words',
+      title: 'Сложные слова',
       iconName: 'ErrorOutline',
       url: 'dictionary/difficult',
     },
     {
-      title: 'Learned words',
+      title: 'Выученные слова',
       iconName: 'MenuBook',
       url: 'dictionary/learned',
     },
     {
-      title: 'Deleted words',
+      title: 'Удалённые слова',
       iconName: 'DeleteForeverIcon',
       url: 'dictionary/deleted',
     },
     {
-      title: 'Statistic',
+      title: 'Статистика',
       iconName: 'StackedLineChartIcon',
       url: 'statistic',
     }];

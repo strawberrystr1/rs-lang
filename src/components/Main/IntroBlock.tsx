@@ -15,7 +15,7 @@ export default function IntroBlock() {
     >
       <Box>
         <h1 className="main__heading">RS Lang</h1>
-        <p className="main__desc">Learning English has never been so easy</p>
+        <p className="main__desc">Учить английский еще не было так просто</p>
         <Link to="/textbook" style={{ textDecoration: 'none' }}>
           <Button
             variant="contained"
@@ -25,7 +25,7 @@ export default function IntroBlock() {
               marginTop: '50px',
             }}
           >
-            Let&apos;s start
+            Давайте начнём
           </Button>
         </Link>
       </Box>

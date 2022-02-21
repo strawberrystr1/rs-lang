@@ -32,7 +32,6 @@ export default function GamePage() {
   const wordGroup = +(params.group as string);
   const wordPage = params.page;
   const { user } = useSelector((state: RootState) => state);
-  // const dispatch = useDispatch();
   if (!user.name) {
     const apiUrl = `https://react-rslang-str.herokuapp.com/words?group=${wordGroup}&page=${wordPage}`;
     useEffect(() => {
@@ -59,12 +58,10 @@ export default function GamePage() {
           }
           console.log(filtered);
           while (filtered.length <= 20) {
-            // const copy = [...filtered];
             if ((+(wordPage as string) - pageReducer) < 0) break;
             // eslint-disable-next-line
             filtered = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer)));
             console.log('newArr: ', filtered);
-            // filtered = [...copy, ...newArr].slice(0, 20);
             pageReducer += 1;
           }
           console.log(filtered);

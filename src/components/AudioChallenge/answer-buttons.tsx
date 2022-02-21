@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import React, { ReactElement, useEffect } from 'react';

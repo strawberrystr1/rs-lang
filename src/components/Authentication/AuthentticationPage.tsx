@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, {
   ReactElement, useEffect,
   useState,

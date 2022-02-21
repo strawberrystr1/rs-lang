@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {
   Container, Card, Button, CircularProgress,
 } from '@mui/material';

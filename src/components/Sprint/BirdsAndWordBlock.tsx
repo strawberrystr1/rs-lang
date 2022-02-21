@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { ISprinGameWord } from '../../interfaces/interfaces';
 

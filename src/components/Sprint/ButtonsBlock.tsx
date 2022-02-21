@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Button } from '@mui/material';
 import React, { ReactElement, useEffect, useRef } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';

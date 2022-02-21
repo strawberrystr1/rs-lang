@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect, ReactElement } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';

@@ -38,7 +38,6 @@ export default function EndGameWordItem(props: ISprinGameWord): ReactElement {
             ? <MicOffIcon fontSize="medium" />
             : <KeyboardVoiceIcon fontSize="medium" />
         }
-
       </Button>
       <Typography
         variant="h6"

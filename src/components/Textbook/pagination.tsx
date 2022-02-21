@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { MouseEvent } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';

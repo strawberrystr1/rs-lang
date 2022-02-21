@@ -37,6 +37,7 @@ export default function GamePage() {
     useEffect(() => {
       axios.get(apiUrl).then((resp) => resp.data).then((data:Array<SinglWord>) => {
         setResponse(data);
+        console.log('data: ', data);
         setOpen(false);
         ResetData();
         FillAnswerButtons(data, 0);
@@ -55,11 +56,14 @@ export default function GamePage() {
           let pageReducer = 1;
           if (location.pathname.includes('textbook')) {
             filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === +(wordPage as string) && !item.userWord?.optional.deleted);
+          } else {
+            filtered = result[0].paginatedResults.filter((item) => item.page === +(wordPage as string));
           }
           while (filtered.length < 20) {
             if ((+(wordPage as string) - pageReducer) < 0) break;
             // eslint-disable-next-line
             filtered = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer) && !item.userWord?.optional.deleted));
+            console.log('filtered: ', filtered);
             filtered = filtered.slice(0, 20);
             pageReducer += 1;
           }

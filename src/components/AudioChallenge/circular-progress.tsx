@@ -2,13 +2,13 @@ import { Box, Typography } from '@mui/material';
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function Circular(progress: number) {
+export default function Circular(progress: number, allCount: number) {
   return (
     <Box sx={{ position: 'relative', marginLeft: '20px', marginTop: '35px' }}>
       <Box sx={{ position: 'relative' }}>
         <CircularProgress
           variant="determinate"
-          value={progress + 5}
+          value={progress + (100 / allCount)}
           size={120}
           sx={{ position: 'absolute', zIndex: 100 }}
         />
@@ -20,7 +20,7 @@ export default function Circular(progress: number) {
         />
       </Box>
       <Typography variant="h6" sx={{ position: 'absolute', top: '43px', left: '41px' }}>
-        {`${(progress / 5) + 1}/20`}
+        {`${Math.ceil(progress / (100 / allCount)) + 1}/${allCount}`}
       </Typography>
     </Box>
   );

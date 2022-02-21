@@ -25,7 +25,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/signin" element={<Header isAuthOpenProp />} />
         <Route path="/textbook" element={<Textbook />} />
-        <Route path="/textbook/:group/:page" element={<TextBookFinal />} />
+        <Route path="/textbook/:group/:page" element={(<TextBookFinal />)} />
         <Route path="/game/audio" element={<AudioChallenge />} />
         <Route path="/game/audio/:group/:page" element={<GamePage />} />
         <Route path="/statistic" element={<StatisticPage />} />

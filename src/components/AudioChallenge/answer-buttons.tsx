@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
@@ -29,15 +30,15 @@ const style = {
 
 function AudioUrl(data: Array<SinglWord>, count: number) {
   if (data.length !== 0) {
-    if (data[(count / 5)].audio !== undefined) {
-      return data[(count / 5)].audio;
+    if (data[Math.ceil(count / (100 / data.length))].audio !== undefined) {
+      return data[Math.ceil(count / (100 / data.length))].audio;
     }
   }
 }
 
 function Word(data: Array<SinglWord>, count: number) {
   if (data.length !== 0) {
-    return data[(count / 5)].word;
+    return data[Math.ceil(count / (100 / data.length))].word;
   }
 }
 
@@ -63,28 +64,38 @@ export default function AnswerVariant(data: Array<SinglWord>) {
   const { user, userStatistic } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
   function KeyboardEvent(button: HTMLButtonElement) {
-    setbuttonName('Следующее слово');
-    const rightAnswer = allWords[progress / 5].wordTranslate;
-    const arrow = AnswerProcessing(button, rightAnswer, allWords[progress / 5], isMute);
+    if (Math.ceil(progress / (100 / (data.length))) === data.length - 1) {
+      setbuttonName('Конец');
+    } else setbuttonName('Следующее слово');
+    const rightAnswer = allWords[Math.ceil(progress / (100 / (data.length)))].wordTranslate;
+    const arrow = AnswerProcessing(button, rightAnswer, allWords[Math.ceil(progress / (100 / (data.length)))], isMute);
     setrightAnswer(arrow);
     if (arrow && arrow === isRightAnswer)setinArrow(inArrow + 1);
     gameData.correctAnswerInARow = inArrow;
-    setComponent(BoxAfterAnswer(allWords[progress / 5].image));
+    setComponent(BoxAfterAnswer(allWords[Math.ceil(progress / (100 / (data.length)))].image));
   }
 
   function EnterKey(button: HTMLButtonElement) {
     dispatch(getStatistic({ userId: user.id, token: user.token }));
     if (button.textContent === 'Я не знаю') {
-      gameData.gameState.wrongWords.push(allWords[progress / 5]);
-      gameData.words.push(allWords[progress / 5]);
-    }
-    if (progress === 95) {
-      setEndGame(true);
+      gameData.gameState.wrongWords.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
+      gameData.words.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
+      setComponent(BoxAfterAnswer(allWords[Math.ceil(progress / (100 / (data.length)))].image));
+      if (Math.ceil(progress / (100 / (data.length))) === data.length - 1) {
+        console.log('ss');
+        setbuttonName('Конец');
+        return;
+      }
+      setbuttonName('Следующее слово');
       return;
     }
     setbuttonName('Я не знаю');
-    setProgress(progress + 5);
-    FillAnswerButtons(data, progress + 5);
+    if (Math.ceil(progress / (100 / (data.length))) === data.length - 1) {
+      setEndGame(true);
+      return;
+    }
+    setProgress(progress + (100 / (data.length)));
+    FillAnswerButtons(data, Math.ceil(progress / (100 / (data.length))) + 1);
     setComponent(undefined);
     document.querySelector('.game-box-text')?.classList.add('hidden');
   }
@@ -168,13 +179,18 @@ export default function AnswerVariant(data: Array<SinglWord>) {
       }
     }
   }, [endGame]);
+  if (allWords.length === 0) {
+    return (
+      <div className="hidden" />
+    );
+  }
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        {Circular(progress)}
+        {Circular(progress, data.length)}
         <VolumeOffIcon
           sx={{
-            marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px',
+            marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
           }}
           onClick={((e) => {
             const icon = e.target as HTMLElement;

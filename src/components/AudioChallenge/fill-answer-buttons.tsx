@@ -6,17 +6,18 @@ export default function FillAnswerButtons(data: Array<SinglWord>, count: number)
   const rightAnswerPosition = getRandom(0, 3);
   const buttons = document.querySelectorAll<HTMLButtonElement>('.variant');
   if (buttons.length === 0) return;
-  if (count === 100) return;
+  if (count === data.length) return;
   for (let index = 0; index < buttons.length; index += 1) {
     buttons[index].classList.remove('wrong');
     buttons[index].classList.remove('right');
     buttons[index].classList.remove('disabled');
+    buttons[index].classList.add('button-background');
     buttons[index].disabled = false;
   }
   while (answers.length <= 4) {
-    const random = getRandom(0, 19);
+    const random = getRandom(0, data.length - 1);
     if (answers.length === rightAnswerPosition) {
-      answers.push(data[count / 5].wordTranslate);
+      answers.push(data[count].wordTranslate);
     }
     if (!answers.includes(data[random].wordTranslate)) {
       answers.push(data[random].wordTranslate);

@@ -3,9 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
-import EmptyPage from './components/EmptyPage';
-import AudioChallenge from './components/Audio challenge/audio-challenge-main';
-import GamePage from './components/Audio challenge/game-page';
+import AudioChallenge from './components/AudioChallenge/audio-challenge-main';
+import GamePage from './components/AudioChallenge/game-page';
 import StatisticPage from './components/Statistic/StatisticPage';
 import SprintGame from './components/Sprint/SprintGame';
 import GameDifficulty from './components/GamesFromMenu/GameDifficulty';
@@ -26,7 +25,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/signin" element={<Header isAuthOpenProp />} />
         <Route path="/textbook" element={<Textbook />} />
-        <Route path="/textbook/:group/:page" element={<TextBookFinal />} />
+        <Route path="/textbook/:group/:page" element={(<TextBookFinal />)} />
         <Route path="/game/audio" element={<AudioChallenge />} />
         <Route path="/game/audio/:group/:page" element={<GamePage />} />
         <Route path="/statistic" element={<StatisticPage />} />

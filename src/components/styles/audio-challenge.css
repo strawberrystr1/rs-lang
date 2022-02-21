@@ -75,4 +75,20 @@
 }
 .mute{
     background-color: darkgray;
+    opacity: 1 !important;
+}
+.pause {
+    background-size: 40px 40px;
+    background-image: url("../../assets/pause.svg") !important;
+    background-color: #000;
+}
+.play {
+    background-size: 40px 40px;
+    background-image: url("../../assets/play.svg");
+}
+.play:hover{
+    background-color: #000 !important;
+}
+.pause:hover{
+    background-color: #000 !important;
 }

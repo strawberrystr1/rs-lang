@@ -10,7 +10,7 @@ export default function GameAudio(audio:string, size: string, style?: object) {
       setTimeout(() => {
         audioN.autoplay = true;
         audioN.load();
-      }, 300);
+      }, 50);
     }
   }, [audio]);
 

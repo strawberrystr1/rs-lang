@@ -62,7 +62,7 @@ export default function CardItem(props: ICardItemDifPropsWithDelete): ReactEleme
               {wordTranslate}
             </Typography>
           </CardContent>
-          <Style>{CardAudio([audio, audioMeaning, audioExample], '3rem')}</Style>
+          <Style>{CardAudio([audio, audioMeaning, audioExample])}</Style>
         </div>
         <div className="word-mean">
           <div className="word-mean-text">

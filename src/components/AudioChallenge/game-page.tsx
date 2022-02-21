@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable */
 import { Box, Container, CircularProgress } from '@mui/material';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';

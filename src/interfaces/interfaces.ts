@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ILongStatsItem, IAggregatedWord, ICurrentUserState } from './apiInterfaces';
 
 export interface IScoreProps {

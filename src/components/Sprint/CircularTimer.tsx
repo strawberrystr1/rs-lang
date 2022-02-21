@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   Box, Button, CircularProgress, Typography,
 } from '@mui/material';

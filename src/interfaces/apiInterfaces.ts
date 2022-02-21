@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { IWordData } from './interfaces';
 
 export interface IUserRegistration {

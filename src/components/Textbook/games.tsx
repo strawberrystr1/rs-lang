@@ -29,7 +29,11 @@ export default function GameButtons(props: IGameButtonsProps) {
           <img src={iconFirstGame} alt="" className="img" />
           Audio challenge
         </Button>
-        <Button disabled={isButtonActive} onClick={() => navigate(`/textbook/game/sprint/${group}/${page}`)} sx={{ backgroundColor: colors[+(group as string)].color }}>
+        <Button
+          disabled={isButtonActive}
+          onClick={() => navigate(`/textbook/game/sprint/${group}/${page}`)}
+          sx={{ backgroundColor: colors[+(group as string)].color }}
+        >
           <img src={iconSecondGame} alt="" className="img" />
           Sprint
         </Button>

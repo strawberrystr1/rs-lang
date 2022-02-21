@@ -76,8 +76,7 @@ export default function ShowCards(props: IShowCardsProps) {
     getAllAggregatedWords(user, {
       filter: '{"$and":[{"userWord.optional.learned":true}]}',
     }).then((res) => {
-      console.log(res);
-      const learned = res[0].totalCount[0].count || 0;
+      const learned = res[0].totalCount[0]?.count || 0;
       newStats.learnedWords = learned;
       const ind = newStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
       getAllAggregatedWords(user, {
@@ -88,7 +87,7 @@ export default function ShowCards(props: IShowCardsProps) {
           const newLongStats = {
             date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
             newWords: newStats.optional.long.stat[ind].newWords,
-            learnedWords: result[0].totalCount[0].count || 0,
+            learnedWords: result[0].totalCount[0]?.count || 0,
           };
           newLongStat.splice(ind, 1, newLongStats);
         }

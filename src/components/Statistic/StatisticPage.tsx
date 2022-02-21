@@ -10,10 +10,11 @@ import sound from '../../assets/audio.png';
 import CircularProgressWithLabel from './CircularProgressWithLabel';
 import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
-import { getStatistic } from '../../redux/userState/statisticSlice';
+import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
 import { getAllWords } from '../../redux/userState/wordsSlice';
 import LongStatistic from './LongStatistic';
 import LongStatisticLearned from './LosgStatisticLearned';
+import { ILongStatsItem } from '../../interfaces/apiInterfaces';
 
 export default function StatisticPage(): ReactElement {
   const { user, userStatistic } = useSelector((state: RootState) => state);
@@ -40,6 +41,41 @@ export default function StatisticPage(): ReactElement {
         setLearnedToday(totalCount);
         setIsLoading(false);
       });
+    }
+    const lastDateInStore = new Date(userStatistic.optional.short.lastDate).getDate();
+    const currentDate = (new Date()).getDate();
+
+    if ((lastDateInStore !== currentDate) && userStatistic.optional.short.lastDate > 0) {
+      const date = `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`;
+      const newWordsForLongStat = (userStatistic.optional.short.sprint?.newWords || 0)
+        + (userStatistic.optional.short.audio?.newWords || 0);
+      const longAddition: ILongStatsItem = {
+        date,
+        newWords: newWordsForLongStat,
+        learnedWords: 0,
+      };
+      dispatch(updateStatistic({
+        userId: user.id,
+        token: user.token,
+        optional: {
+          learnedWords: 0,
+          optional: {
+            short: {
+              lastDate: Date.now(),
+              sprint: {
+                newWords: 0,
+                inARow: 0,
+                percents: 0,
+                correctAnswers: 0,
+                allAnswers: 0,
+              },
+            },
+            long: {
+              stat: [...userStatistic.optional.long.stat, longAddition],
+            },
+          },
+        },
+      }));
     }
   }, []);
 

@@ -89,6 +89,7 @@ export const updateUserWord = createAsyncThunk(
         backProgress,
       },
     };
+    console.log(newData);
     const response = await fetch(
       // eslint-disable-next-line
       `https://react-rslang-str.herokuapp.com/users/${user.id}/words/${word._id}`,

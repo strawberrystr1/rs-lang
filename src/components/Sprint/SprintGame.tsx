@@ -151,7 +151,6 @@ export default function SprintGame(): ReactElement {
             }, page - pageDown);
           }
         } else if (!group) {
-          console.log(group);
           if (!buttonState.gameState.correctWords.length && !buttonState.gameState.wrongWords.length) {
             getAllAggregatedWords(user, {
               filter: '{"$and":[{"userWord.difficulty":"hard"}, {"userWord.optional.deleted":false}]}',

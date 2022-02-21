@@ -56,15 +56,16 @@ export default function GamePage() {
           if (location.pathname.includes('textbook')) {
             filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === +(wordPage as string) && !item.userWord?.optional.deleted);
           }
-          console.log(filtered);
-          while (filtered.length <= 20) {
+          while (filtered.length < 20) {
             if ((+(wordPage as string) - pageReducer) < 0) break;
             // eslint-disable-next-line
-            filtered = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer)));
-            console.log('newArr: ', filtered);
+            filtered = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer) && !item.userWord?.optional.deleted));
+            filtered = filtered.slice(0, 20);
             pageReducer += 1;
           }
-          console.log(filtered);
+          if (filtered.length > 20) {
+            filtered = filtered.slice(0, 20);
+          }
           const newData = filtered.map((item) => ({
             audio: item.audio,
             audioExample: item.audioExample,

@@ -184,7 +184,8 @@ export default function SingleCard(
         } else {
           deleteDispatch(wordCard as IAggregatedWord);
         }
-        ((e.target as HTMLElement).closest('.card-item') as HTMLElement).remove();
+        checkPageIsLearned();
+        ((e.target as HTMLElement).closest('.card-item') as HTMLElement).style.display = 'none';
       });
   };
 
@@ -239,7 +240,6 @@ export default function SingleCard(
               <br />
             </Typography>
           </div>
-          {/* <Style>{CardAudio(audioMeaning, '2rem')}</Style> */}
         </div>
         <br />
         <div className="word-translate">
@@ -253,7 +253,6 @@ export default function SingleCard(
               <br />
             </Typography>
           </div>
-          {/* <Style>{CardAudio(audioExample, '2rem')}</Style> */}
         </div>
         {
           name

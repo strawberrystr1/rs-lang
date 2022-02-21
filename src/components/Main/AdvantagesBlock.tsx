@@ -11,14 +11,14 @@ export default function AdvantagesBlock() {
       а также произношения слов
       представлены отдельно и в составе фразы.`,
       image: 'book',
-      heading: 'Textbook',
+      heading: 'Учебник',
     },
     {
       text: `Словарь содержит списки изучаемых слов,
       слова, которые были удалены из учебника, а также те
       которые вызывают затруднения. `,
       image: 'dictionary',
-      heading: 'Dictionary',
+      heading: 'Словарь',
     },
     {
       text: `Для изучения слов и закрепления запоминания,
@@ -26,7 +26,7 @@ export default function AdvantagesBlock() {
       Вызов, которые помогут вам
       «прокачать» свой словарный запас в игровой форме.`,
       image: 'game',
-      heading: 'Games',
+      heading: 'Игры',
     },
     {
       text: `Весь ход обучения можно посмотреть в
@@ -34,7 +34,7 @@ export default function AdvantagesBlock() {
       представлены за весь период обучения.
       Информация представленна в виде графиков, что очень удобно`,
       image: 'stat',
-      heading: 'Statistics',
+      heading: 'Статистика',
     },
 
   ];
@@ -56,7 +56,7 @@ export default function AdvantagesBlock() {
             textAlign: 'center',
           }}
         >
-          Advantages
+          Наши преимущества
         </Grid>
         {
           gridContent.map((item) => (

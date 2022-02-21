@@ -118,9 +118,9 @@ export default function SprintGame(): ReactElement {
               filter: `{"$and":[{"group":${group}}, {"page":${page - pageDown}}]}`,
               wordsPerPage: '20',
             }).then((result) => {
-              let filtered = result[0].paginatedResults;
+              let filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.deleted);
               if (location.pathname.includes('textbook')) {
-                filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && !item.userWord?.optional.deleted);
+                filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
               }
               const newData = filtered.map((item) => ({
                 audio: item.audio,

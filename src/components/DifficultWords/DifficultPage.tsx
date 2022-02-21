@@ -2,7 +2,7 @@ import {
   Button, ButtonGroup, Container, Dialog, DialogActions, DialogTitle, Typography,
 } from '@mui/material';
 import React, { ReactElement, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CardsBlock from './CardsBlock';
 import iconFirstGame from '../../assets/audio.png';
@@ -11,10 +11,9 @@ import { RootState } from '../../redux/store';
 
 export default function DifficultPage(): ReactElement {
   const { user } = useSelector((state: RootState) => state);
-  const params = useParams();
   const navigate = useNavigate();
-  const { group, page } = params;
   const [isEmpty, setIsEmpty] = useState(false);
+  const [isErrorGameOpen, setIsErrorGameOpen] = useState(false);
 
   return (
     <Container
@@ -43,7 +42,15 @@ export default function DifficultPage(): ReactElement {
               }}
               >
                 <ButtonGroup variant="contained" aria-label="outlined primary button group" color="secondary">
-                  <Button onClick={() => navigate(`/game/audio/${group}/${page}`)}>
+                  <Button onClick={() => {
+                    const cards = document.querySelectorAll('.card-item');
+                    if (cards.length <= 4) {
+                      setIsErrorGameOpen(true);
+                    } else {
+                      navigate('/game/audio/difficult');
+                    }
+                  }}
+                  >
                     <img src={iconFirstGame} alt="" className="img" />
                     Audio challenge
                   </Button>
@@ -64,7 +71,6 @@ export default function DifficultPage(): ReactElement {
                 Сложные слова
               </Typography>
               <CardsBlock setIsEmpty={(value: boolean) => {
-                console.log(value);
                 setIsEmpty(value);
               }}
               />
@@ -84,6 +90,17 @@ export default function DifficultPage(): ReactElement {
             </Dialog>
           )
       }
+      <Dialog
+        open={isErrorGameOpen}
+        onClose={() => setIsErrorGameOpen(false)}
+      >
+        <DialogTitle>
+          Для этой игры необходимо минимум 5 слова
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setIsErrorGameOpen(false)} variant="contained">Закрыть</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

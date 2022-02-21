@@ -29,7 +29,7 @@ export default function GamePage() {
   const [open, setOpen] = React.useState(true);
   const location = useLocation();
   const params = useParams();
-  const wordGroup = params.group;
+  const wordGroup = +(params.group as string);
   const wordPage = params.page;
   const { user } = useSelector((state: RootState) => state);
   // const dispatch = useDispatch();
@@ -46,33 +46,66 @@ export default function GamePage() {
   }
   useEffect(() => {
     if (user.name) {
-      getAllAggregatedWords(user, {
-        filter: `{"$and":[{"group":${wordGroup}}, {"page":${wordPage}}]}`,
-        wordsPerPage: '20',
-      }).then((result) => {
-        const filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
-        const newData = filtered.map((item) => ({
-          audio: item.audio,
-          audioExample: item.audioExample,
-          audioMeaning: item.audioMeaning,
-          group: item.group,
-          // eslint-disable-next-line no-underscore-dangle
-          id: item._id,
-          image: item.image,
-          page: item.page,
-          textExample: item.textExample,
-          textExampleTranslate: item.textExampleTranslate,
-          textMeaning: item.textMeaning,
-          textMeaningTranslate: item.textMeaningTranslate,
-          transcription: item.transcription,
-          word: item.word,
-          wordTranslate: item.wordTranslate,
-        }));
-        setResponse(newData);
-        setOpen(false);
-        ResetData();
-        FillAnswerButtons(newData, 0);
-      });
+      if (wordGroup >= 0) {
+        getAllAggregatedWords(user, {
+          filter: `{"$and":[{"group":${wordGroup}}, {"page":${wordPage}}]}`,
+          wordsPerPage: '20',
+        }).then((result) => {
+          let filtered = result[0].paginatedResults;
+          if (location.pathname.includes('textbook')) {
+            filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+          }
+          const newData = filtered.map((item) => ({
+            audio: item.audio,
+            audioExample: item.audioExample,
+            audioMeaning: item.audioMeaning,
+            group: item.group,
+            // eslint-disable-next-line no-underscore-dangle
+            id: item._id,
+            image: item.image,
+            page: item.page,
+            textExample: item.textExample,
+            textExampleTranslate: item.textExampleTranslate,
+            textMeaning: item.textMeaning,
+            textMeaningTranslate: item.textMeaningTranslate,
+            transcription: item.transcription,
+            word: item.word,
+            wordTranslate: item.wordTranslate,
+          }));
+          setResponse(newData);
+          setOpen(false);
+          ResetData();
+          FillAnswerButtons(newData, 0);
+        });
+      } else {
+        getAllAggregatedWords(user, {
+          filter: '{"$and":[{"userWord.difficulty": "hard"}]}',
+          wordsPerPage: '20',
+        }).then((result) => {
+          const filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+          const newData = filtered.map((item) => ({
+            audio: item.audio,
+            audioExample: item.audioExample,
+            audioMeaning: item.audioMeaning,
+            group: item.group,
+            // eslint-disable-next-line no-underscore-dangle
+            id: item._id,
+            image: item.image,
+            page: item.page,
+            textExample: item.textExample,
+            textExampleTranslate: item.textExampleTranslate,
+            textMeaning: item.textMeaning,
+            textMeaningTranslate: item.textMeaningTranslate,
+            transcription: item.transcription,
+            word: item.word,
+            wordTranslate: item.wordTranslate,
+          }));
+          setResponse(newData);
+          setOpen(false);
+          ResetData();
+          FillAnswerButtons(newData, 0);
+        });
+      }
     }
   }, [user, wordGroup, wordPage]);
   return (

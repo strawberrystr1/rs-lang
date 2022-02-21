@@ -92,6 +92,7 @@ function App() {
         <Route path="/textbook/game/audio/:group/:page" element={<GamePage />} />
         <Route path="/game/sprint" element={<DifficultyChoose />} />
         <Route path="/game/sprint/difficult" element={<SprintGame />} />
+        <Route path="/game/audio/difficult" element={<GamePage />} />
       </Routes>
       <Footer />
     </div>

@@ -59,7 +59,7 @@ export default function SprintGame(): ReactElement {
   const page: number = +(params.page as string);
   const location = useLocation();
 
-  const { user, userStatistic } = useSelector((state: RootState) => state);
+  const { user, userStatistic, userWords } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -119,11 +119,9 @@ export default function SprintGame(): ReactElement {
               wordsPerPage: '20',
             }).then((result) => {
               let filtered = result[0].paginatedResults;
-              console.log(location.pathname);
               if (location.pathname.includes('textbook')) {
                 filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
               }
-              console.log(filtered);
               const newData = filtered.map((item) => ({
                 audio: item.audio,
                 audioExample: item.audioExample,
@@ -237,7 +235,7 @@ export default function SprintGame(): ReactElement {
         addNewWords();
         const newOrNot = userStatistic.optional.short.sprint?.allAnswers === 0
           && userStatistic.optional.short.audio?.allAnswers === 0;
-        compareStatistic(userStatistic, buttonState, user, newOrNot, 'sprint')
+        compareStatistic(userStatistic, buttonState, user, newOrNot, 'sprint', userWords)
           .then((result) => {
             dispatch(updateStatistic({
               userId: user.id,

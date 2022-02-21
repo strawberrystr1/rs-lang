@@ -109,6 +109,10 @@ export interface IDifficultyBlockProps {
   setIsEmpty: (value: boolean) => void;
 }
 
+export interface IGameButtonsProps {
+  isButtonActive: boolean;
+}
+
 export type SetWordsCBType = (data: IWordData[]) => void;
 export type SetGameLevelCB = (level: number) => void;
 export type LearnDispatchCB = (word: IAggregatedWord, type: string) => void;

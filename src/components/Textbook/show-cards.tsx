@@ -52,7 +52,7 @@ export default function ShowCards(props: IShowCardsProps) {
 
   const checkPageIsLearned = () => {
     getAllAggregatedWords(user, {
-      filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}]}`,
+      filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}, {"userWord.optional.deleted": false}]}`,
       wordsPerPage: '20',
     }).then((res) => {
       const ans = res[0].paginatedResults.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');

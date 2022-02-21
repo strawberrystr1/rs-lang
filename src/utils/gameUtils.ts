@@ -4,7 +4,7 @@ import {
   DispatchCBCheckWord,
   DispatchCBUpdateWord,
   IAggregatedWord,
-  ICurrentUserState, IQueryParamsForWords, ISprintStats, ITodayStats, ITodayWordsResponse, IUserStatistic,
+  ICurrentUserState, IQueryParamsForWords, ISprintStats, ITodayStats, ITodayWordsResponse, IUserStatistic, IUserWord,
 } from '../interfaces/apiInterfaces';
 import {
   ICurrentGameBlockState,
@@ -193,8 +193,9 @@ export async function compareStatistic(
   user: Partial<ICurrentUserState>,
   isNewUser: boolean,
   gameType: string,
+  userWords: IUserWord[],
 ) {
-  // const todayDate = (new Date()).getDate() * ((new Date()).getMonth() + 1);
+  const userWordsIds = userWords.map((item) => item.wordId);
   const bestInARow = (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow > (currentStats.gameState as IGameStatistic).bestInARow
     ? (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).inARow
     : (currentStats.gameState as IGameStatistic).bestInARow;
@@ -210,11 +211,16 @@ export async function compareStatistic(
 
   const indOfLastLongStat = storageStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
   const newLongStat = [...storageStats.optional.long.stat];
-  const newWords = (currentStats.gameState as IGameStatistic).correctWords.length
-      + (currentStats.gameState as IGameStatistic).wrongWords.length
-      + (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).newWords;
-  const newWordsLong = (currentStats.gameState as IGameStatistic).correctWords.length
-  + (currentStats.gameState as IGameStatistic).wrongWords.length + storageStats.optional.long.stat[indOfLastLongStat].newWords;
+  const filteredCorrectWords = (currentStats.gameState as IGameStatistic).correctWords.filter(
+    (item) => !userWordsIds.includes(item.id),
+  );
+  const filteredWrongWords = (currentStats.gameState as IGameStatistic).wrongWords.filter(
+    (item) => !userWordsIds.includes(item.id),
+  );
+  const newWords = filteredCorrectWords.length + filteredWrongWords.length
+    + (storageStats.optional.short[gameType as keyof ITodayStats] as ISprintStats).newWords;
+  const newWordsLong = filteredCorrectWords.length + filteredWrongWords.length
+    + storageStats.optional.long.stat[indOfLastLongStat].newWords;
   if (indOfLastLongStat !== -1) {
     const newLongStats = {
       date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,

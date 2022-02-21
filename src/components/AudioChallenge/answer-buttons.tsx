@@ -62,7 +62,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
   const [inArrow, setinArrow] = React.useState(0);
   const [isRightAnswer, setrightAnswer] = React.useState(true);
   const { ...allWords } = data;
-  const { user, userStatistic } = useSelector((state: RootState) => state);
+  const { user, userStatistic, userWords } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
     const rightAnswer = allWords[Math.ceil(progress / (100 / (data.length)))].wordTranslate;
     const arrow = AnswerProcessing(button, rightAnswer, allWords[Math.ceil(progress / (100 / (data.length)))], isMute);
     setrightAnswer(arrow);
-    if (arrow && arrow === isRightAnswer)setinArrow(inArrow + 1);
+    if (arrow && arrow === isRightAnswer) setinArrow(inArrow + 1);
     gameData.correctAnswerInARow = inArrow;
     setComponent(BoxAfterAnswer(allWords[Math.ceil(progress / (100 / (data.length)))].image));
   }
@@ -90,7 +90,6 @@ export default function AnswerVariant(data: Array<SinglWord>) {
       gameData.words.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
       setComponent(BoxAfterAnswer(allWords[Math.ceil(progress / (100 / (data.length)))].image));
       if (Math.ceil(progress / (100 / (data.length))) === data.length - 1) {
-        console.log('ss');
         setbuttonName('Конец');
         return;
       }
@@ -134,6 +133,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
       EnterKey(nextButton);
     }
   }
+
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
       e.preventDefault();
@@ -176,7 +176,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
       if (user.name) {
         addNewWords();
         const newOrNot = userStatistic.optional.short.audio?.allAnswers === 0;
-        compareStatistic(userStatistic, gameData, user, newOrNot, 'audio')
+        compareStatistic(userStatistic, gameData, user, newOrNot, 'audio', userWords)
           .then((result) => {
             dispatch(updateStatistic({
               userId: user.id,
@@ -232,7 +232,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
           sx={{ marginTop: '80px', marginBottom: '40px' }}
           onClick={((event) => {
             const button = event.target as HTMLButtonElement;
-            if (button.childNodes.length === 4) return;
+            // if (button.childNodes.length === 4) return;
             KeyboardEvent(button);
           })}
         >

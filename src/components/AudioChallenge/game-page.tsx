@@ -55,16 +55,16 @@ export default function GamePage() {
           let filtered = result[0].paginatedResults;
           let pageReducer = 1;
           if (location.pathname.includes('textbook')) {
-            filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === +(wordPage as string));
+            filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === +(wordPage as string) && !item.userWord?.optional.deleted);
           }
           console.log(filtered);
           while (filtered.length <= 20) {
-            const copy = [...filtered];
+            // const copy = [...filtered];
             if ((+(wordPage as string) - pageReducer) < 0) break;
             // eslint-disable-next-line
-            const newArr = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer)));
-            console.log('newArr: ', newArr);
-            filtered = [...copy, ...newArr].slice(0, 20);
+            filtered = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer)));
+            console.log('newArr: ', filtered);
+            // filtered = [...copy, ...newArr].slice(0, 20);
             pageReducer += 1;
           }
           console.log(filtered);

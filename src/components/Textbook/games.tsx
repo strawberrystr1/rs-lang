@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import {
-  Container, Dialog, DialogActions, DialogTitle,
+  Container,
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import iconFirstGame from '../../assets/audio.png';
@@ -14,7 +14,6 @@ export default function GameButtons(props: IGameButtonsProps) {
   const { isButtonActive } = props;
   const params = useParams();
   const navigate = useNavigate();
-  const [isErrorGameOpen, setIsErrorGameOpen] = React.useState(false);
   const { group, page } = params;
 
   return (
@@ -23,13 +22,7 @@ export default function GameButtons(props: IGameButtonsProps) {
         <Button
           disabled={isButtonActive}
           onClick={() => {
-            const cardsLearned = document.querySelectorAll('.learned').length;
-            const allCards = document.querySelectorAll('.card-item').length;
-            if (allCards - cardsLearned < 5) {
-              setIsErrorGameOpen(true);
-            } else {
-              navigate(`/textbook/game/audio/${group}/${page}`);
-            }
+            navigate(`/textbook/game/audio/${group}/${page}`);
           }}
           sx={{ backgroundColor: colors[+(group as string)].color }}
         >
@@ -41,17 +34,6 @@ export default function GameButtons(props: IGameButtonsProps) {
           Sprint
         </Button>
       </ButtonGroup>
-      <Dialog
-        open={isErrorGameOpen}
-        onClose={() => setIsErrorGameOpen(false)}
-      >
-        <DialogTitle>
-          Недостаточно слов для игры
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setIsErrorGameOpen(false)} variant="contained">Закрыть</Button>
-        </DialogActions>
-      </Dialog>
     </Container>
   );
 }

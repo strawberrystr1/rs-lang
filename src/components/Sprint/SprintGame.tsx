@@ -120,7 +120,7 @@ export default function SprintGame(): ReactElement {
             }).then((result) => {
               let filtered = result[0].paginatedResults;
               if (location.pathname.includes('textbook')) {
-                filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+                filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && !item.userWord?.optional.deleted);
               }
               const newData = filtered.map((item) => ({
                 audio: item.audio,

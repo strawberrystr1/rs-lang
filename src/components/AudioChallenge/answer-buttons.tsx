@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import React, { ReactElement, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
 import { RootState } from '../../redux/store';
 import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
@@ -85,6 +86,10 @@ export default function AnswerVariant(data: Array<SinglWord>) {
   }
 
   function EnterKey(button: HTMLButtonElement) {
+    document.querySelectorAll('.variant').forEach((item) => {
+      // eslint-disable-next-line
+      (item as HTMLButtonElement).disabled = true;
+    });
     if (button.textContent === 'Я не знаю') {
       gameData.gameState.wrongWords.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
       gameData.words.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
@@ -199,18 +204,30 @@ export default function AnswerVariant(data: Array<SinglWord>) {
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {Circular(progress, data.length)}
-        <VolumeOffIcon
-          sx={{
-            marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
-          }}
-          onClick={((e) => {
-            const icon = e.target as HTMLElement;
-            const svg = icon.closest('svg') as SVGElement;
-            svg.classList.toggle('mute');
-            if (svg.classList.contains('mute')) setIsMute(true);
-            else setIsMute(false);
-          })}
-        />
+        {
+          isMute
+            ? (
+              <VolumeOffIcon
+                sx={{
+                  marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
+                }}
+                onClick={() => {
+                  setIsMute(false);
+                }}
+              />
+            )
+            : (
+              <VolumeUpIcon
+                sx={{
+                  marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
+                }}
+                onClick={() => {
+                  setIsMute(true);
+                }}
+              />
+            )
+        }
+
       </Box>
       <Box
         sx={{
@@ -231,8 +248,9 @@ export default function AnswerVariant(data: Array<SinglWord>) {
           direction="row"
           sx={{ marginTop: '80px', marginBottom: '40px' }}
           onClick={((event) => {
+            if ((event.target as HTMLElement).nodeName !== 'BUTTON') return;
             const button = event.target as HTMLButtonElement;
-            // if (button.childNodes.length === 4) return;
+            if (button.childNodes.length === 4) return;
             KeyboardEvent(button);
           })}
         >

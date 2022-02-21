@@ -44,17 +44,30 @@ export default function GamePage() {
       });
     }, [apiUrl]);
   }
+
   useEffect(() => {
     if (user.name) {
       if (wordGroup >= 0) {
         getAllAggregatedWords(user, {
-          filter: `{"$and":[{"group":${wordGroup}}, {"page":${wordPage}}]}`,
-          wordsPerPage: '20',
+          filter: `{"$and":[{"group":${wordGroup}}]}`,
+          wordsPerPage: '600',
         }).then((result) => {
           let filtered = result[0].paginatedResults;
+          let pageReducer = 1;
           if (location.pathname.includes('textbook')) {
-            filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+            filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === +(wordPage as string));
           }
+          console.log(filtered);
+          while (filtered.length <= 20) {
+            const copy = [...filtered];
+            if ((+(wordPage as string) - pageReducer) < 0) break;
+            // eslint-disable-next-line
+            const newArr = filtered.concat(result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned && item.page === (+(wordPage as string) - pageReducer)));
+            console.log('newArr: ', newArr);
+            filtered = [...copy, ...newArr].slice(0, 20);
+            pageReducer += 1;
+          }
+          console.log(filtered);
           const newData = filtered.map((item) => ({
             audio: item.audio,
             audioExample: item.audioExample,

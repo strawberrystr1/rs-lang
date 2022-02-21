@@ -37,7 +37,7 @@ export default function ShowCards(props: IShowCardsProps) {
       });
     } else {
       getAllAggregatedWords(user, {
-        filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}]}`,
+        filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}, {"userWord.optional.deleted": false}]}`,
         wordsPerPage: '20',
       }).then((res) => {
         const data = res[0].paginatedResults.sort((a, b) => a.word.localeCompare(b.word))
@@ -52,10 +52,12 @@ export default function ShowCards(props: IShowCardsProps) {
 
   const checkPageIsLearned = () => {
     getAllAggregatedWords(user, {
-      filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}, {"userWord.optional.deleted": false}]}`,
+      filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}]}`,
       wordsPerPage: '20',
     }).then((res) => {
-      const ans = res[0].paginatedResults.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
+      const filtered = res[0].paginatedResults.filter((item) => !item.userWord?.optional.deleted);
+      console.log(filtered);
+      const ans = res[0].paginatedResults.every((item) => (item.userWord?.optional.learned || item.userWord?.difficulty === 'hard'));
       if (ans) {
         setIsPageLearned(true);
       } else {

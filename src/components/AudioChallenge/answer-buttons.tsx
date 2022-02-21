@@ -38,7 +38,8 @@ function AudioUrl(data: Array<SinglWord>, count: number) {
 
 function Word(data: Array<SinglWord>, count: number) {
   if (data.length !== 0) {
-    return data[Math.ceil(count / (100 / data.length))].word;
+    // eslint-disable-next-line max-len
+    return `${data[Math.ceil(count / (100 / data.length))].word} [${data[Math.ceil(count / (100 / data.length))].wordTranslate}]`;
   }
 }
 

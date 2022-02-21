@@ -20,6 +20,7 @@ export default function BasicPagination() {
       </div>
       <Stack spacing={10}>
         <Pagination
+          className="test"
           page={wordPage}
           sx={{ margin: '0 auto' }}
           count={30}
@@ -47,7 +48,6 @@ export default function BasicPagination() {
           }}
         />
       </Stack>
-
     </>
   );
 }

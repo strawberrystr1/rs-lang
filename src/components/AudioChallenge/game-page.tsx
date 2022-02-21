@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Container, CircularProgress } from '@mui/material';
 import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -30,33 +31,50 @@ export default function GamePage() {
   const params = useParams();
   const wordGroup = params.group;
   const wordPage = params.page;
-  const apiUrl = `https://react-rslang-str.herokuapp.com/words?group=${wordGroup}&page=${wordPage}`;
   const { user } = useSelector((state: RootState) => state);
-  useEffect(() => {
-    if (user.name) {
-      getAllAggregatedWords(user, {
-        filter: `{"$and":[{"group":${wordGroup}}, {"page":${wordPage}}]}`,
-        wordsPerPage: '20',
-      }).then((res) => {
-        let filtered = res[0].paginatedResults;
-        if (location.pathname.includes('textbook')) {
-          filtered = res[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
-        }
-        setResponse(filtered);
-        console.log('filtered: ', filtered);
-        setOpen(false);
-        ResetData();
-        FillAnswerButtons(filtered, 0);
-      });
-    } else {
+  // const dispatch = useDispatch();
+  if (!user.name) {
+    const apiUrl = `https://react-rslang-str.herokuapp.com/words?group=${wordGroup}&page=${wordPage}`;
+    useEffect(() => {
       axios.get(apiUrl).then((resp) => resp.data).then((data:Array<SinglWord>) => {
         setResponse(data);
         setOpen(false);
         ResetData();
         FillAnswerButtons(data, 0);
       });
+    }, [apiUrl]);
+  }
+  useEffect(() => {
+    if (user.name) {
+      getAllAggregatedWords(user, {
+        filter: `{"$and":[{"group":${wordGroup}}, {"page":${wordPage}}]}`,
+        wordsPerPage: '20',
+      }).then((result) => {
+        const filtered = result[0].paginatedResults.filter((item) => !item.userWord?.optional.learned);
+        const newData = filtered.map((item) => ({
+          audio: item.audio,
+          audioExample: item.audioExample,
+          audioMeaning: item.audioMeaning,
+          group: item.group,
+          // eslint-disable-next-line no-underscore-dangle
+          id: item._id,
+          image: item.image,
+          page: item.page,
+          textExample: item.textExample,
+          textExampleTranslate: item.textExampleTranslate,
+          textMeaning: item.textMeaning,
+          textMeaningTranslate: item.textMeaningTranslate,
+          transcription: item.transcription,
+          word: item.word,
+          wordTranslate: item.wordTranslate,
+        }));
+        setResponse(newData);
+        setOpen(false);
+        ResetData();
+        FillAnswerButtons(newData, 0);
+      });
     }
-  }, [apiUrl]);
+  }, [user, wordGroup, wordPage]);
   return (
     <Container
       maxWidth={false}

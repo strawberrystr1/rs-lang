@@ -4,6 +4,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import GameButtons from './games';
 import BasicPagination from './pagination';
 import ShowCards from './show-cards';
+import PaginationLearn from './test';
 
 function TextBookFinal() {
   const [isPageLearned, setIsPageLearned] = useState(false);
@@ -21,9 +22,13 @@ function TextBookFinal() {
       {
         isPageLearned
           && (
-            <Tooltip title="Страница полностью изучена">
-              <CheckCircleOutlineIcon sx={{ fontSize: '84px', color: 'lightgreen', position: 'absolute' }} />
-            </Tooltip>
+            <>
+              <Tooltip title="Страница полностью изучена">
+                <CheckCircleOutlineIcon sx={{ fontSize: '84px', color: 'lightgreen', position: 'absolute' }} />
+              </Tooltip>
+              <PaginationLearn />
+
+            </>
           )
       }
       <Container

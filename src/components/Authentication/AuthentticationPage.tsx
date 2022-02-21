@@ -8,8 +8,11 @@ import {
   Alert,
   CircularProgress,
   Backdrop,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { checkInput } from '../../utils/authenticationUtils';
 import { newUser } from '../../constants/apiConstants';
 
@@ -30,11 +33,12 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
   const [passwordFieldError, setPasswordFieldError] = useState(false);
   const [nameFieldError, setNameFieldError] = useState(false);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
-  const checkField = (e: React.FormEvent<HTMLDivElement>, type: string) => {
+  const checkField = (e: React.ChangeEvent<HTMLInputElement | HTMLDivElement>, type: string) => {
     const { value } = (e as React.ChangeEvent<HTMLInputElement>).target;
     if (type === 'email') {
       newUser.email = value;
@@ -85,6 +89,14 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
     setIsRegistrationOpen(true);
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <div>
       <Dialog
@@ -107,30 +119,45 @@ export default function AuthentticationPage(props: IAuthProps): ReactElement {
                 helperText={nameFieldError ? '' : 'Введите имя'}
                 fullWidth
                 margin="dense"
-                onInput={(e) => checkField(e, 'name')}
+                onInput={(e) => checkField((e as React.ChangeEvent<HTMLDivElement>), 'name')}
               />
             )
             : null}
           <TextField
             error={!emailFieldError}
-            id="outlined-error-helper-text"
+            id="outlined-error-helper-text2"
             label="Email"
             name="email"
             helperText={emailFieldError ? '' : 'Неверный email.'}
             fullWidth
             margin="dense"
-            onInput={(e) => checkField(e, 'email')}
+            onInput={(e) => checkField((e as React.ChangeEvent<HTMLDivElement>), 'email')}
           />
           <TextField
             error={!passwordFieldError}
-            id="outlined-error-helper-text"
+            id="outlined-error-helper-text3"
             label="Password"
+            type={showPassword ? 'text' : 'password'}
             helperText={passwordFieldError
               ? ''
               : 'Пароль должен содержать минимум 8 симвоволов.'}
             fullWidth
             margin="dense"
-            onInput={(e) => checkField(e, 'pass')}
+            onChange={(e) => checkField((e as React.ChangeEvent<HTMLInputElement>), 'pass')}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           {
             user.error

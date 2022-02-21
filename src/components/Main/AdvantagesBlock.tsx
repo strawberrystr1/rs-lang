@@ -5,38 +5,36 @@ import AdvantagesGridItem from './AdvantagesGridItem';
 export default function AdvantagesBlock() {
   const gridContent = [
     {
-      text: `The electronic textbook consists of six sections. 
-      Each section has 30 pages of 20 words. 
-      The translation of the word, the thematic image, 
-      as well as the pronunciation of both the word 
-      separately and as part of the phrase are presented.`,
+      text: `Электронный учебник состоит из шести разделов.
+      В каждом разделе 30 страниц по 20 слов.
+      Перевод слова, тематическое изображение,
+      а также произношения слов
+      представлены отдельно и в составе фразы.`,
       image: 'book',
-      heading: 'Textbook',
+      heading: 'Учебник',
     },
     {
-      text: `The dictionary contains lists of studied words, 
-      words that do not need to be learned, as well as those 
-      that cause difficulties. The dictionary reflects 
-      statistics for each section and student progress.`,
+      text: `Словарь содержит списки изучаемых слов,
+      слова, которые были удалены из учебника, а также те
+      которые вызывают затруднения. `,
       image: 'dictionary',
-      heading: 'Dictionary',
+      heading: 'Словарь',
     },
     {
-      text: `For learning words and reinforcing memorization, 
-      the application has 4 games: Savannah, Sprint, Audio 
-      Chalenge and Imaginarium, which will help you to 
-      "pump" your vocabulary in a playful way.`,
+      text: `Для изучения слов и закрепления запоминания,
+      в приложении 2 игры: Спринт и Аудио
+      Вызов, которые помогут вам
+      «прокачать» свой словарный запас в игровой форме.`,
       image: 'game',
-      heading: 'Games',
+      heading: 'Игры',
     },
     {
-      text: `All the progress of training can be viewed in 
-      statistics, where data for the current day, as well as 
-      for the entire training period, are presented. 
-      The information is presented both in the form of a table 
-      and graphs, which is very convenient.`,
+      text: `Весь ход обучения можно посмотреть в
+      статистика, где данные за текущий день, а также
+      представлены за весь период обучения.
+      Информация представленна в виде графиков, что очень удобно`,
       image: 'stat',
-      heading: 'Statistics',
+      heading: 'Статистика',
     },
 
   ];
@@ -58,7 +56,7 @@ export default function AdvantagesBlock() {
             textAlign: 'center',
           }}
         >
-          Advantages
+          Наши преимущества
         </Grid>
         {
           gridContent.map((item) => (

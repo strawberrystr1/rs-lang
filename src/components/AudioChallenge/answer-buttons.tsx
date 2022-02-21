@@ -5,10 +5,11 @@ import Stack from '@mui/material/Stack';
 import React, { ReactElement, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { IUserCreateWordRequest, IUserUpdateWordRequest } from '../../interfaces/apiInterfaces';
 import { RootState } from '../../redux/store';
 import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
-import { addUserWord, updateUserWord } from '../../redux/userState/wordsSlice';
+import { addUserWord, getAllWords, updateUserWord } from '../../redux/userState/wordsSlice';
 import { checkWord, compareStatistic, updateWord } from '../../utils/gameUtils';
 import { SinglWord } from '../interfaces/textbookI';
 import EndGameView from '../Sprint/EndGameView';
@@ -62,8 +63,16 @@ export default function AnswerVariant(data: Array<SinglWord>) {
   const [inArrow, setinArrow] = React.useState(0);
   const [isRightAnswer, setrightAnswer] = React.useState(true);
   const { ...allWords } = data;
-  const { user, userStatistic } = useSelector((state: RootState) => state);
+  const { user, userStatistic, userWords } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user.name) {
+      dispatch(getStatistic({ userId: user.id, token: user.token }));
+      dispatch(getAllWords(user));
+    }
+  }, []);
+
   function KeyboardEvent(button: HTMLButtonElement) {
     if (Math.ceil(progress / (100 / (data.length))) === data.length - 1) {
       setbuttonName('Конец');
@@ -71,19 +80,21 @@ export default function AnswerVariant(data: Array<SinglWord>) {
     const rightAnswer = allWords[Math.ceil(progress / (100 / (data.length)))].wordTranslate;
     const arrow = AnswerProcessing(button, rightAnswer, allWords[Math.ceil(progress / (100 / (data.length)))], isMute);
     setrightAnswer(arrow);
-    if (arrow && arrow === isRightAnswer)setinArrow(inArrow + 1);
+    if (arrow && arrow === isRightAnswer) setinArrow(inArrow + 1);
     gameData.correctAnswerInARow = inArrow;
     setComponent(BoxAfterAnswer(allWords[Math.ceil(progress / (100 / (data.length)))].image));
   }
 
   function EnterKey(button: HTMLButtonElement) {
-    dispatch(getStatistic({ userId: user.id, token: user.token }));
+    document.querySelectorAll('.variant').forEach((item) => {
+      // eslint-disable-next-line
+      (item as HTMLButtonElement).disabled = true;
+    });
     if (button.textContent === 'Я не знаю') {
       gameData.gameState.wrongWords.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
       gameData.words.push(allWords[Math.ceil(progress / (100 / (data.length)))]);
       setComponent(BoxAfterAnswer(allWords[Math.ceil(progress / (100 / (data.length)))].image));
       if (Math.ceil(progress / (100 / (data.length))) === data.length - 1) {
-        console.log('ss');
         setbuttonName('Конец');
         return;
       }
@@ -127,6 +138,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
       EnterKey(nextButton);
     }
   }
+
   useEffect(() => {
     window.addEventListener('keydown', (e) => {
       e.preventDefault();
@@ -135,38 +147,41 @@ export default function AnswerVariant(data: Array<SinglWord>) {
     return () => window.removeEventListener('keyup', keyHandler);
   }, [allWords]);
 
+  const addNewWords = () => {
+    gameData.correctAnswerInARow = inArrow;
+    gameData.gameState.bestInARow = inArrow;
+    checkWord(
+      gameData.gameState.correctWords,
+      user,
+      (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
+    );
+    checkWord(
+      gameData.gameState.wrongWords,
+      user,
+      (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
+    );
+    setTimeout(() => {
+      updateWord(
+        gameData.gameState.correctWords,
+        'correct',
+        (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+        user,
+      );
+      updateWord(
+        gameData.gameState.wrongWords,
+        'wrong',
+        (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
+        user,
+      );
+    }, 1000);
+  };
+
   useEffect(() => {
     if (endGame) {
-      gameData.correctAnswerInARow = inArrow;
-      gameData.gameState.bestInARow = inArrow;
-      const addNewWords = () => {
-        checkWord(
-          gameData.gameState.correctWords,
-          user,
-          (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
-        );
-        checkWord(
-          gameData.gameState.wrongWords,
-          user,
-          (value: IUserCreateWordRequest) => dispatch(addUserWord(value)),
-        );
-        updateWord(
-          gameData.gameState.correctWords,
-          'correct',
-          (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
-          user,
-        );
-        updateWord(
-          gameData.gameState.wrongWords,
-          'wrong',
-          (value: IUserUpdateWordRequest) => dispatch(updateUserWord(value)),
-          user,
-        );
-      };
       if (user.name) {
         addNewWords();
         const newOrNot = userStatistic.optional.short.audio?.allAnswers === 0;
-        compareStatistic(userStatistic, gameData, user, newOrNot, 'audio')
+        compareStatistic(userStatistic, gameData, user, newOrNot, 'audio', userWords)
           .then((result) => {
             dispatch(updateStatistic({
               userId: user.id,
@@ -189,18 +204,30 @@ export default function AnswerVariant(data: Array<SinglWord>) {
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {Circular(progress, data.length)}
-        <VolumeOffIcon
-          sx={{
-            marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
-          }}
-          onClick={((e) => {
-            const icon = e.target as HTMLElement;
-            const svg = icon.closest('svg') as SVGElement;
-            svg.classList.toggle('mute');
-            if (svg.classList.contains('mute')) setIsMute(true);
-            else setIsMute(false);
-          })}
-        />
+        {
+          isMute
+            ? (
+              <VolumeOffIcon
+                sx={{
+                  marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
+                }}
+                onClick={() => {
+                  setIsMute(false);
+                }}
+              />
+            )
+            : (
+              <VolumeUpIcon
+                sx={{
+                  marginTop: '64px', marginRight: '45px', borderRadius: '50%', fontSize: '30px', opacity: '0.5',
+                }}
+                onClick={() => {
+                  setIsMute(true);
+                }}
+              />
+            )
+        }
+
       </Box>
       <Box
         sx={{
@@ -221,6 +248,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
           direction="row"
           sx={{ marginTop: '80px', marginBottom: '40px' }}
           onClick={((event) => {
+            if ((event.target as HTMLElement).nodeName !== 'BUTTON') return;
             const button = event.target as HTMLButtonElement;
             if (button.childNodes.length === 4) return;
             KeyboardEvent(button);
@@ -251,7 +279,7 @@ export default function AnswerVariant(data: Array<SinglWord>) {
             right={gameData.correctAnswerCounter}
             inARow={inArrow}
             words={gameData.words}
-            audioGame="/game/audio"
+            gameType="audio"
           />
           )
       }

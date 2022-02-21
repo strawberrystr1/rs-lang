@@ -23,7 +23,11 @@ const initialState: IUserStatistic = {
       },
     },
     long: {
-      stat: [],
+      stat: [{
+        date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
+        newWords: 0,
+        learnedWords: 0,
+      }],
     },
   },
 };

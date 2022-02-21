@@ -14,7 +14,7 @@ import EndGameWordItem from './EndGameWordItem';
 
 export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
   const {
-    inARow, right, wrong, state, audioGame,
+    inARow, right, wrong, state, gameType,
   } = props;
   const navigate = useNavigate();
 
@@ -42,11 +42,7 @@ export default function EndGameView(props: IAfterGameWordsStat): ReactElement {
             <Button
               variant="contained"
               onClick={(() => {
-                if (audioGame === '/game/audio') {
-                  navigate(audioGame);
-                  return;
-                }
-                navigate('/gamedif');
+                navigate(`/game/${gameType}`);
               })}
             >
               Сыграть ещё раз

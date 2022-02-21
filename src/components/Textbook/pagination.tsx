@@ -5,7 +5,12 @@ import Stack from '@mui/material/Stack';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import NavigationByDifficult from './difficult-nav';
 
-export default function BasicPagination() {
+interface IPAginationProps {
+  setIsPageLearned: () => void;
+}
+
+export default function BasicPagination(props: IPAginationProps) {
+  const { setIsPageLearned } = props;
   const params = useParams();
   const wordGroup = params.group as string;
   const page = params.page as string;
@@ -45,6 +50,7 @@ export default function BasicPagination() {
               const newPath = `${groupIndex.slice(0, location.pathname.lastIndexOf('/'))}/${rightPage}`;
               navigate(newPath);
             }
+            setIsPageLearned();
           }}
         />
       </Stack>

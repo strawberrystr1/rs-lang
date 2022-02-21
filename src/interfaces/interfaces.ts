@@ -51,7 +51,7 @@ export interface IAfterGameWordsStat {
   wrong: number;
   state: IGameStatistic;
   words: IWordData[];
-  audioGame?: string;
+  gameType: string;
 }
 
 export interface IWordData {
@@ -103,6 +103,14 @@ export interface ICardItemDifPropsWithDelete extends ICardItemDifProps {
 
 export interface IShowCardsProps {
   setIsPageLearned: (value: boolean) => void;
+}
+
+export interface IDifficultyBlockProps {
+  setIsEmpty: (value: boolean) => void;
+}
+
+export interface IGameButtonsProps {
+  isButtonActive: boolean;
 }
 
 export type SetWordsCBType = (data: IWordData[]) => void;

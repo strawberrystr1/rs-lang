@@ -13,10 +13,9 @@ export default function VideoBlock(): ReactElement {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#000',
       }}
     >
-      Here will be a video
+      <iframe src="https://www.youtube.com/embed/Ju_VpADjG8M" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
     </Container>
   );
 }

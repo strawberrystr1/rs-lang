@@ -45,7 +45,7 @@ export default function ShowCards(props: IShowCardsProps) {
         setResponse(data);
         setOpen(false);
         const ans = data.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
-        if (ans) setIsPageLearned(true);
+        if (ans && data.length) setIsPageLearned(true);
       });
     }
   }, [apiUrlAnonym, user.name]);
@@ -55,7 +55,8 @@ export default function ShowCards(props: IShowCardsProps) {
       filter: `{"$and":[{"group":${wordGroup}}, {"page": ${wordPage}}]}`,
       wordsPerPage: '20',
     }).then((res) => {
-      const ans = res[0].paginatedResults.every((item) => item.userWord?.optional.learned || item.userWord?.difficulty === 'hard');
+      const filtered = res[0].paginatedResults.filter((item) => !item.userWord?.optional.deleted);
+      const ans = filtered.every((item) => (item.userWord?.optional.learned || item.userWord?.difficulty === 'hard'));
       if (ans) {
         setIsPageLearned(true);
       } else {
@@ -76,7 +77,7 @@ export default function ShowCards(props: IShowCardsProps) {
     getAllAggregatedWords(user, {
       filter: '{"$and":[{"userWord.optional.learned":true}]}',
     }).then((res) => {
-      const learned = res[0].totalCount[0].count || 0;
+      const learned = res[0].totalCount[0]?.count || 0;
       newStats.learnedWords = learned;
       const ind = newStats.optional.long.stat.findIndex((item) => item.date === `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`);
       getAllAggregatedWords(user, {
@@ -87,7 +88,7 @@ export default function ShowCards(props: IShowCardsProps) {
           const newLongStats = {
             date: `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`,
             newWords: newStats.optional.long.stat[ind].newWords,
-            learnedWords: result[0].totalCount[0].count || 0,
+            learnedWords: result[0].totalCount[0]?.count || 0,
           };
           newLongStat.splice(ind, 1, newLongStats);
         }
@@ -181,7 +182,8 @@ export default function ShowCards(props: IShowCardsProps) {
             ))}
           </Box>
         )
-        : (
+        : (!open
+          && (
           <Typography
             variant="h4"
             color="white"
@@ -191,6 +193,7 @@ export default function ShowCards(props: IShowCardsProps) {
           >
             Все слова на этой странице удалены
           </Typography>
+          )
         )}
       <Backdrop
         sx={{ color: '#fff', zIndex: 10001 }}

@@ -10,10 +10,11 @@ import sound from '../../assets/audio.png';
 import CircularProgressWithLabel from './CircularProgressWithLabel';
 import { RootState } from '../../redux/store';
 import { getAllAggregatedWords } from '../../utils/gameUtils';
-import { getStatistic } from '../../redux/userState/statisticSlice';
+import { getStatistic, updateStatistic } from '../../redux/userState/statisticSlice';
 import { getAllWords } from '../../redux/userState/wordsSlice';
 import LongStatistic from './LongStatistic';
 import LongStatisticLearned from './LosgStatisticLearned';
+import { ILongStatsItem } from '../../interfaces/apiInterfaces';
 
 export default function StatisticPage(): ReactElement {
   const { user, userStatistic } = useSelector((state: RootState) => state);
@@ -26,7 +27,7 @@ export default function StatisticPage(): ReactElement {
     + (userStatistic.optional.short.audio?.newWords || 0);
   const totalAnswers = (userStatistic.optional.short.sprint?.allAnswers || 0) + (userStatistic.optional.short.audio?.allAnswers || 0);
   const correctAnswers = (userStatistic.optional.short.sprint?.correctAnswers || 0) + (userStatistic.optional.short.audio?.correctAnswers || 0);
-  const totalPercents = Math.ceil(((correctAnswers * 100) / totalAnswers)) || 0;
+  const totalPercents = Math.floor(((correctAnswers * 100) / totalAnswers)) || 0;
 
   useEffect(() => {
     if (user.name) {
@@ -41,65 +42,42 @@ export default function StatisticPage(): ReactElement {
         setIsLoading(false);
       });
     }
-  }, []);
+    const lastDateInStore = new Date(userStatistic.optional.short.lastDate).getDate();
+    const currentDate = (new Date()).getDate();
 
-  // const data = [
-  //   {
-  //     date: '17.02',
-  //     newWords: 15,
-  //     learnedWords: 3,
-  //   },
-  //   {
-  //     date: '18.02',
-  //     newWords: 8,
-  //     learnedWords: 6,
-  //   },
-  //   {
-  //     date: '19.02',
-  //     newWords: 19,
-  //     learnedWords: 4,
-  //   },
-  //   {
-  //     date: '20.02',
-  //     newWords: 4,
-  //     learnedWords: 9,
-  //   },
-  //   {
-  //     date: '21.02',
-  //     newWords: 66,
-  //     learnedWords: 5,
-  //   },
-  //   {
-  //     date: '22.02',
-  //     newWords: 31,
-  //     learnedWords: 19,
-  //   },
-  //   {
-  //     date: '23.02',
-  //     newWords: 18,
-  //     learnedWords: 12,
-  //   },
-  //   {
-  //     date: '24.02',
-  //     newWords: 15,
-  //     learnedWords: 15,
-  //   },
-  //   {
-  //     date: '25.02',
-  //     newWords: 5,
-  //     learnedWords: 20,
-  //   },
-  //   {
-  //     date: '26.02',
-  //     newWords: 19,
-  //     learnedWords: 13,
-  //   },
-  //   {
-  //     date: '27.02',
-  //     newWords: 23,
-  //     learnedWords: 21,
-  //   },
-  // ];
+    if ((lastDateInStore !== currentDate) && userStatistic.optional.short.lastDate > 0) {
+      const date = `${(new Date()).getDate()}.${(new Date()).getMonth() + 1}`;
+      const newWordsForLongStat = (userStatistic.optional.short.sprint?.newWords || 0)
+        + (userStatistic.optional.short.audio?.newWords || 0);
+      const longAddition: ILongStatsItem = {
+        date,
+        newWords: newWordsForLongStat,
+        learnedWords: 0,
+      };
+      dispatch(updateStatistic({
+        userId: user.id,
+        token: user.token,
+        optional: {
+          learnedWords: 0,
+          optional: {
+            short: {
+              lastDate: Date.now(),
+              sprint: {
+                newWords: 0,
+                inARow: 0,
+                percents: 0,
+                correctAnswers: 0,
+                allAnswers: 0,
+              },
+            },
+            long: {
+              stat: [...userStatistic.optional.long.stat, longAddition],
+            },
+          },
+        },
+      }));
+    }
+  }, []);
 
   return (
     <Container
@@ -276,11 +254,9 @@ export default function StatisticPage(): ReactElement {
                     <>
                       <Grid item xs={6} className="stat__grid-item_long">
                         <LongStatistic data={userStatistic.optional.long.stat} />
-                        {/* <LongStatistic data={data} /> */}
                       </Grid>
                       <Grid item xs={6} className="stat__grid-item_long">
                         <LongStatisticLearned data={userStatistic.optional.long.stat} />
-                        {/* <LongStatisticLearned data={data} /> */}
                       </Grid>
                     </>
                   )

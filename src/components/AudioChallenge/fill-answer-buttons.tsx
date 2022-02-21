@@ -3,7 +3,10 @@ import { SinglWord } from '../interfaces/textbookI';
 
 export default function FillAnswerButtons(data: Array<SinglWord>, count: number) {
   const answers: Array<string> = [];
-  const rightAnswerPosition = getRandom(0, 3);
+  let rightAnswerPosition = getRandom(0, 3);
+  if (data.length <= 4) {
+    rightAnswerPosition = getRandom(0, data.length - 1);
+  }
   const buttons = document.querySelectorAll<HTMLButtonElement>('.variant');
   if (buttons.length === 0) return;
   if (count === data.length) return;

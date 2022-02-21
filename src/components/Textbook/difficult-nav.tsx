@@ -44,6 +44,19 @@ export default function NavigationByDifficult() {
               }}
             />
           ))}
+          <SpeedDialAction
+            key={7}
+            icon={7}
+            tooltipTitle={12}
+            onClick={() => {
+              navigate('/dictionary/difficult');
+            }}
+            sx={{
+              backgroundColor: 'blue',
+              color: 'white',
+              fontSize: '20px',
+            }}
+          />
         </StyledSpeedDial>
       </Box>
     </Box>

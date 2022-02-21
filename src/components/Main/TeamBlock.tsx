@@ -29,9 +29,8 @@ export default function TeamBlock(): ReactElement {
           </a>
           <h6>Andrei Shakh</h6>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Odio iusto quis architecto temporibus. Accusantium
-            magnam quidem adipisci recusandae non laudantium!
+            Team Lead. Отвечал за архитектуру приложения. Организовал хранение данных и создал игру
+            Sprint, а так же страницу статистики и страницу со сложными словами.
           </p>
         </div>
       </StyledBox>
@@ -55,9 +54,8 @@ export default function TeamBlock(): ReactElement {
           </a>
           <h6>Dzmitry Gilew</h6>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Odio iusto quis architecto temporibus.
-            Accusantium magnam quidem adipisci recusandae non laudantium!
+            Разработчик. Отвечал за основной дизайн. Создатель учебника и игры Audio Challenge,
+            а так же страниц с удалёнными и изученными словами.
           </p>
         </div>
       </StyledBox>
